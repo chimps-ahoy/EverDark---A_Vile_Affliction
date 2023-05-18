@@ -1,4 +1,3 @@
-package ncg.chimpsahoy.everdark;
 public class InputHandler { 
 
 	private GameState state;

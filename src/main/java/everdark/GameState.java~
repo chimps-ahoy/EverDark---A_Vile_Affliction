@@ -22,6 +22,6 @@ public class GameState {
 		world.addEdge(m1,m2);
 	}
 
-	//public boolean changeLocation(--what to put here?--) {} 
+	//??????????
 
 }

@@ -1,29 +1,25 @@
 package ncg.chimpsahoy.everdark;
+import java.io.*;
 
 public class Main {
 	public static void main(String[] args) {
+		Player p = new Player("joe", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'a', 0);
 		try {
-			for (int i = 0; i <= 5; i++) {
-				printMap(i, 3);
-				Thread.sleep(1000);
-			}
-		} catch (InterruptedException e) {}	
-	}
-	public static void printMap(int x, int y) {
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				int z = (int)(10*Math.random());
-				if (j == 0 || j == 15) { System.out.print("|"); }
-				else if (i == 0 || i == 15) { System.out.print("- "); }
-				else if (i == y && j == x) { System.out.print("@ "); }
-				else if (z%3==0) { System.out.print("' "); }
-				else if (z%3==1) { System.out.print(", "); }
-				else {
-					System.out.print("\" ");
-				}
-			}
-			System.out.print('\n');
+			//p.saveToFile();
+			Player b = Player.loadFromFile("joe.ed");		
+		} catch (ClassNotFoundException cnfe) {
+			System.out.println("Class not found");
+			cnfe.printStackTrace();
+		} catch (InvalidClassException ice) {
+			System.out.println("Class is broken");
+			ice.printStackTrace();
+		} catch (IOException ioe) {
+			System.out.println("Unknown error" + ioe.getMessage());
+			ioe.printStackTrace();
 		}
-
+		System.out.println((b.equals(p)) ? "IDs are same and .equals works" : "IDs or .equals is broke");
+		System.out.println(p);
+		System.out.println(b);
 	}
+
 }

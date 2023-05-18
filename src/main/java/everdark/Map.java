@@ -1,3 +1,4 @@
+package ncg.chimpsahoy.everdark;
 import java.io.*;
 
 public class Map {
@@ -9,7 +10,9 @@ public class Map {
 	private char[][] featMap;
 	private Entity[][] entMap;
 	//private Event[][] evntMap;
-
+	
+	private int playerX;
+	private int playerY;
 	private final int ROWS;
 	private final int COLS;
 
@@ -41,6 +44,7 @@ public class Map {
 					output += topoMap[i][j];
 				}
 			}
+			output += '\n';
 		}
 		return output;
 	}

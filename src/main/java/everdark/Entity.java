@@ -1,7 +1,9 @@
+package ncg.chimpsahoy.everdark;
 import java.io.*;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable{
 
+	private String name;
 	//Physical stats TODO: hp -> bodypart system
 	private int maxHp;
 	private int hp;
@@ -25,7 +27,8 @@ public abstract class Entity {
 			     //and for NPCs we can count up from there. For generic enemies which will have a static counter, we can have that counter begin at 10000 for one class
 			     //20000 for the next, and so on. I do not think I need to worry about ever creating more than 10000 of a generic enemy during normal gameplay?
 
-	public Entity(int maxHp, int hp, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, int id) {
+	public Entity(String name, int maxHp, int hp, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, int id) {
+		this.name = name;
 		this.maxHp = maxHp;
 		this.hp = hp;
 		this.str = str;
@@ -53,4 +56,7 @@ public abstract class Entity {
 		return "" + appearance;
 	}
 
+	public String getName() {
+		return name;
+	}
 }
