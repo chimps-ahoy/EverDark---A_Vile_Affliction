@@ -22,6 +22,13 @@ public class GameState {
 		world.addEdge(m1,m2);
 	}
 
+	public void movePlayer(String direction) {
+		location.movePlayer(direction.charAt(0));
+	}
+
+	public String getMapString() {
+		return location.toString();
+	}
 	//public boolean changeLocation(--what to put here?--) {} 
 
 }

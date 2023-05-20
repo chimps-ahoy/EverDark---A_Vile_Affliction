@@ -11,10 +11,10 @@ public class Map {
 	private Entity[][] entMap;
 	//private Event[][] evntMap;
 	
-	private int playerX;
-	private int playerY;
-	private final int ROWS;
-	private final int COLS;
+	private int playerC;//player's current column position
+	private int playerR;//player's current row position
+	private final int ROWS;//# of rows in the Map
+	private final int COLS;//# of columns in the Map
 
 	public Map(int ID, String name, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols) {//Event[][] evntMap
 		this.ID = ID;
@@ -25,7 +25,26 @@ public class Map {
 		//this.evntMap = evntMap;
 		ROWS = rows;
 		COLS = cols;
+	}
 
+	public void movePlayer(char d) {
+		if (d == 'n' && playerR-1 >= 0) {
+			entMap[playerR-1][playerC] = entMap[playerR][playerC];
+			entMap[playerR][playerC] = null;
+			playerR--;			
+		} else if (d == 's' && playerR+1 < ROWS) {
+			entMap[playerR+1][playerC] = entMap[playerR][playerC];
+			entMap[playerR][playerC] = null;
+			playerR++;
+		} else if (d == 'e' && playerC+1 < COLS) {
+			entMap[playerR][playerC+1] = entMap[playerR][playerC];
+			entMap[playerR][playerC] = null;
+			playerC++;
+		} else if (d =='w' && playerC-1 >= 0) {
+			entMap[playerR][playerC-1] = entMap[playerR][playerC];
+			entMap[playerR][playerC] = null;
+			playerC--;
+		}
 	}
 
 	public boolean equals(Map other) {
@@ -44,6 +63,7 @@ public class Map {
 					output += topoMap[i][j];
 				}
 			}
+			output += '\n';
 		}
 		return output;
 	}
