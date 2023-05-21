@@ -195,6 +195,7 @@ public class Player extends Entity {
 				System.out.println("That is not a valid character.");
 			} 
 		}
+		System.out.println();
 		return new Player(inName, MAX_HP, MAX_HP, inStr, inEndur, inDex, inSwift, inIq, inWil, inCharm, inIntim, inPerc, inAppearance, 0);
 	}
 

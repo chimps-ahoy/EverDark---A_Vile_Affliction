@@ -10,12 +10,7 @@ public class Main {
 		int[][] topography = new int[3][3];
 		Entity[][] entities = new Entity[3][3];
 		char[][] features = new char[3][3];
-		Entity player = null;
-		try {
-			player = Player.loadFromFile("joe.ed");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Entity player = Player.characterCreation();
 		Map m = new Map(0, "test", topography, features, entities, 3, 3);
 		m.spawnPlayer(player, 1, 1);
 		GameState g = new GameState(m);

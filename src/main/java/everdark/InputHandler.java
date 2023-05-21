@@ -19,7 +19,7 @@ public class InputHandler {
 
 		Scanner tokenizer = new Scanner(input.toLowerCase());
 		String leadingCommand =(tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
-		String output = "Command not recognized.";
+		String output = "Command not recognized.\n";
 
 		if (leadingCommand.equals("placeholder")) { 
 			output = "this is a placeholder";
@@ -28,11 +28,11 @@ public class InputHandler {
 				state.movePlayer(tokenizer.next());
 				output = state.getMapString();
 			} else {
-				output = "Please include a direction after the move command.";
+				output = "Please include a direction after the move command.\n";
 			}
 		} else if (leadingCommand.equals("exit")) {
 			acceptingInput = false;
-			output = "Bye!";
+			output = "Bye!\n";
 		}
 
 		return output;
