@@ -35,8 +35,8 @@ public class Player extends Entity {
 	public static Player characterCreation() { //TODO: this is so ugly
 		Scanner in = new Scanner(System.in);
 		int availablePoints = 100;
-		System.out.println("Welcome to EverDark. The Character Creation Process will begin now. Please refer to any available manuals and documentation to aid you during this process. " +
-				"You can't go back! So, make sure you know where you're putting your points before you begin.\n");
+		System.out.println("\tWelcome to EverDark. The Character Creation Process will begin now. You are given 100 total Stat Points to assign amongst your characters stats. The stats will be shown one-by-one, and you can't go back! So, " +
+					"plan carefully.\n The available stats are: Strength, Endurance, Dexterity, Swiftness, Intelligence, Willpower, Charisma, Intimidation, and Perception.");
 		String inName = "";
 		int inStr = 0;
 		int inEndur = 0;
@@ -49,8 +49,24 @@ public class Player extends Entity {
 		int inPerc= 0;
 		char inAppearance = 'c';
 		boolean finished = false;
-		
-		System.out.print("Please name your character: ");
+
+		System.out.print("Would you like more info about these stats? (Y/N): ");
+		if (in.next().toLowerCase().charAt(0) == 'y') {
+			System.out.println("\nStrength - Your character's physical prowess. This is a measure of your short-twitch muscle fibres- quick bursts of force.\n" +
+							"Endurance - In contrast to Strength; your character's slow-twitch muscle fibres- how long they can act before becoming fatigued.\n" +
+							"Dexterity - The strength of your character's little muscles, rather than the big ones. This is your fine motor skill. It measures how precisely you can perform an action.\n" +
+							"Swiftness - This is a measure of how quickly your character can perform an action.\n" +
+							"Intelligence - Your character's mental ability. This is their aptitude to learn new things, and apply what they know to solve problems.\n" +
+							"Willpower - This is a mental analogue to Endurance. It is a measure of how much mental strain your character can take. Higher willpower also allows you to resist charm and intimidation.\n" +
+							"Charisma - Your character's social ability- how easily they get along with people and how much they appeal to them.\n" +
+							"Intimidation - While Charisma can allow you to convince people to do things of their own volition, Intimidation is your ability to impose your will on others by force.\n" +
+							"Perception - This is a mental analogue to Swiftness and Dexterity. It is your character's precision and speed at observing things in their environment.\n");
+		} else {
+			finished = true;
+		}
+
+		System.out.print("\nPlease name your character: ");
+		in.next();
 		inName = in.nextLine();
 
 		while (!finished) {
@@ -195,6 +211,7 @@ public class Player extends Entity {
 				System.out.println("That is not a valid character.");
 			} 
 		}
+		System.out.println();
 		return new Player(inName, MAX_HP, MAX_HP, inStr, inEndur, inDex, inSwift, inIq, inWil, inCharm, inIntim, inPerc, inAppearance, 0);
 	}
 

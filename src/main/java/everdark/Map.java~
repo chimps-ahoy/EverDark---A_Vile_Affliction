@@ -27,6 +27,14 @@ public class Map {
 		COLS = cols;
 	}
 
+	public void spawnPlayer(Entity player, int c, int r) {
+		if (c >= 0 && c < COLS && r >= 0 && r < ROWS && entMap[r][c] == null) {
+			entMap[r][c] = player;
+			playerC = c;
+			playerR = r;
+		}
+	}
+
 	public void movePlayer(char d) {
 		if (d == 'n' && playerR-1 >= 0) {
 			entMap[playerR-1][playerC] = entMap[playerR][playerC];

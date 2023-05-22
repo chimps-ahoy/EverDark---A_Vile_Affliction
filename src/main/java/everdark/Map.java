@@ -70,6 +70,7 @@ public class Map {
 				} else {
 					output += topoMap[i][j];
 				}
+				output += " ";
 			}
 			output += '\n';
 		}

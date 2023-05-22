@@ -4,9 +4,10 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("        EverDark       ");
-		System.out.println("---A Vile Affliction---");
-		System.out.println("                                              v0.0.1");
+		System.out.println("_______________________________________________________");
+		System.out.println("|                        EverDark                     |");
+		System.out.println("|                 ---A Vile Affliction---             |");
+		System.out.println("|______________________________________________v0.0.2_|");
 		int[][] topography = new int[16][16];
 		Entity[][] entities = new Entity[16][16];
 		char[][] features = new char[16][16];
