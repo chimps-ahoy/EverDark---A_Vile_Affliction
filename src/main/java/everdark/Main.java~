@@ -4,23 +4,61 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("        EverDark       ");
-		System.out.println("---A Vile Affliction---");
-		System.out.println("                                              v0.0.2");
+
+		//menu drawing
+		System.out.println("_______________________________________________________");
+		System.out.println("|                        EverDark                     |");
+		System.out.println("|                 ---A Vile Affliction---             |");
+		System.out.println("|______________________________________________v0.0.2_|");
+
+		//ini
 		int[][] topography = new int[16][16];
 		Entity[][] entities = new Entity[16][16];
 		char[][] features = new char[16][16];
-		Entity player = Player.characterCreation();
-		Map m = new Map(0, "test", topography, features, entities, 16, 16);
-		m.spawnPlayer(player, 5, 5);
-		GameState g = new GameState(m);
-		InputHandler IOh = new InputHandler(g);
-		Scanner in = new Scanner(System.in);
-
-		while (IOh.acceptingInput()) {
-			System.out.println(IOh.handle(in.nextLine()));
+		int count = 0;
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 16; j++) {
+				features[i][j] = (count%7==0) ? 'T' : '\u0000';
+				topography[i][j] = (i == 15 || j == 15 || i == 0 || j == 0) ? 0 : 1;
+				count++;
+			}
 		}
+		Entity player = null;
+		Map ww = null;
+		Map m = null;
+		try {
+			m = new Map(0, "main", null, null, null, 0, 0);
+			ww =  new Map(1, "whispering woods", topography, features, entities, 16, 16);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		GameState g = new GameState(m);
+		InputHandler ioHandler = new InputHandler(g);
 
+		//player ini
+		Scanner in = new Scanner(System.in);
+		System.out.print("Would you like to load from file? (Y/N): ");
+		if (in.nextLine().toLowerCase().charAt(0)=='y') {
+			boolean found = false;
+			while (!found) {
+				System.out.print("\nPlease specify the name of the character: ");
+				try {
+					player = Player.loadFromFile(in.nextLine() + ".ed");
+					found = true;
+				} catch (Exception e) {
+					System.out.print("The character file could not be found. Try again.");
+				}	
+			}
+		} else {
+			player = Player.characterCreation();
+		}
+		ww.spawnPlayer(player, 6, 6);
+
+		//game runtime
+		while (ioHandler.acceptingInput()) {
+			System.out.println(ioHandler.handle(in.nextLine()));
+		}
+		System.exit(0);
 	}
 
 }

@@ -12,6 +12,7 @@ public class GameState {
 		world = new SimpleGraph(DefaultEdge.class);
 		addLocation(startingLocation);
 		location = startingLocation;
+		this.playMusic();
 	}
 
 	public boolean addLocation(Map m) {
@@ -22,13 +23,30 @@ public class GameState {
 		world.addEdge(m1,m2);
 	}
 
-	public void movePlayer(String direction) {
-		location.movePlayer(direction.charAt(0));
+	public String movePlayer(String direction) {
+		return location.movePlayer(direction.charAt(0));
+	}
+
+	public void playMusic() {
+		location.playMusic();
+	}
+
+	public void stopMusic() {
+		location.stopMusic();
+	}
+	
+	public void closeMusic() {
+		location.closeMusic();
 	}
 
 	public String getMapString() {
 		return location.toString();
 	}
-	//public boolean changeLocation(--what to put here?--) {} 
+	
+	public void changeLocation(Map m) {
+		location.stopMusic();
+		location = m;
+		this.playMusic();
+	} 
 
 }

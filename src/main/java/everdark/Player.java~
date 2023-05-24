@@ -73,7 +73,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Strength? (" + availablePoints + " available): ");
 			try {
 				inStr = in.nextInt();
-				if (finished = (inStr <= availablePoints)) {
+				if (finished = ((inStr <= availablePoints) && inStr >= 0)) {
 					availablePoints -= inStr;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -88,7 +88,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Endurance? (" + availablePoints + " available): ");
 			try {
 				inEndur = in.nextInt();
-				if (finished = (inEndur <= availablePoints)) {
+				if (finished = ((inEndur <= availablePoints) && inEndur >= 0)) {
 					availablePoints -= inEndur;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -103,7 +103,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Dexterity? (" + availablePoints + " available): ");
 			try {
 				inDex = in.nextInt();
-				if (finished = (inDex <= availablePoints)) {
+				if (finished = ((inDex <= availablePoints) && inDex >= 0)) {
 					availablePoints -= inDex;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -118,7 +118,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Swiftness? (" + availablePoints + " available): ");
 			try {
 				inStr = in.nextInt();
-				if (finished = (inSwift <= availablePoints)) {
+				if (finished = ((inSwift <= availablePoints) && inSwift >= 0)) {
 					availablePoints -= inSwift;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -133,7 +133,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Intelligence? (" + availablePoints + " available): ");
 			try {
 				inIq = in.nextInt();
-				if (finished = (inIq <= availablePoints)) {
+				if (finished = ((inIq <= availablePoints) && inIq >= 0)) {
 					availablePoints -= inIq;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -148,7 +148,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Willpower? (" + availablePoints + " available): ");
 			try {
 				inWil = in.nextInt();
-				if (finished = (inWil <= availablePoints)) {
+				if (finished = ((inWil <= availablePoints) && inWil >= 0)) {
 					availablePoints -= inWil;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -163,7 +163,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Charisma? (" + availablePoints + " available): ");
 			try {
 				inCharm = in.nextInt();
-				if (finished = (inCharm <= availablePoints)) {
+				if (finished = ((inCharm <= availablePoints) && inCharm >= 0)) {
 					availablePoints -= inCharm;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -178,7 +178,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Intimidation? (" + availablePoints + " available): ");
 			try {
 				inIntim = in.nextInt();
-				if (finished = (inIntim <= availablePoints)) {
+				if (finished = ((inIntim <= availablePoints) && inIntim >= 0)) {
 					availablePoints -= inIntim;
 				} else {
 					System.out.println("You don't have enough points for that!");
@@ -193,7 +193,7 @@ public class Player extends Entity {
 			System.out.print("\nHow many points would you like to put into Perception? (" + availablePoints + " available): ");
 			try {
 				inPerc = in.nextInt();
-				if (finished = (inPerc <= availablePoints)) {
+				if (finished = ((inPerc <= availablePoints) && inPerc >= 0)) {
 					availablePoints -= inPerc;
 				} else {
 					System.out.println("You don't have enough points for that!");

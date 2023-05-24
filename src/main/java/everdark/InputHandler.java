@@ -25,13 +25,14 @@ public class InputHandler {
 			output = "this is a placeholder";
 		} else if (leadingCommand.equals("move")) {
 			if (tokenizer.hasNext()) {
-				state.movePlayer(tokenizer.next());
-				output = state.getMapString();
+				output = state.movePlayer(tokenizer.next());
 			} else {
 				output = "Please include a direction after the move command.\n";
 			}
 		} else if (leadingCommand.equals("exit")) {
 			acceptingInput = false;
+			state.stopMusic();
+			state.closeMusic();
 			output = "Bye!\n";
 		}
 

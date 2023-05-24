@@ -12,7 +12,7 @@ public class Player extends Entity {
 
 	public static Player loadFromFile(String path) throws FileNotFoundException, IOException, ClassNotFoundException {
 		
-		FileInputStream fis = new FileInputStream(path);
+		FileInputStream fis = new FileInputStream("saves/" + path);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		Player loaded = (Player)(ois.readObject());
 		ois.close();
@@ -61,8 +61,6 @@ public class Player extends Entity {
 							"Charisma - Your character's social ability- how easily they get along with people and how much they appeal to them.\n" +
 							"Intimidation - While Charisma can allow you to convince people to do things of their own volition, Intimidation is your ability to impose your will on others by force.\n" +
 							"Perception - This is a mental analogue to Swiftness and Dexterity. It is your character's precision and speed at observing things in their environment.\n");
-		} else {
-			finished = true;
 		}
 
 		System.out.print("\nPlease name your character: ");
