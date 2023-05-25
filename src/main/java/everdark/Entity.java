@@ -57,4 +57,8 @@ public abstract class Entity implements Serializable{
 	public String getName() {
 		return name;
 	}
+	
+	public int getPerc() {
+		return perc;
+	}
 }

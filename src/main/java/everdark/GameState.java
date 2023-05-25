@@ -27,6 +27,10 @@ public class GameState {
 		return location.movePlayer(direction.charAt(0));
 	}
 
+	public String getLocationDesc() {
+		return location.getDesc();
+	}
+
 	public void playMusic() {
 		location.playMusic();
 	}
@@ -41,6 +45,10 @@ public class GameState {
 
 	public String getMapString() {
 		return location.toString();
+	}
+
+	public String getTopoMapString() {
+		return location.getTopoMapString();
 	}
 	
 	public void changeLocation(Map m) {

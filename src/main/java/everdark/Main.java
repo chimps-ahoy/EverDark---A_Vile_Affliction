@@ -15,6 +15,15 @@ public class Main {
 	
 	public static void main(String[] args) {
 
+		//This is just so I always have a test file to load from.
+		Player joe = null;
+		joe = new Player("joe", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'a', 1);
+		try {
+			joe.saveToFile();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		//menu drawing
 		System.out.print(drawMenu());
 
@@ -56,9 +65,12 @@ public class Main {
 		Entity player = null;
 		ww = null;
 		m = null;
+		String wwDesc1 = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n";
+		String wwDesc2 = "A light breeze flows between the trees and almost sounds like hushed voices.\n";
+		String wwDesc3 = "Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
 		try {
-			m = new Map(0, "main", null, null, null, 0, 0);
-			ww =  new Map(1, "whispering woods", topography, features, entities, 16, 16);
+			m = new Map(0, "main", "", "", "", null, null, null, 0, 0);
+			ww =  new Map(1, "whispering woods", wwDesc1, wwDesc2, wwDesc3, topography, features, entities, 16, 16);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,25 +80,30 @@ public class Main {
 	public static void playerIni() {
 		Scanner in = new Scanner(System.in);
 		System.out.print("Would you like to load from file? (Y/N): ");
-		if (in.nextLine().toLowerCase().charAt(0)=='y') {
-			boolean found = false;
-			while (!found) {
-				System.out.print("\nPlease specify the name of the character: ");
-				try {
-					player = Player.loadFromFile(in.nextLine() + ".ed");
-					found = true;
-				} catch (Exception e) {
-					System.out.print("The character file could not be found. Try again.");
-				}	
+		try { 
+			if (in.nextLine().toLowerCase().charAt(0)=='y') {
+				boolean found = false;
+				while (!found) {
+					System.out.print("\nPlease specify the name of the character: ");
+					try {
+						player = Player.loadFromFile(in.nextLine() + ".ed");
+						found = true;
+					} catch (Exception e) {
+						System.out.print("The character file could not be found. Try again.");
+					}	
+				}
+				System.out.println();
+			} else {
+				player = Player.characterCreation();
 			}
-			System.out.println();
-		} else {
-			player = Player.characterCreation();
+		} catch (Exception e) {
+			System.out.println("An unexpected error has occurred.");
+			playerIni();
 		}
 	}
 
 	public static String drawMenu() {
 		return "_______________________________________________________\n" + "|                        EverDark                     |\n" +
-				"|                 ---A Vile Affliction---             |\n" + "|______________________________________________v0.0.5_|\n";
+				"|                 ---A Vile Affliction---             |\n" + "|____________________________________________v0.0.5.1_|\n";
 	}
 }

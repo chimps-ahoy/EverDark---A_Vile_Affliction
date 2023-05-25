@@ -23,7 +23,7 @@ public class Player extends Entity {
 
 	public void saveToFile() throws FileNotFoundException, IOException {
 
-		String fileName = super.getName() + ".ed";
+		String fileName = "saves/" + super.getName() + ".ed";
 		FileOutputStream fos = new FileOutputStream(fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(this);
@@ -213,6 +213,8 @@ public class Player extends Entity {
 		return new Player(inName, MAX_HP, MAX_HP, inStr, inEndur, inDex, inSwift, inIq, inWil, inCharm, inIntim, inPerc, inAppearance, 0);
 	}
 
-
+	public String toString() {
+		return ConsoleColours.YELLOW_BOLD + super.toString() + ConsoleColours.RESET;
+	}
 
 }
