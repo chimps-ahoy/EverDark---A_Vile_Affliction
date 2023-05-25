@@ -115,7 +115,7 @@ public class Player extends Entity {
 		while (!finished) {
 			System.out.print("\nHow many points would you like to put into Swiftness? (" + availablePoints + " available): ");
 			try {
-				inStr = in.nextInt();
+				inSwift = in.nextInt();
 				if (finished = ((inSwift <= availablePoints) && inSwift >= 0)) {
 					availablePoints -= inSwift;
 				} else {

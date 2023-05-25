@@ -46,8 +46,6 @@ public abstract class Entity implements Serializable{
 
 	}
 
-	//TODO: public static Entity loadFromFile() and public static Entity characterCreator()
-
 	public boolean equals(Entity other) {
 		return this.ID == other.ID;
 	}
