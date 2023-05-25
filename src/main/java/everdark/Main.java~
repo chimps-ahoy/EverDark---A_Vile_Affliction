@@ -34,7 +34,7 @@ public class Main {
 		while (ioHandler.acceptingInput()) {
 			System.out.println(ioHandler.handle(in.nextLine()));
 		}
-		//System.exit(0);
+		System.exit(0);
 	}
 	
 	public static void iniGameData() {
