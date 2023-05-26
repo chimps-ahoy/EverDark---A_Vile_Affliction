@@ -16,6 +16,9 @@ public class Main {
 	public static void main(String[] args) {
 
 		//This is just so I always have a test file to load from.
+		//IMPORTANT: similar idea could be applied to the GameState info for a New Game at startup. Instead of relying on the user having the files from the inital download, we can simply generate them in
+		//iniGameData() whenever New Game is selected.
+		//the only BIG thing to remember is to keep the file names different so we don't overwrite their old save.
 		Player joe = null;
 		joe = new Player("joe", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'a', 1);
 		try {

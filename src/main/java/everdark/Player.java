@@ -32,6 +32,9 @@ public class Player extends Entity {
 
 	}
 
+	//public String talk() [or whatever I call it], maybe the player character can become saved to the world after they start a new game, and their actions from their initial playthrough
+	//influence the now-NPC's dialogue? This is a FAR off pipedream, I'd say think about this LAST, maybe for v1.2 or wtv yk
+
 	public static Player characterCreation() { //TODO: this is so ugly
 		Scanner in = new Scanner(System.in);
 		int availablePoints = 100;

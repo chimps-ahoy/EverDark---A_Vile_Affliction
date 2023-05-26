@@ -6,12 +6,16 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sound.sampled.LineUnavailableException;
+import java.util.Scanner;
 
 public class Map {
 	
 	//private static int mapCount = 0; ? dunno if i wanna do it this way because could lead to issues with importing from file
 	private final int ID;
 	private String name;
+	private String loDesc;
+	private String medDesc;
+	private String hiDesc;
 	private File track;
 	private int[][] topoMap;
 	private char[][] featMap;
@@ -26,9 +30,12 @@ public class Map {
 	private AudioInputStream as;
 	private Clip clip;
 
-	public Map(int ID, String name, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols) throws UnsupportedAudioFileException, IOException, LineUnavailableException {//Event[][] evntMap
+	public Map(int ID, String name, String loDesc, String medDesc, String hiDesc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols) throws UnsupportedAudioFileException, IOException, LineUnavailableException {//Event[][] evntMap
 		this.ID = ID;
 		this.name = name;
+		this.loDesc = loDesc;
+		this.medDesc = medDesc;
+		this.hiDesc = hiDesc;
 		track = new File("global/music/" + name + ".wav");
 		this.topoMap = topoMap;
 		this.featMap = featMap;
@@ -43,6 +50,13 @@ public class Map {
 	}
 
 	public void spawnPlayer(Entity player, int c, int r) {
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				if (entMap[i][j] != null && entMap[i][j].equals(player)) {
+					entMap[i][j] = null;
+				}
+			}
+		}
 		if (c >= 0 && c < COLS && r >= 0 && r < ROWS && entMap[r][c] == null) {
 			entMap[r][c] = player;
 			playerC = c;
@@ -50,15 +64,15 @@ public class Map {
 		}
 	}
 
-	public void playTrack() {
+	public void playMusic() {
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
-	public void stopTrack() {
+	public void stopMusic() {
 		clip.stop();
 	}
 	
-	public void closeMusicLine() {
+	public void closeMusic() {
 		try {
 			clip.close();
 			as.close();
@@ -100,7 +114,30 @@ public class Map {
 		} else {
 			output = "An obstacle blocks your path.";
 		}
-		return output + "\n" + this;
+		return output + "\n";
+	}
+
+	public String getDesc() {
+		String output = "";
+		if (entMap[playerR][playerC].getPerc() >= 66) {
+			output = loDesc + medDesc + hiDesc;
+		} else if (entMap[playerR][playerC].getPerc() >= 33) { 
+			output = loDesc + medDesc;
+		} else if (entMap[playerR][playerC].getPerc() > 0) {
+			output = loDesc;
+		}
+		return output;
+	}
+	
+	public String getTopoMapString() {
+		String output = "";
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				output += topoMap[i][j] + " ";
+			}
+			output += '\n';
+		}
+		return output;
 	}
 
 	public boolean equals(Map other) {
@@ -113,8 +150,10 @@ public class Map {
 			for (int j = 0; j < COLS; j++) {
 				if (entMap[i][j] != null) {
 					output += entMap[i][j];
-				} else if (featMap[i][j] != '\u0000') { 
+				} else if (featMap[i][j] == ';') { 
 					output += featMap[i][j];
+				} else if (featMap[i][j] == 'T') {
+					output += featMap[i][j]; //these are separated incase I want to do ANSI colour shenanigans
 				} else {
 					output += topoMap[i][j];
 				}
@@ -124,11 +163,6 @@ public class Map {
 		}
 		return output;
 	}
-
-
-
-
-
 
 
 

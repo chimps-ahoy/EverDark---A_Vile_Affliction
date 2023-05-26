@@ -81,59 +81,61 @@ public class Map {
 		}
 	}
 
-	public String movePlayer(char d) {
+	public String movePlayer(char d) {//TODO: look into cleaning this up. 
 		
 		final int CLIMBING_FACTOR = 1;//the difference of elevation the player can traverse
 		String output = "";
 		
-		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {
+		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {//checking if we're on the edge and we try walking off
 			output = "You can't walk there.";
-		} else if (d == 'n' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR-1][playerC]) <= CLIMBING_FACTOR && featMap[playerR-1][playerC] != 'T' && featMap[playerR-1][playerC] != '#') {
-			entMap[playerR-1][playerC] = entMap[playerR][playerC];
+		} else if (d == 'n' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR-1][playerC]) <= CLIMBING_FACTOR && featMap[playerR-1][playerC] != 'T' && featMap[playerR-1][playerC] != '#') {//the Good case for north
+			entMap[playerR-1][playerC] = entMap[playerR][playerC];//makes sure change in elevation is good and there are no obstacles
 			entMap[playerR][playerC] = null;
 			playerR--;			
 			output = "You take a step to the North.";
-		} else if (d == 's' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR+1][playerC]) <= CLIMBING_FACTOR && featMap[playerR+1][playerC] != 'T' && featMap[playerR+1][playerC] != '#') {
+		} else if (d == 's' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR+1][playerC]) <= CLIMBING_FACTOR && featMap[playerR+1][playerC] != 'T' && featMap[playerR+1][playerC] != '#') {//same for south
 			entMap[playerR+1][playerC] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerR++;
 			output = "You take a step to the South.";
-		} else if (d == 'e' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR][playerC+1]) <= CLIMBING_FACTOR && featMap[playerR][playerC+1] != 'T' && featMap[playerR][playerC+1] != '#') {
+		} else if (d == 'e' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR][playerC+1]) <= CLIMBING_FACTOR && featMap[playerR][playerC+1] != 'T' && featMap[playerR][playerC+1] != '#') {//same for east
 			entMap[playerR][playerC+1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC++;
 			output = "You take a step to the East.";
-		} else if (d =='w' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR][playerC-1]) <= CLIMBING_FACTOR && featMap[playerR][playerC-1] != 'T' && featMap[playerR][playerC-1] != '#') {
+		} else if (d =='w' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR][playerC-1]) <= CLIMBING_FACTOR && featMap[playerR][playerC-1] != 'T' && featMap[playerR][playerC-1] != '#') {//same for west
 			entMap[playerR][playerC-1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC--;
 			output = "You take a step to the West.";
 		} else if ((d == 'n' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR-1][playerC]) > CLIMBING_FACTOR) || (d == 's' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR+1][playerC]) > CLIMBING_FACTOR)
 					|| (d == 'e' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR][playerC+1]) > CLIMBING_FACTOR) || (d == 'w' && Math.abs(topoMap[playerR][playerC] - topoMap[playerR][playerC-1]) > CLIMBING_FACTOR)) {
-			output = "The change in elevation is too great.";
+			output = "The change in elevation is too great.";//if the good case doesn't work then we know it's bad. this checks if the elevation is WHY it's bad.
 		} else {
-			output = "An obstacle blocks your path.";
-		}
+			output = "An obstacle blocks your path.";//assume otherwise that it's an obstacle. There would be WAY too many checks otherwise.
+		}//TODO: ideally we'd want "you can't walk there" as the 'else' condition, so look into a way of doing that without having a MASSIVE else-if checking for obstacles
 		return output + "\n";
 	}
 
-	public String getDesc() {
-		String output = "";
-		if (entMap[playerR][playerC].getPerc() >= 66) {
-			output = loDesc + medDesc + hiDesc;
+	public String getDesc() {//TODO: look into ways of making this better? I'd like to have one description variable and split it up with a Scanner, but that was REALLY slow and didn't work
+		String output = loDesc;
+		if (entMap[playerR][playerC].getPerc() >= 66) {//this method just uses 3 description variables and displays them depending on the perception
+			output += medDesc + hiDesc;
 		} else if (entMap[playerR][playerC].getPerc() >= 33) { 
-			output = loDesc + medDesc;
-		} else if (entMap[playerR][playerC].getPerc() > 0) {
-			output = loDesc;
+			output +=  medDesc;
 		}
 		return output;
 	}
 	
-	public String getTopoMapString() {
+	public String getTopoMapString() {//gets a string of the topography of the area. 
 		String output = "";
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
-				output += topoMap[i][j] + " ";
+				if (i == playerR && j == playerC) {
+					output += ConsoleColours.YELLOW_BOLD + topoMap[i][j] + ConsoleColours.RESET + " ";//highlights the player location in  yellow
+				} else {
+					output += topoMap[i][j] + " ";
+				}
 			}
 			output += '\n';
 		}
