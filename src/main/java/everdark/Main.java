@@ -4,10 +4,6 @@ import java.util.Scanner;
 
 public class Main {
 	
-	public static int[][] topography;
-	public static Entity[][] entities;
-	public static char[][] features;
-	public static int count;
 	public static Entity player;
 	public static Map ww;
 	public static Map m;
@@ -51,32 +47,25 @@ public class Main {
 	
 	public static void iniGameData() {
 		
-		//unimportant test stuff
-		topography = new int[16][16];
-		entities = new Entity[16][16];
-		features = new char[16][16];
-		count = 0;
+		//unimportant test stuff - NOTE: maps will still be generated at startup when the player selects to start a new game/if the files arent present?
+		int[][] topography = new int[16][16];
+		Entity[][] entities = new Entity[16][16];
+		char[][] features = new char[16][16];
+		int count = 0;
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				features[i][j] = (count%7==0) ? 'T' : ';';
-				topography[i][j] = (i == 15 || j == 15 || i == 0 || j == 0) ? 0 : 1;
+				topography[i][j] = (i == 15 || j == 15 || i == 0 || j == 0) ? 0 : 2;
 				count++;
 			}
 		}
 		
 		//important permanent-ish stuff
-		Entity player = null;
-		ww = null;
-		m = null;
 		String wwDesc1 = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n";
 		String wwDesc2 = "A light breeze flows between the trees and almost sounds like hushed voices.\n";
 		String wwDesc3 = "Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
-		try {
-			m = new Map(0, "main", "", "", "", null, null, null, 0, 0);
-			ww =  new Map(1, "whispering woods", wwDesc1, wwDesc2, wwDesc3, topography, features, entities, 16, 16);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		m = new Map(0, "main", "", "", "", null, null, null, 0, 0);
+		ww =  new Map(1, "whispering woods", wwDesc1, wwDesc2, wwDesc3, topography, features, entities, 16, 16);
 		g = new GameState(m);
 	}
 	

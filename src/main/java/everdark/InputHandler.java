@@ -37,8 +37,7 @@ public class InputHandler {
 			//output = state.save();
 		} else if (leadingCommand.equals("exit")) {
 			acceptingInput = false;
-			state.stopMusic();
-			state.closeMusic();
+			state.close();
 			output = "Bye!\n";
 		}
 
