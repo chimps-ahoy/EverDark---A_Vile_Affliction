@@ -1,14 +1,12 @@
 package ncg.chimpsahoy.everdark;
 
-//import java.util.Scanner;
+import java.util.Scanner;
 
 public class Map {
 	
 	private final int ID;
 	private String name;
-	private String loDesc;
-	private String medDesc;
-	private String hiDesc;
+	private String desc;
 	private int[][] topoMap;
 	private char[][] featMap;
 	private Entity[][] entMap;
@@ -18,20 +16,22 @@ public class Map {
 	private int playerR;//player's current row position
 	private final int ROWS;//# of rows in the Map
 	private final int COLS;//# of columns in the Map
+	private final int PERC_DELTA;
+	
+	private static final String BLOCKING = "T#";
+	private static final String LIQUID = "~";
 
-
-	public Map(int ID, String name, String loDesc, String medDesc, String hiDesc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols){//Event[][] evntMap
+	public Map(int ID, String name, String desc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols, int percDelta){//Event[][] evntMap
 		this.ID = ID;
 		this.name = name;
-		this.loDesc = loDesc;
-		this.medDesc = medDesc;
-		this.hiDesc = hiDesc;
+		this.desc = desc;
 		this.topoMap = topoMap;
 		this.featMap = featMap;
 		this.entMap = entMap;
 		//this.evntMap = evntMap;
 		ROWS = rows;
 		COLS = cols;
+		PERC_DELTA = percDelta;
 	}
 
 	public void spawnPlayer(Entity player, int c, int r) {
@@ -49,13 +49,29 @@ public class Map {
 		}
 	}
 
-	public String movePlayer(char d) {//TODO: look into cleaning this up. 
+	public Entity beginDialogue(char d) {
+		Entity output = null;
+		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {	
+			output = null;
+		} else if (d == 'n') {
+			output = entMap[playerR-1][playerC];
+		} else if (d == 's') {
+			output = entMap[playerR+1][playerC];
+		} else if (d == 'e') {
+			output = entMap[playerR][playerC+1];
+		} else if (d == 'w') {
+			output = entMap[playerR][playerC-1];
+		}
+		return output;
+	}
+
+	public String movePlayer(char d) {
 	
 		String output = "";
 		
-		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {//checking if we're on the edge and we try walking off
+		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {//checking for out of bounds
 			output = "You can't walk there.";
-		} else if (blocked(d)) {
+		} else if ( ((d == 'n' && !passable(-1,0)) || (d == 's' && !passable(1,0)) || (d == 'e' && !passable(0,1)) || (d == 'w' && !passable(0,-1))) ) {
 			output = "An obstacle blocks your path";
 		} else if ((d == 'n' && !climbable(-1,0)) || (d == 's' && !climbable(1,0)) || (d == 'e' && !climbable(0,1)) || (d == 'w' && !climbable(0,-1))) {
 			output = "The change in elevation is too great.";
@@ -90,22 +106,25 @@ public class Map {
 		 return (Math.abs(topoMap[playerR][playerC] - topoMap[playerR+dR][playerC+dC]) <= CLIMBING_FACTOR);
 	}
 	
-	private boolean blocked(char d) {
-		return ( (d == 'n' && blocking(featMap[playerR-1][playerC])) || (d == 's' && blocking(featMap[playerR+1][playerC])) || 
-				(d == 'e' && blocking(featMap[playerR][playerC+1])) || (d == 'w' && blocking(featMap[playerR][playerC-1])) );
+	private boolean passable(int dR, int dC) {//same as climbable but for obstacles
+		return !blocking(featMap[playerR+dR][playerC+dC]);
 	}
 	
-	private boolean blocking(char feature) {
-		return (feature == 'T' || feature == '#');
+	private boolean blocking(char feature) {//checks if a map feature is blocking
+		boolean output = false;
+		for (int i = 0; i < BLOCKING.length() && !output; i++) {
+			output = (feature == BLOCKING.charAt(i));
+		}
+		return output;
 	}
 
-	public String getDesc() {//TODO: look into ways of making this better? I'd like to have one description variable and split it up with a Scanner, but that was REALLY slow and didn't work
-		String output = loDesc;
-		if (entMap[playerR][playerC].getPerc() >= 66) {//this method just uses 3 description variables and displays them depending on the perception
-			output += medDesc + hiDesc;
-		} else if (entMap[playerR][playerC].getPerc() >= 33) { 
-			output +=  medDesc;
-		}
+	public String getDesc() {
+		int playerPerc = entMap[playerR][playerC].getPerc();
+		String output = "";
+		String[] details = desc.split("\n");
+		for (int i = 0; i < details.length && playerPerc >= i*PERC_DELTA ; i++) {
+			output += details[i] + '\n';
+		}	
 		return output;
 	}
 	
@@ -142,6 +161,10 @@ public class Map {
 					output += featMap[i][j];
 				} else if (featMap[i][j] == 'T') {
 					output += featMap[i][j]; //these are separated incase I want to do ANSI colour shenanigans
+				} else if (featMap[i][j] == '~') {
+					output += ConsoleColours.BLUE_BRIGHT + featMap[i][j] + ConsoleColours.RESET;
+				} else if (featMap[i][j] != '\u0000') { 
+					output += featMap[i][j];
 				} else {
 					output += topoMap[i][j];
 				}

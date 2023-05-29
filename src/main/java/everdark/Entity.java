@@ -22,12 +22,12 @@ public abstract class Entity implements Serializable{
 	private char appearance;
 	//private ??? origin, the place they came from PROBABLY stored as Enum or String, but Enum >> faster
 	
+	private int dialogueStage;
+
 	private final int ID;//each subclass of Entity will contain a static variable to count the instances of the class and automatically assign IDs. Unique NPCs
 			     //which have their own class, will have a set ID, but this must be decided so we don't get bad overlap. I think the player will have ID = 0,
-			     //and for NPCs we can count up from there. For generic enemies which will have a static counter, we can have that counter begin at 10000 for one class
-			     //20000 for the next, and so on. I do not think I need to worry about ever creating more than 10000 of a generic enemy during normal gameplay?
-
-			    //UPDATE MAY2023: with how I'm planning to construct the Maps at game startup (and save/load them from file), we definitely don't have to worry about this. We could separate Entity types by 1k
+			     //and for NPCs we can count up from there. For generic enemies which will have a static counter, we can have that counter begin at 1k for one Entity
+			     //and 2k for the next etc.
 	public Entity(String name, int maxHp, int hp, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, int id) {
 		this.name = name;
 		this.maxHp = maxHp;
@@ -43,8 +43,13 @@ public abstract class Entity implements Serializable{
 		this.perc = perc;
 		APPEAR_MOD = appearMod;
 		ID = id;
+		dialogueStage = 0;
 		appearance = (str + endur >= dex + swift) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD));
 
+	} 
+
+	public String talk(int response) {
+		return "They don't have anything to say to you.";
 	}
 
 	public boolean equals(Entity other) {

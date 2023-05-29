@@ -29,6 +29,11 @@ public class InputHandler {
 				output += state.movePlayer(tokenizer.next());
 			}
 			output += state.getMapString();
+		} else if (leadingCommand.equals("speak")) {
+			output = "Please include a direction after the speak command.\n";
+			if (tokenizer.hasNext()) {
+				output = state.beginDialogue(tokenizer.next().charAt(0));
+			}
 		} else if (leadingCommand.equals("look")) {
 			output = state.getLocationDesc();
 		} else if (leadingCommand.equals("survey")) {

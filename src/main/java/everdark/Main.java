@@ -29,7 +29,7 @@ public class Main {
 		//ini 
 		//TODO: replace with file IO 
 		iniGameData();
-		g.addLocation(ww);
+		//g.addLocation(ww);
 
 		//player ini
 		playerIni();
@@ -55,17 +55,18 @@ public class Main {
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				features[i][j] = (count%7==0) ? 'T' : ';';
+				features[i][j] = (j >= 7 && j <= 9) ? '~' : features[i][j];
 				topography[i][j] = (i == 15 || j == 15 || i == 0 || j == 0) ? 0 : 2;
 				count++;
 			}
 		}
 		
 		//important permanent-ish stuff
-		String wwDesc1 = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n";
-		String wwDesc2 = "A light breeze flows between the trees and almost sounds like hushed voices.\n";
-		String wwDesc3 = "Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
-		m = new Map(0, "main", "", "", "", null, null, null, 0, 0);
-		ww =  new Map(1, "whispering woods", wwDesc1, wwDesc2, wwDesc3, topography, features, entities, 16, 16);
+		String wwDesc = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n" +
+		"A light breeze flows between the trees and almost sounds like hushed voices.\n" +
+		"Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
+		m = new Map(0, "main", "", null, null, null, 0, 0, 0);
+		ww =  new Map(1, "whispering woods", wwDesc, topography, features, entities, 16, 16, 5);
 		g = new GameState(m);
 	}
 	
