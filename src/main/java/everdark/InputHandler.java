@@ -21,8 +21,15 @@ public class InputHandler {
 		String leadingCommand =(tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
 		String output = "Command not recognized.\n";
 
-		if (leadingCommand.equals("placeholder")) { 
-			output = "this is a placeholder\n";
+		if (state.getInterlocutor() != null) { 
+			try {
+				output = state.getInterlocutor().talk(Integer.parseInt(leadingCommand));
+			} catch (EndOfDialogueException eode) {
+				output = eode.getMessage();
+				state.endDialogue();
+			} catch (Exception e) {
+				output = "Please choose a valid response.";
+			}
 		} else if (leadingCommand.equals("move")) {
 			output = (tokenizer.hasNext()) ? "" : "Please include a direction after the move command.\n";
 			while (tokenizer.hasNext()) {

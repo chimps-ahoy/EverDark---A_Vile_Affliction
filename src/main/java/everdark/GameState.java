@@ -61,11 +61,18 @@ public class GameState {
 		interlocutor = location.beginDialogue(d);
 		String output = "There's no one to talk to there.\n";
 		try { 
-			output = interlocutor.talk(0);
+			output = interlocutor.beginDialogue();
+		} catch (EndOfDialogueException eode) {
+			output = eode.getMessage();
+			interlocutor = null;
 		} catch (Exception e) {
 
 		}
 		return output;
+	}
+
+	public void endDialogue() {
+		interlocutor = null;
 	}
 
 	public String getLocationDesc() {

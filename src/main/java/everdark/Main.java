@@ -16,7 +16,7 @@ public class Main {
 		//iniGameData() whenever New Game is selected.
 		//the only BIG thing to remember is to keep the file names different so we don't overwrite their old save.
 		Player joe = null;
-		joe = new Player("joe", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'a', 1);
+		joe = new Player("joe", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'a', 0);
 		try {
 			joe.saveToFile();
 		} catch (Exception e) {
@@ -60,6 +60,8 @@ public class Main {
 				count++;
 			}
 		}
+		entities[0][8] = new Frog(1);
+		entities[15][3] = new Human(1);
 		
 		//important permanent-ish stuff
 		String wwDesc = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n" +

@@ -48,8 +48,12 @@ public abstract class Entity implements Serializable{
 
 	} 
 
-	public String talk(int response) {
-		return "They don't have anything to say to you.";
+	public String beginDialogue() throws EndOfDialogueException {
+		throw new EndOfDialogueException("They don't have anything to say to you.");
+	}
+
+	public String talk(int response) throws EndOfDialogueException {
+		throw new EndOfDialogueException("They don't have anything to say to you.");
 	}
 
 	public boolean equals(Entity other) {
@@ -66,5 +70,13 @@ public abstract class Entity implements Serializable{
 	
 	public int getPerc() {
 		return perc;
+	}
+
+	public int curStage() {
+		return dialogueStage;
+	}
+
+	public void setStage(int stage) {
+		dialogueStage = stage;
 	}
 }

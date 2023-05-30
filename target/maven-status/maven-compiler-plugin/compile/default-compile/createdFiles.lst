@@ -1,8 +1,11 @@
 ncg\chimpsahoy\everdark\GameState.class
 ncg\chimpsahoy\everdark\Player.class
+ncg\chimpsahoy\everdark\Frog.class
+ncg\chimpsahoy\everdark\Human.class
 ncg\chimpsahoy\everdark\Main.class
 ncg\chimpsahoy\everdark\ConsoleColours.class
 ncg\chimpsahoy\everdark\Map.class
+ncg\chimpsahoy\everdark\EndOfDialogueException.class
 ncg\chimpsahoy\everdark\InputHandler.class
 ncg\chimpsahoy\everdark\Entity.class
 ncg\chimpsahoy\everdark\App.class
