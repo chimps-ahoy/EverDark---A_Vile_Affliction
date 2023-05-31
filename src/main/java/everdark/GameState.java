@@ -1,9 +1,5 @@
 package ncg.chimpsahoy.everdark;
 
-/**import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-**/
 import java.io.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -12,23 +8,18 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sound.sampled.LineUnavailableException;
 
 public class GameState {
-	//private Player player <- if entMap[playerR][playerC] ever gets SLOW or if the code is too messy to get player info, it makes sense to have a pointer to the player
-	//in the GameState
+	private Entity player;
 	private Entity interlocutor;//the person currently in dialogue with
 	//private Entity combatant - for combat?
 	private Map location;
-	//private Graph<Map, DefaultEdge> world;//IMPORTANT: THIS MAY NOT BE NEEDED!? with how I'm envisioning using Portals/Events/MapLinks to connect Maps, the Graph structure is not needed
-	 //is stored in the Maps and between them. This is similar to how we handle the player in entMap with playerR and playerC, and we just need to make sure portals are always updated
-	 //so gameworld doesn't break
 	private File music;
 	private AudioInputStream as;
 	private Clip clip;
 	private static final String MUSIC_PATH = "global/music/";
 
-	public GameState(Map startingLocation) {
-		//world = new SimpleGraph(DefaultEdge.class);
-		//addLocation(startingLocation);
+	public GameState(Map startingLocation, Entity player) {
 		location = startingLocation;
+		this.player = player;
 		
 		try {
 			music = new File(MUSIC_PATH + location.getName() + ".wav");
@@ -41,15 +32,7 @@ public class GameState {
 		this.playMusic();
 	}
 
-	/**public boolean addLocation(Map m) {
-		return world.addVertex(m);
-	}
-
-	public void addConnection(Map m1, Map m2) {
-		world.addEdge(m1,m2);
-	}**/
-
-	public String movePlayer(String direction) {
+	public String movePlayer(String direction) throws MapLink {
 		return location.movePlayer(direction.charAt(0));
 	}
 
@@ -59,7 +42,7 @@ public class GameState {
 
 	public String beginDialogue(char d) {
 		interlocutor = location.beginDialogue(d);
-		String output = "There's no one to talk to there.\n";
+		String output = "There's no one to talk to there.";
 		try { 
 			output = interlocutor.beginDialogue();
 		} catch (EndOfDialogueException eode) {
@@ -79,9 +62,10 @@ public class GameState {
 		return location.getDesc();
 	}
 	
-	public void changeLocation(Map m) {
+	public String changeLocation(Map m, int playerR, int playerC) {
 		this.stopMusic();
 		location = m;
+		location.spawnPlayer(player, playerR, playerC);
 		try {
 			music = new File(MUSIC_PATH + location.getName() + ".wav");
 			as = AudioSystem.getAudioInputStream(music);
@@ -91,7 +75,12 @@ public class GameState {
 		} catch (Exception e) {
 			//we have no music but everything still works
 		}
+		return location.getDesc();
 	} 
+
+	public void changePlayer(Entity player) {
+		this.player = player;
+	}
 
 	public void playMusic() {
 		clip.loop(Clip.LOOP_CONTINUOUSLY);

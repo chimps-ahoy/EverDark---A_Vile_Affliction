@@ -19,7 +19,7 @@ public class InputHandler {
 
 		Scanner tokenizer = new Scanner(input.toLowerCase());
 		String leadingCommand =(tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
-		String output = "Command not recognized.\n";
+		String output = "Command not recognized.";
 
 		if (state.getInterlocutor() != null) { 
 			try {
@@ -31,29 +31,35 @@ public class InputHandler {
 				output = "Please choose a valid response.";
 			}
 		} else if (leadingCommand.equals("move")) {
-			output = (tokenizer.hasNext()) ? "" : "Please include a direction after the move command.\n";
-			while (tokenizer.hasNext()) {
-				output += state.movePlayer(tokenizer.next());
+			boolean leftMap = false;
+			output = (tokenizer.hasNext()) ? "" : "Please include a direction after the move command.";
+			while (tokenizer.hasNext() && !leftMap) {
+				try {
+					output += state.movePlayer(tokenizer.next());
+				} catch (MapLink ml) {
+					output = ml.getMessage() + state.changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC());
+					leftMap = true;
+				}
 			}
 			output += state.getMapString();
 		} else if (leadingCommand.equals("speak")) {
-			output = "Please include a direction after the speak command.\n";
+			output = "Please include a direction after the speak command.";
 			if (tokenizer.hasNext()) {
 				output = state.beginDialogue(tokenizer.next().charAt(0));
 			}
 		} else if (leadingCommand.equals("look")) {
 			output = state.getLocationDesc();
 		} else if (leadingCommand.equals("survey")) {
-			output = "You survey the area for changes in elevation.\n" + state.getTopoMapString();
+			output = "You survey the area for changes in elevation." + state.getTopoMapString();
 		} else if (leadingCommand.equals("save")) {
 			//output = state.save();
 		} else if (leadingCommand.equals("exit")) {
 			acceptingInput = false;
 			state.close();
-			output = "Bye!\n";
+			output = "Bye!";
 		}
 
-		return output;
+		return output + '\n';
 	}
 
 }

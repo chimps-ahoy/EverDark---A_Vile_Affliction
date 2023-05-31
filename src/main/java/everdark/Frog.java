@@ -9,11 +9,11 @@ public class Frog extends Entity {
 	}
 
 	public String beginDialogue() throws EndOfDialogueException {
-		throw new EndOfDialogueException("\"ribbit.\"\n");
+		throw new EndOfDialogueException("\"ribbit.\"");
 	}
 
 	public String talk(int response) throws EndOfDialogueException {
-		throw new EndOfDialogueException("\"ribbit.\"\n");
+		throw new EndOfDialogueException("\"ribbit.\"");
 	}
 
 	public String toString() {

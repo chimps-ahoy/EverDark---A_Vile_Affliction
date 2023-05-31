@@ -1,5 +1,6 @@
 ncg\chimpsahoy\everdark\GameState.class
 ncg\chimpsahoy\everdark\Player.class
+ncg\chimpsahoy\everdark\MapLink.class
 ncg\chimpsahoy\everdark\Frog.class
 ncg\chimpsahoy\everdark\Human.class
 ncg\chimpsahoy\everdark\Main.class

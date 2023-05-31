@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ncg.chimpsahoy</groupId>
     <artifactId>ever-dark</artifactId>
-    <version>0.0.5.1</version>
+    <version>0.0.7</version>
     <packaging>jar</packaging>
     <name>EverDark - A Vile Affliction</name>
     <properties>

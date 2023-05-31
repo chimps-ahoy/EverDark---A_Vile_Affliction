@@ -10,7 +10,7 @@ public class Map {
 	private int[][] topoMap;
 	private char[][] featMap;
 	private Entity[][] entMap;
-	//private Event[][] evntMap;
+	private MapLink[][] links;
 	
 	private int playerC;//player's current column position
 	private int playerR;//player's current row position
@@ -21,20 +21,20 @@ public class Map {
 	private static final String BLOCKING = "T#";
 	private static final String LIQUID = "~";
 
-	public Map(int ID, String name, String desc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols, int percDelta){//Event[][] evntMap
+	public Map(int ID, String name, String desc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols, int percDelta){
 		this.ID = ID;
 		this.name = name;
 		this.desc = desc;
 		this.topoMap = topoMap;
 		this.featMap = featMap;
 		this.entMap = entMap;
-		//this.evntMap = evntMap;
+		this.links = new MapLink[rows][cols];
 		ROWS = rows;
 		COLS = cols;
 		PERC_DELTA = percDelta;
 	}
 
-	public void spawnPlayer(Entity player, int c, int r) {
+	public void spawnPlayer(Entity player, int r, int c) {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				if (entMap[i][j] != null && entMap[i][j].equals(player)) {
@@ -42,10 +42,17 @@ public class Map {
 				}
 			}
 		}
-		if (c >= 0 && c < COLS && r >= 0 && r < ROWS && entMap[r][c] == null) {
+		if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
 			entMap[r][c] = player;
 			playerC = c;
 			playerR = r;
+		}
+	}
+
+	public void addLink(Map destination, int r, int c, int endR, int endC) {
+		if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
+			links[r][c] = new MapLink(this, destination);
+			links[r][c].setEndPoint(endR, endC);
 		}
 	}
 
@@ -65,40 +72,44 @@ public class Map {
 		return output;
 	}
 
-	public String movePlayer(char d) {
+	public String movePlayer(char d) throws MapLink {
 	
 		String output = "";
 		
 		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {//checking for out of bounds
-			output = "You can't walk there.";
+			output = "You can't walk there";
 		} else if ( ((d == 'n' && !passable(-1,0)) || (d == 's' && !passable(1,0)) || (d == 'e' && !passable(0,1)) || (d == 'w' && !passable(0,-1))) ) {
 			output = "An obstacle blocks your path";
 		} else if ((d == 'n' && !climbable(-1,0)) || (d == 's' && !climbable(1,0)) || (d == 'e' && !climbable(0,1)) || (d == 'w' && !climbable(0,-1))) {
-			output = "The change in elevation is too great.";
+			output = "The change in elevation is too great";
 		} else if (d == 'n') {
 			entMap[playerR-1][playerC] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerR--;			
-			output = "You take a step to the North.";
+			output = "You take a step to the North";
+			transportPlayer(output);
 		} else if (d == 's') {
 			entMap[playerR+1][playerC] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerR++;
-			output = "You take a step to the South.";
+			output = "You take a step to the South";
+			transportPlayer(output);
 		} else if (d == 'e') {
 			entMap[playerR][playerC+1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC++;
-			output = "You take a step to the East.";
+			output = "You take a step to the East";
+			transportPlayer(output);
 		} else if (d =='w') {
 			entMap[playerR][playerC-1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC--;
-			output = "You take a step to the West.";
+			output = "You take a step to the West";
+			transportPlayer(output);
 		} else {
-			output = "Something has stopped you from moving.";
+			output = "Unrecognized direction";
 		}
-		return output + "\n";
+		return output + ".\n";
 	}
 	
 	private boolean climbable(int dR, int dC) {//WARNING: does NOT check for out of bounds - this is only expected to be called by movePlayer() for now, which checks that itself
@@ -108,6 +119,13 @@ public class Map {
 	
 	private boolean passable(int dR, int dC) {//same as climbable but for obstacles
 		return !blocking(featMap[playerR+dR][playerC+dC]);
+	}
+
+	private void transportPlayer(String output) throws MapLink {
+		if (links[playerR][playerC] != null) {
+			links[playerR][playerC].setMessage(output + " and are transported to a new location.\n");
+			throw links[playerR][playerC];
+		}
 	}
 	
 	private boolean blocking(char feature) {//checks if a map feature is blocking
@@ -157,6 +175,8 @@ public class Map {
 			for (int j = 0; j < COLS; j++) {
 				if (entMap[i][j] != null) {
 					output += entMap[i][j];
+				} else if (links[i][j] != null) {
+					output += ConsoleColours.RED_BRIGHT + '@' + ConsoleColours.RESET;	
 				} else if (featMap[i][j] == ';') { 
 					output += featMap[i][j];
 				} else if (featMap[i][j] == 'T') {

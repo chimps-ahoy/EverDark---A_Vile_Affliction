@@ -57,7 +57,7 @@ public abstract class Entity implements Serializable{
 	}
 
 	public boolean equals(Entity other) {
-		return this.ID == other.ID;
+		return other != null && this.ID == other.ID;
 	}
 
 	public String toString() {

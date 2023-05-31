@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
 	
 	public static Entity player;
+	public static Map twn;
 	public static Map ww;
 	public static Map m;
 	public static GameState g;
@@ -22,19 +23,16 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//menu drawing
-		System.out.print(drawMenu());
+	
+			System.out.print(drawMenu());
 
-		//ini 
 		//TODO: replace with file IO 
 		iniGameData();
-		//g.addLocation(ww);
 
-		//player ini
 		playerIni();
-		ww.spawnPlayer(player, 6, 6);
-		g.changeLocation(ww);
+
+		g.changePlayer(player);
+		System.out.println(g.changeLocation(ww, 6, 6));
 		
 		//game runtime
 		InputHandler ioHandler = new InputHandler(g);
@@ -48,28 +46,43 @@ public class Main {
 	public static void iniGameData() {
 		
 		//unimportant test stuff - NOTE: maps will still be generated at startup when the player selects to start a new game/if the files arent present?
-		int[][] topography = new int[16][16];
-		Entity[][] entities = new Entity[16][16];
-		char[][] features = new char[16][16];
+		int[][] wwTopo = new int[16][16];
+		Entity[][] wwEnt = new Entity[16][16];
+		char[][] wwFeat = new char[16][16];
+		MapLink[][] wwLink = new MapLink[16][16];
+
+		int[][] twnTopo = new int[16][16];
+		Entity[][] twnEnt = new Entity[16][16];
+		char[][] twnFeat = new char[16][16];
+		MapLink[][] twnLink = new MapLink[16][16];
+
 		int count = 0;
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
-				features[i][j] = (count%7==0) ? 'T' : ';';
-				features[i][j] = (j >= 7 && j <= 9) ? '~' : features[i][j];
-				topography[i][j] = (i == 15 || j == 15 || i == 0 || j == 0) ? 0 : 2;
+				wwFeat[i][j] = (count%7==0) ? 'T' : ';';
+				twnFeat[i][j] = ';';
+				wwFeat[i][j] = (j >= 7 && j <= 9) ? '~' : wwFeat[i][j];
+				wwTopo[i][j] = (i == 15 || j == 15 || i == 0 || j == 0) ? 0 : 1;
 				count++;
 			}
 		}
-		entities[0][8] = new Frog(1);
-		entities[15][3] = new Human(1);
+		wwEnt[0][8] = new Frog(1);
+		wwEnt[15][3] = new Human(1);
 		
 		//important permanent-ish stuff
 		String wwDesc = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n" +
 		"A light breeze flows between the trees and almost sounds like hushed voices.\n" +
 		"Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
+		String twnDesc = "A town.";
+
 		m = new Map(0, "main", "", null, null, null, 0, 0, 0);
-		ww =  new Map(1, "whispering woods", wwDesc, topography, features, entities, 16, 16, 5);
-		g = new GameState(m);
+		ww =  new Map(1, "whispering woods", wwDesc, wwTopo, wwFeat, wwEnt, 16, 16, 5);
+		twn = new Map(2, "town", twnDesc, twnTopo, twnFeat, twnEnt, 16, 16, 0);
+
+		ww.addLink(twn, 15, 15, 0, 0);
+		twn.addLink(ww, 0, 0, 15, 15);
+
+		g = new GameState(m, player);
 	}
 	
 	public static void playerIni() {
@@ -99,6 +112,6 @@ public class Main {
 
 	public static String drawMenu() {
 		return "_______________________________________________________\n" + "|                        EverDark                     |\n" +
-				"|                 ---A Vile Affliction---             |\n" + "|____________________________________________v0.0.5.1_|\n";
+				"|                 ---A Vile Affliction---             |\n" + "|______________________________________________v0.0.7_|\n";
 	}
 }
