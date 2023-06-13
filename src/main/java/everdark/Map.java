@@ -176,7 +176,7 @@ public class Map {
 				if (entMap[i][j] != null) {
 					output += entMap[i][j];
 				} else if (links[i][j] != null) {
-					output += ConsoleColours.RED_BRIGHT + '@' + ConsoleColours.RESET;	
+					output += ConsoleColours.CYAN_BRIGHT + '>' + ConsoleColours.RESET;
 				} else if (featMap[i][j] == ';') { 
 					output += featMap[i][j];
 				} else if (featMap[i][j] == 'T') {

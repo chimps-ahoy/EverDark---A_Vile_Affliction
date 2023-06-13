@@ -51,6 +51,10 @@ public class InputHandler {
 			output = state.getLocationDesc();
 		} else if (leadingCommand.equals("survey")) {
 			output = "You survey the area for changes in elevation." + state.getTopoMapString();
+		} else if (leadingCommand.equals("clear")) {
+			for (int i = 0; i < Config.HEIGHT; i++) {
+				output += '\n';
+			}
 		} else if (leadingCommand.equals("save")) {
 			//output = state.save();
 		} else if (leadingCommand.equals("exit")) {

@@ -12,7 +12,7 @@ public class Player extends Entity {
 
 	public static Player loadFromFile(String path) throws FileNotFoundException, IOException, ClassNotFoundException {
 		
-		FileInputStream fis = new FileInputStream("saves/" + path);
+		FileInputStream fis = new FileInputStream(Config.SAVE_PATH + path);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		Player loaded = (Player)(ois.readObject());
 		ois.close();
@@ -23,7 +23,7 @@ public class Player extends Entity {
 
 	public void saveToFile() throws FileNotFoundException, IOException {
 
-		String fileName = "saves/" + super.getName() + ".ed";
+		String fileName = Config.SAVE_PATH + super.getName() + ".ed";
 		FileOutputStream fos = new FileOutputStream(fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(this);

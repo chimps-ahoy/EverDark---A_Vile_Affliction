@@ -24,11 +24,10 @@ public class Main {
 			e.printStackTrace();
 		}
 	
-			System.out.print(drawMenu());
+		System.out.print(drawMenu());
 
 		//TODO: replace with file IO 
 		iniGameData();
-
 		playerIni();
 
 		g.changePlayer(player);
@@ -111,7 +110,34 @@ public class Main {
 	}
 
 	public static String drawMenu() {
-		return "_______________________________________________________\n" + "|                        EverDark                     |\n" +
-				"|                 ---A Vile Affliction---             |\n" + "|______________________________________________v0.0.7_|\n";
+		String menu = "";
+		String title = "EverDark";
+		String subtitle = "---A Vile Affliction---";
+		String vers = "v0.0.7";
+		for (int i = 0; i <= Config.HEIGHT; i++) {
+			menu += '\n';
+		}
+		for (int i = 0; i < Config.HEIGHT-1; i++) {
+			for (int j = 0; j < Config.WIDTH; j++) {
+				if (i == (Config.HEIGHT-1)/2 && j == (Config.WIDTH-title.length())/2) {
+					menu += title;
+					j += title.length()-1;
+				} else if (i == (Config.HEIGHT-1)/2 + 1 && j == (Config.WIDTH-subtitle.length())/2) {
+					menu += subtitle;
+					j += subtitle.length()-1;
+				} else if (i == Config.HEIGHT-2 && j == Config.WIDTH-vers.length()-1) {
+					menu += vers;
+					j += vers.length()-1;
+				} else if (i == 0 || (i == Config.HEIGHT-2 && j > 0 && j < Config.WIDTH-1)) {
+					menu += '_';
+				} else if (j == 0 || j == Config.WIDTH-1) {
+					menu += '|';
+				} else {
+					menu += " ";
+				}
+			}
+			menu += '\n';
+		}
+		return menu;
 	}
 }

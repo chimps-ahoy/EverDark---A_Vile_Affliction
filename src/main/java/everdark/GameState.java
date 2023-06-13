@@ -15,21 +15,20 @@ public class GameState {
 	private File music;
 	private AudioInputStream as;
 	private Clip clip;
-	private static final String MUSIC_PATH = "global/music/";
 
 	public GameState(Map startingLocation, Entity player) {
 		location = startingLocation;
 		this.player = player;
 		
 		try {
-			music = new File(MUSIC_PATH + location.getName() + ".wav");
+			music = new File(Config.MUSIC_PATH + location.getName() + ".wav");
 			as = AudioSystem.getAudioInputStream(music);
 			clip = AudioSystem.getClip();
 			clip.open(as);
+			this.playMusic();
 		} catch (Exception e) {
 			//we have no music but everything still works
 		}
-		this.playMusic();
 	}
 
 	public String movePlayer(String direction) throws MapLink {
@@ -67,7 +66,7 @@ public class GameState {
 		location = m;
 		location.spawnPlayer(player, playerR, playerC);
 		try {
-			music = new File(MUSIC_PATH + location.getName() + ".wav");
+			music = new File(Config.MUSIC_PATH + location.getName() + ".wav");
 			as = AudioSystem.getAudioInputStream(music);
 			clip = AudioSystem.getClip();
 			clip.open(as);

@@ -7,10 +7,10 @@ public class Human extends Entity {
 	}
 
 	public String beginDialogue() throws EndOfDialogueException {
-		String output = "\"Hello.\"" + "1 - \"Hello.\"" 
+		String output = "\"Hello.\"\n" + "1 - \"Hello.\"\n" 
 						+ "2 - \"Who are you?.\"";
 		if (super.curStage() > 0) {
-			output = "\"Hello, again.\"" + "1 - \"Hello.\"" 
+			output = "\"Hello, again.\"\n" + "1 - \"Hello.\"\n" 
 						+ "2 - \"Who are you?.\"";
 		}
 		super.setStage(1);
@@ -19,11 +19,7 @@ public class Human extends Entity {
 
 	public String talk(int response) throws EndOfDialogueException {
 		String output = "";
-		if (super.curStage() == 0) {
-			output = "\"Hello.\"" + "1 - \"Hello.\"" 
-			       			+ "2 - \"Who are you?.\"";
-			super.setStage(curStage()+1);
-		} else if (super.curStage() == 1) {
+	      	if (super.curStage() == 1) {
 			switch (response) {
 				case 1:
 					throw new EndOfDialogueException("\"Goodbye.\"");
