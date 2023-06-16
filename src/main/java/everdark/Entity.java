@@ -1,4 +1,5 @@
 package ncg.chimpsahoy.everdark;
+import java.util.LinkedList;
 import java.io.*;
 
 public abstract class Entity implements Serializable{
@@ -52,7 +53,7 @@ public abstract class Entity implements Serializable{
 		throw new EndOfDialogueException("They don't have anything to say to you.");
 	}
 
-	public String talk(int response) throws EndOfDialogueException {
+	public String talk(int response, LinkedList<Character> args, Entity player) throws EndOfDialogueException {
 		throw new EndOfDialogueException("They don't have anything to say to you.");
 	}
 
@@ -61,13 +62,26 @@ public abstract class Entity implements Serializable{
 	}
 
 	public String toString() {
-		return "" + appearance;
+		return "" + ((str + endur >= dex + swift) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD)));
+	}
+
+	public String stats() {
+		return "Name: " + name + " - " + this + "\nStr: " + str + "\nEndur: " + endur + "\nDex; " + dex + "\nSwift: " + swift + "\nInt: " + iq + "\nWill: " + wil
+		       + "\nCharm: " + charm + "\nIntim: " + intim + "\nPerc: " + perc;	
 	}
 
 	public String getName() {
 		return name;
 	}
 	
+	public int getWil() {
+		return wil;
+	}
+
+	public int getCharm() {
+		return charm;
+	}
+
 	public int getPerc() {
 		return perc;
 	}

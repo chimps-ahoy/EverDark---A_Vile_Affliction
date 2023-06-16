@@ -54,7 +54,7 @@ public class Player extends Entity {
 		boolean finished = false;
 
 		System.out.print("Would you like more info about these stats? (Y/N): ");
-		if (in.next().toLowerCase().charAt(0) == 'y') {
+		if (in.nextLine().toLowerCase().charAt(0) == 'y') {
 			System.out.println("\nStrength - Your character's physical prowess. This is a measure of your short-twitch muscle fibres- quick bursts of force.\n" +
 							"Endurance - In contrast to Strength; your character's slow-twitch muscle fibres- how long they can act before becoming fatigued.\n" +
 							"Dexterity - The strength of your character's little muscles, rather than the big ones. This is your fine motor skill. It measures how precisely you can perform an action.\n" +
@@ -67,7 +67,7 @@ public class Player extends Entity {
 		}
 
 		System.out.print("\nPlease name your character: ");
-		in.next();
+		//in.next();
 		inName = in.nextLine();
 
 		while (!finished) {

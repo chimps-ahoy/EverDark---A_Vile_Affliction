@@ -79,7 +79,7 @@ public class Map {
 		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {//checking for out of bounds
 			output = "You can't walk there";
 		} else if ( ((d == 'n' && !passable(-1,0)) || (d == 's' && !passable(1,0)) || (d == 'e' && !passable(0,1)) || (d == 'w' && !passable(0,-1))) ) {
-			output = "An obstacle blocks your path";
+			output = "Something blocks your path";
 		} else if ((d == 'n' && !climbable(-1,0)) || (d == 's' && !climbable(1,0)) || (d == 'e' && !climbable(0,1)) || (d == 'w' && !climbable(0,-1))) {
 			output = "The change in elevation is too great";
 		} else if (d == 'n') {
@@ -118,12 +118,12 @@ public class Map {
 	}
 	
 	private boolean passable(int dR, int dC) {//same as climbable but for obstacles
-		return !blocking(featMap[playerR+dR][playerC+dC]);
+		return !blocking(featMap[playerR+dR][playerC+dC]) && (entMap[playerR+dR][playerC+dC] == null);
 	}
 
 	private void transportPlayer(String output) throws MapLink {
 		if (links[playerR][playerC] != null) {
-			links[playerR][playerC].setMessage(output + " and are transported to a new location.\n");
+			links[playerR][playerC].setMessage(output + " and travel to a new location.\n");
 			throw links[playerR][playerC];
 		}
 	}

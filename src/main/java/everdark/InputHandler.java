@@ -1,5 +1,7 @@
 package ncg.chimpsahoy.everdark;
 import java.util.Scanner;
+import java.util.InputMismatchException;
+import java.util.LinkedList;
 
 public class InputHandler { 
 
@@ -19,44 +21,51 @@ public class InputHandler {
 
 		Scanner tokenizer = new Scanner(input.toLowerCase());
 		String leadingCommand =(tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
+		LinkedList<Character> args = new LinkedList<>();
+		while (tokenizer.hasNext()) {
+			args.add(tokenizer.next().charAt(0));	
+		}
 		String output = "Command not recognized.";
 
 		if (state.getInterlocutor() != null) { 
 			try {
-				output = state.getInterlocutor().talk(Integer.parseInt(leadingCommand));
+				output = state.getInterlocutor().talk(Integer.parseInt(leadingCommand), args, state.getPlayer());
 			} catch (EndOfDialogueException eode) {
 				output = eode.getMessage();
 				state.endDialogue();
-			} catch (Exception e) {
-				output = "Please choose a valid response.";
+			} catch (NumberFormatException|InputMismatchException ex) { 
+				output = "Please use a numeric input.";
+			} catch (IllegalArgumentException iae) {
+				output = iae.getMessage();
 			}
 		} else if (leadingCommand.equals("move")) {
-			boolean leftMap = false;
-			output = (tokenizer.hasNext()) ? "" : "Please include a direction after the move command.";
-			while (tokenizer.hasNext() && !leftMap) {
-				try {
-					output += state.movePlayer(tokenizer.next());
-				} catch (MapLink ml) {
-					output = ml.getMessage() + state.changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC());
-					leftMap = true;
+			output = (args.peek() == null) ? "Please include a direction after the move command." : "";
+			try {
+				for (char d : args) {
+					output += state.movePlayer(d);
 				}
+			} catch (MapLink ml) {
+				output = ml.getMessage() + state.changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC());
 			}
 			output += state.getMapString();
 		} else if (leadingCommand.equals("speak")) {
 			output = "Please include a direction after the speak command.";
-			if (tokenizer.hasNext()) {
-				output = state.beginDialogue(tokenizer.next().charAt(0));
+			if (args.peek() != null) {
+				output = state.beginDialogue(args.pop());
 			}
 		} else if (leadingCommand.equals("look")) {
 			output = state.getLocationDesc();
 		} else if (leadingCommand.equals("survey")) {
-			output = "You survey the area for changes in elevation." + state.getTopoMapString();
+			output = "You survey the area for changes in elevation.\n" + state.getTopoMapString();
 		} else if (leadingCommand.equals("clear")) {
+			output = "";
 			for (int i = 0; i < Config.HEIGHT; i++) {
 				output += '\n';
 			}
+		} else if (leadingCommand.equals("stats")) {
+			output = state.getPlayer().stats();
 		} else if (leadingCommand.equals("save")) {
-			//output = state.save();
+			output = state.save();
 		} else if (leadingCommand.equals("exit")) {
 			acceptingInput = false;
 			state.close();

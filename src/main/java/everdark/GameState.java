@@ -30,9 +30,13 @@ public class GameState {
 			//we have no music but everything still works
 		}
 	}
+	
+	public String save() {
+		return "This is yet to be implemented!";
+	}
 
-	public String movePlayer(String direction) throws MapLink {
-		return location.movePlayer(direction.charAt(0));
+	public String movePlayer(char d) throws MapLink {
+		return location.movePlayer(d);
 	}
 
 	public Entity getInterlocutor() {
@@ -79,6 +83,10 @@ public class GameState {
 
 	public void changePlayer(Entity player) {
 		this.player = player;
+	}
+
+	public Entity getPlayer() {
+		return player;
 	}
 
 	public void playMusic() {

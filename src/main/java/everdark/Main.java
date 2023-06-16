@@ -113,7 +113,7 @@ public class Main {
 		String menu = "";
 		String title = "EverDark";
 		String subtitle = "---A Vile Affliction---";
-		String vers = "v0.0.7";
+		String vers = "v0.0.8";
 		for (int i = 0; i <= Config.HEIGHT; i++) {
 			menu += '\n';
 		}

@@ -1,4 +1,5 @@
 package ncg.chimpsahoy.everdark;
+import java.util.LinkedList;
 
 public class Frog extends Entity {
 
@@ -12,7 +13,7 @@ public class Frog extends Entity {
 		throw new EndOfDialogueException("\"ribbit.\"");
 	}
 
-	public String talk(int response) throws EndOfDialogueException {
+	public String talk(int response, LinkedList<Character> args, Entity player) throws EndOfDialogueException {
 		throw new EndOfDialogueException("\"ribbit.\"");
 	}
 
