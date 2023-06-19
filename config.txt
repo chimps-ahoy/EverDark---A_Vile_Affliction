@@ -2,3 +2,4 @@ Screen width (# of character columns): 192
 Screen height (# of character rows): 57
 Filepath for game saves (root being the everdark directory): saves/
 Filepath for music files (root being the everdark directory): global/music/
+Use ANSI colours? (Y/N): Y

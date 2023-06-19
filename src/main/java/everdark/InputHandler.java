@@ -27,7 +27,16 @@ public class InputHandler {
 		}
 		String output = "Command not recognized.";
 
-		if (state.getInterlocutor() != null) { 
+		if (state.getPlayer() == null) {
+				try {
+					output = state.ini(leadingCommand);
+				} catch (LoadFromFileException lfle) {
+					state.stopMusic();
+					state = lfle.getState();
+					state.startMusic();
+					output = lfle.getMessage();
+				}
+		} else if (state.getInterlocutor() != null) { 
 			try {
 				output = state.getInterlocutor().talk(Integer.parseInt(leadingCommand), args, state.getPlayer());
 			} catch (EndOfDialogueException eode) {

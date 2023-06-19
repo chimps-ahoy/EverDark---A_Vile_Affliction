@@ -1,8 +1,9 @@
 package ncg.chimpsahoy.everdark;
 
 import java.util.Scanner;
+import java.io.Serializable;
 
-public class Map {
+public class Map implements Serializable {
 	
 	private final int ID;
 	private String name;
@@ -34,7 +35,7 @@ public class Map {
 		PERC_DELTA = percDelta;
 	}
 
-	public void spawnPlayer(Entity player, int r, int c) {
+	public void spawnPlayer(Player player, int r, int c) {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				if (entMap[i][j] != null && entMap[i][j].equals(player)) {
