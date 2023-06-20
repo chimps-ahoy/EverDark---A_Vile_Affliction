@@ -28,14 +28,14 @@ public class InputHandler {
 		String output = "Command not recognized.";
 
 		if (state.getPlayer() == null) {
-				try {
-					output = state.ini(leadingCommand);
-				} catch (LoadFromFileException lfle) {
-					state.stopMusic();
-					state = lfle.getState();
-					state.startMusic();
-					output = lfle.getMessage();
-				}
+			try {
+				output = state.ini(leadingCommand);
+			} catch (LoadFromFileException lfle) {
+				state.stopMusic();
+				state = lfle.getState();
+				state.startMusic();
+				output = lfle.getMessage();
+			}
 		} else if (state.getInterlocutor() != null) { 
 			try {
 				output = state.getInterlocutor().talk(Integer.parseInt(leadingCommand), args, state.getPlayer());
@@ -49,12 +49,8 @@ public class InputHandler {
 			}
 		} else if (leadingCommand.equals("move")) {
 			output = (args.peek() == null) ? "Please include a direction after the move command." : "";
-			try {
-				for (char d : args) {
-					output += state.movePlayer(d);
-				}
-			} catch (MapLink ml) {
-				output = ml.getMessage() + state.changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC());
+			for (char d : args) {
+				output += state.movePlayer(d);
 			}
 			output += state.getMapString();
 		} else if (leadingCommand.equals("speak")) {

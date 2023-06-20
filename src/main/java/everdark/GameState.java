@@ -200,7 +200,7 @@ public class GameState implements Serializable {
 				finalState = GameState.loadFromFile(fileList[Integer.parseInt(response)]);
 				loadMessage = finalState.getLocationDesc();
 				throw new LoadFromFileException(finalState, loadMessage);
-			} catch (IOException|ClassNotFoundException|ClassCastException ex) {
+			} catch (IOException|ClassNotFoundException|RuntimeException ex) {
 				output = "Save could not be found.";
 			}
 		}
@@ -232,8 +232,14 @@ public class GameState implements Serializable {
 		return loaded;
 	}
 
-	public String movePlayer(char d) throws MapLink {
-		return location.movePlayer(d);
+	public String movePlayer(char d) {
+		String output = "";
+		try {
+			output = location.movePlayer(d);
+		} catch (MapLink ml) {
+			output = ml.getMessage() + this.changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC());
+		}
+		return output;
 	}
 
 	public Entity getInterlocutor() {
