@@ -48,7 +48,7 @@ public class InputHandler {
 				output = iae.getMessage();
 			}
 		} else if (leadingCommand.equals("move")) {
-			output = (args.peek() == null) ? "Please include a direction after the move command." : "";
+			output = (args.peek() == null) ? "Please include a direction after the move command.\n" : "";
 			for (char d : args) {
 				output += state.movePlayer(d);
 			}

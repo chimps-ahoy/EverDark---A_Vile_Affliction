@@ -1,6 +1,8 @@
 package ncg.chimpsahoy.everdark;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -209,8 +211,9 @@ public class GameState implements Serializable {
 	
 	public String save() {
 		String output = "";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uu-MM-dd_HH-mm-ss");
 		try {
-			String fileName = Config.SAVE_PATH + player.getName() + ".ed";
+			String fileName = Config.SAVE_PATH + player.getName() + LocalDateTime.now().format(dtf) + ".ed";
 			FileOutputStream fos = new FileOutputStream(fileName);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(this);
@@ -237,7 +240,7 @@ public class GameState implements Serializable {
 		try {
 			output = location.movePlayer(d);
 		} catch (MapLink ml) {
-			output = ml.getMessage() + this.changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC());
+			output = ml.getMessage() + this.changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC()) + '\n';
 		}
 		return output;
 	}
@@ -313,12 +316,12 @@ public class GameState implements Serializable {
 	}
 	
 	public void close() {
-		clip.stop();
 		try {
+			clip.stop();
 			clip.close();
 			as.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	} 
 

@@ -139,10 +139,10 @@ public class Map implements Serializable {
 
 	public String getDesc() {
 		int playerPerc = entMap[playerR][playerC].getPerc();
-		String output = "";
 		String[] details = desc.split("\n");
-		for (int i = 0; i < details.length && playerPerc >= i*PERC_DELTA ; i++) {
-			output += details[i] + '\n';
+		String output = details[0];
+		for (int i = 1; i < details.length && playerPerc >= i*PERC_DELTA ; i++) {
+			output += '\n' + details[i];
 		}	
 		return output;
 	}
@@ -160,10 +160,13 @@ public class Map implements Serializable {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				if (i == playerR && j == playerC) {
-					output += ConsoleColours.YELLOW_BOLD + topoMap[i][j] + ConsoleColours.RESET + " ";//highlights the player location in  yellow
+					output += ConsoleColours.YELLOW_BOLD + topoMap[i][j] + ConsoleColours.RESET;//highlights the player location in  yellow
+				} else if (topoMap[i][j] < 0) {
+					output += ConsoleColours.BLACK_BRIGHT + Math.abs(topoMap[i][j]) + ConsoleColours.RESET;//negatives display as red?
 				} else {
-					output += topoMap[i][j] + " ";
+					output += topoMap[i][j];
 				}
+				output += " ";
 			}
 			output += '\n';
 		}
