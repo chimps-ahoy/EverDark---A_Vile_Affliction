@@ -27,26 +27,17 @@ public class InputHandler {
 		}
 		String output = "Command not recognized.";
 
-		if (state.getPlayer() == null) {
+		if (!state.initialized()) {
 			try {
-				output = state.ini(leadingCommand);
+				output = state.ini(input);
 			} catch (LoadFromFileException lfle) {
 				state.stopMusic();
 				state = lfle.getState();
 				state.startMusic();
-				output = lfle.getMessage();
+				output = state.getLocationDesc();
 			}
-		} else if (state.getInterlocutor() != null) { 
-			try {
-				output = state.getInterlocutor().talk(Integer.parseInt(leadingCommand), args, state.getPlayer());
-			} catch (EndOfDialogueException eode) {
-				output = eode.getMessage();
-				state.endDialogue();
-			} catch (NumberFormatException|InputMismatchException ex) { 
-				output = "Please use a numeric input.";
-			} catch (IllegalArgumentException iae) {
-				output = iae.getMessage();
-			}
+		} else if (state.inDialogue()) { 
+				output = state.talk(Integer.parseInt(leadingCommand), args);
 		} else if (leadingCommand.equals("move")) {
 			output = (args.peek() == null) ? "Please include a direction after the move command.\n" : "";
 			for (char d : args) {
@@ -68,7 +59,7 @@ public class InputHandler {
 				output += '\n';
 			}
 		} else if (leadingCommand.equals("stats")) {
-			output = state.getPlayer().stats();
+			output = state.getPlayerStats();
 		} else if (leadingCommand.equals("save")) {
 			output = state.save();
 		} else if (leadingCommand.equals("exit")) {

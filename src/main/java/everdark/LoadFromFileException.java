@@ -4,8 +4,7 @@ public class LoadFromFileException extends Exception {
 
 	private GameState state;
 
-	public LoadFromFileException(GameState state, String message) {
-		super(message);
+	public LoadFromFileException(GameState state) {
 		this.state = state;	
 	}
 

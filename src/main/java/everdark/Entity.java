@@ -21,10 +21,7 @@ public abstract class Entity implements Serializable{
 	//----------------------------
 	private final char APPEAR_MOD; //the appearance modifier. the basic char for their appearance before it is affected by stuff like starvation
 	private char appearance;
-	//private ??? origin, the place they came from PROBABLY stored as Enum or String, but Enum >> faster
 	
-	private int dialogueStage;
-
 	private final int ID;//each subclass of Entity will contain a static variable to count the instances of the class and automatically assign IDs. Unique NPCs
 			     //which have their own class, will have a set ID, but this must be decided so we don't get bad overlap. I think the player will have ID = 0,
 			     //and for NPCs we can count up from there. For generic enemies which will have a static counter, we can have that counter begin at 1k for one Entity
@@ -44,16 +41,15 @@ public abstract class Entity implements Serializable{
 		this.perc = perc;
 		APPEAR_MOD = appearMod;
 		ID = id;
-		dialogueStage = 0;
 		appearance = (str + endur >= dex + swift) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD));
 
 	} 
 
-	public String beginDialogue() throws EndOfDialogueException {
+	public String beginDialogue(Player player) throws EndOfDialogueException {
 		throw new EndOfDialogueException("They don't have anything to say to you.");
 	}
 
-	public String talk(int response, LinkedList<Character> args, Entity player) throws EndOfDialogueException {
+	public String talk(int response, LinkedList<Character> args, Player player) throws EndOfDialogueException {
 		throw new EndOfDialogueException("They don't have anything to say to you.");
 	}
 
@@ -86,11 +82,8 @@ public abstract class Entity implements Serializable{
 		return perc;
 	}
 
-	public int curStage() {
-		return dialogueStage;
+	public int getClimbing() {
+		return (int)(Math.sqrt(str * endur));
 	}
 
-	public void setStage(int stage) {
-		dialogueStage = stage;
-	}
 }

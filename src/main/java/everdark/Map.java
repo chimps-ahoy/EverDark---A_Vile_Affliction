@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 public class Map implements Serializable {
 	
+	private static int mapCount = 0;
 	private final int ID;
 	private String name;
 	private String desc;
@@ -22,8 +23,8 @@ public class Map implements Serializable {
 	private static final String BLOCKING = "T#";
 	private static final String LIQUID = "~";
 
-	public Map(int ID, String name, String desc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols, int percDelta){
-		this.ID = ID;
+	public Map(String name, String desc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols, int percDelta){
+		this.ID = mapCount++;
 		this.name = name;
 		this.desc = desc;
 		this.topoMap = topoMap;
@@ -59,7 +60,7 @@ public class Map implements Serializable {
 
 	public Entity beginDialogue(char d) {
 		Entity output = null;
-		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {	
+		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == ROWS-1) || (d == 'e' && playerC == COLS-1) || (d == 'w' && playerC == 0)) {	
 			output = null;
 		} else if (d == 'n') {
 			output = entMap[playerR-1][playerC];
@@ -77,44 +78,44 @@ public class Map implements Serializable {
 	
 		String output = "";
 		
-		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == 15) || (d == 'e' && playerC == 15) || (d == 'w' && playerC == 0)) {//checking for out of bounds
-			output = "You can't walk there";
+		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == ROWS-1) || (d == 'e' && playerC == COLS-1) || (d == 'w' && playerC == 0)) {//checking for out of bounds
+			output = "You can't walk there.\n";
 		} else if ( ((d == 'n' && !passable(-1,0)) || (d == 's' && !passable(1,0)) || (d == 'e' && !passable(0,1)) || (d == 'w' && !passable(0,-1))) ) {
-			output = "Something blocks your path";
+			output = "Something blocks your path.\n";
 		} else if ((d == 'n' && !climbable(-1,0)) || (d == 's' && !climbable(1,0)) || (d == 'e' && !climbable(0,1)) || (d == 'w' && !climbable(0,-1))) {
-			output = "The change in elevation is too great";
+			output = "The change in elevation is too great.\n";
 		} else if (d == 'n') {
 			entMap[playerR-1][playerC] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerR--;			
-			output = "You take a step to the North";
+			output = "You take a step to the North.\n";
 			transportPlayer(output);
 		} else if (d == 's') {
 			entMap[playerR+1][playerC] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerR++;
-			output = "You take a step to the South";
+			output = "You take a step to the South.\n";
 			transportPlayer(output);
 		} else if (d == 'e') {
 			entMap[playerR][playerC+1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC++;
-			output = "You take a step to the East";
+			output = "You take a step to the East.\n";
 			transportPlayer(output);
 		} else if (d =='w') {
 			entMap[playerR][playerC-1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC--;
-			output = "You take a step to the West";
+			output = "You take a step to the West.\n";
 			transportPlayer(output);
 		} else {
-			output = "Unrecognized direction";
+			output = "Unrecognized direction.\n";
 		}
-		return output + ".\n";
+		return output;
 	}
 	
 	private boolean climbable(int dR, int dC) {//WARNING: does NOT check for out of bounds - this is only expected to be called by movePlayer() for now, which checks that itself
-		final int CLIMBING_FACTOR = 1;
+		final int CLIMBING_FACTOR = entMap[playerR][playerC].getClimbing();
 		 return (Math.abs(topoMap[playerR][playerC] - topoMap[playerR+dR][playerC+dC]) <= CLIMBING_FACTOR);
 	}
 	
@@ -138,7 +139,7 @@ public class Map implements Serializable {
 	}
 
 	public String getDesc() {
-		int playerPerc = entMap[playerR][playerC].getPerc();
+		int playerPerc = (entMap != null) ? (entMap[playerR][playerC].getPerc()) : (0);
 		String[] details = desc.split("\n");
 		String output = details[0];
 		for (int i = 1; i < details.length && playerPerc >= i*PERC_DELTA ; i++) {
@@ -156,47 +157,45 @@ public class Map implements Serializable {
 	}
 
 	public String getTopoMapString() {//gets a string of the topography of the area. 
-		String output = "";
+		StringBuilder output = new StringBuilder(ROWS*COLS+50);
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				if (i == playerR && j == playerC) {
-					output += ConsoleColours.YELLOW_BOLD + topoMap[i][j] + ConsoleColours.RESET;//highlights the player location in  yellow
+					output.append(ConsoleColours.YELLOW_BOLD).append(Math.abs(topoMap[i][j])).append(ConsoleColours.RESET);//highlights the player location in  yellow
+				} else if (Math.abs(topoMap[i][j]) > 9) {
+					output.append(ConsoleColours.RED).append('!').append(ConsoleColours.RESET);//anything greater or less than 9 is used for like pits, which will just be shown as !
 				} else if (topoMap[i][j] < 0) {
-					output += ConsoleColours.BLACK_BRIGHT + Math.abs(topoMap[i][j]) + ConsoleColours.RESET;//negatives display as red?
+					output.append(ConsoleColours.BLACK_BRIGHT).append(Math.abs(topoMap[i][j])).append(ConsoleColours.RESET);//negatives display as red?
 				} else {
-					output += topoMap[i][j];
+					output.append(topoMap[i][j]);
 				}
-				output += " ";
+				output.append(' ');
 			}
-			output += '\n';
+			output.append('\n');
 		}
-		return output;
+		return output.toString();
 	}
 
 	public String toString() {
-		String output = "";
+		StringBuilder output = new StringBuilder(ROWS*COLS+50);
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				if (entMap[i][j] != null) {
-					output += entMap[i][j];
+					output.append(entMap[i][j]);
 				} else if (links[i][j] != null) {
-					output += ConsoleColours.CYAN_BRIGHT + '>' + ConsoleColours.RESET;
-				} else if (featMap[i][j] == ';') { 
-					output += featMap[i][j];
-				} else if (featMap[i][j] == 'T') {
-					output += featMap[i][j]; //these are separated incase I want to do ANSI colour shenanigans
+					output.append(ConsoleColours.CYAN_BRIGHT).append('>').append(ConsoleColours.RESET);
 				} else if (featMap[i][j] == '~') {
-					output += ConsoleColours.BLUE_BRIGHT + featMap[i][j] + ConsoleColours.RESET;
+					output.append(ConsoleColours.BLUE_BRIGHT).append(featMap[i][j]).append(ConsoleColours.RESET);
 				} else if (featMap[i][j] != '\u0000') { 
-					output += featMap[i][j];
+					output.append(featMap[i][j]);
 				} else {
-					output += topoMap[i][j];
+					output.append(topoMap[i][j]);
 				}
-				output += " ";
+				output.append(' ');
 			}
-			output += '\n';
+			output.append('\n');
 		}
-		return output;
+		return output.toString();
 	}
 
 }

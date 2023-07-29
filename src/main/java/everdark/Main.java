@@ -11,6 +11,7 @@ public class Main {
 		GameState g = new GameState(Config.MAIN_MENU);
 		InputHandler ioHandler = new InputHandler(g);
 		Scanner in = new Scanner(System.in);
+		
 		while (ioHandler.acceptingInput()) {
 			System.out.println(ioHandler.handle(in.nextLine()));
 		}
