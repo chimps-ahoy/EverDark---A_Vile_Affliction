@@ -1,6 +1,6 @@
 package ncg.chimpsahoy.everdark;
 
-public class MapLink extends Exception {
+public class MapLink extends Event {
 
 	private Map source;
 	private Map destination;
@@ -8,10 +8,16 @@ public class MapLink extends Exception {
 	private int endR;
 	private int endC;
 
-	public MapLink(Map source, Map destination) {
+	public MapLink(Map source, Map destination, int r, int c) {
 		super();
 		this.source = source;
 		this.destination = destination;
+		this.endR = r;
+		this.endC = c;
+	}
+
+	public String update(GameState state) {
+		return message + state.changeLocation(destination, endR, endC);
 	}
 
 	public Map getDestination() {

@@ -7,7 +7,7 @@ public class Human extends NPC {
 		super("test", lvl, lvl, lvl, lvl, lvl, lvl, lvl, lvl, lvl, lvl, lvl, 'c', 1);
 	}
 
-	public String beginDialogue(Player player) throws EndOfDialogueException {
+	public String beginDialogue(Player player) throws EndOfDialogueEvent {
 		String output = "\"Hello.\"\n" + "1 - \"I'm the president.\"\n" 
 						+ "2 - \"Who are you?.\"";
 		if (super.curStage() > 0) {
@@ -18,17 +18,17 @@ public class Human extends NPC {
 		return output;
 	}
 
-	public String talk(int response, LinkedList<Character> args, Player player) throws EndOfDialogueException {
+	public String talk(int response, LinkedList<Character> args, Player player) throws EndOfDialogueEvent {
 		String output = "";
 	      if (super.curStage() == 1) {
 				if (response == 1 && player.getCharm() > this.getWil() && args.contains('l')) {
-					throw new EndOfDialogueException("\"You lied to me, but I believe it.\"");
+					throw new EndOfDialogueEvent("\"You lied to me, but I believe it.\"");
 				} else if (response == 1 &&  args.contains('l')) {
-					throw new EndOfDialogueException("\"I don't believe that.\"");
+					throw new EndOfDialogueEvent("\"I don't believe that.\"");
 				} else if (response == 1) {
-					throw new EndOfDialogueException("\"That is the truth.\"");
+					throw new EndOfDialogueEvent("\"That is the truth.\"");
 				} else if (response == 2) {
-					throw new EndOfDialogueException("\"I am a test of the dialogue routines.\"");
+					throw new EndOfDialogueEvent("\"I am a test of the dialogue routines.\"");
 				} else {
 					throw new IllegalArgumentException("Invalid selection.");
 				}

@@ -22,7 +22,7 @@ public class GameState implements Serializable {
 	private transient Clip clip;
 
 	private int iniStage = 0;
-	private int availablePoints = 20;
+	private int availablePoints = 30;
 	private String inName = "";
 	private char inAppear = 'c';
 	private int[] stats = new int[9];
@@ -164,44 +164,28 @@ public class GameState implements Serializable {
 		return loaded;
 	}
 
-	public String movePlayer(char d) {
-		String output = "";
-		try {
-			output = location.movePlayer(d);
-		} catch (MapLink ml) {
-			output = ml.getMessage() + changeLocation(ml.getDestination(), ml.getEndR(), ml.getEndC()) + '\n';
-		}
-		return output;
+	public String movePlayer(char d) throws Event {
+		return location.movePlayer(d);
 	}
 
 	public boolean inDialogue() {
 		return interlocutor != null;
 	}
 
-	public String talk(int response, LinkedList<Character> args) {
-		String output = "";
-		try {
-			output = interlocutor.talk(response, args, player); 
-		} catch (EndOfDialogueException eode) {
-			output = eode.getMessage();
-			interlocutor = null;
-		} catch (NumberFormatException|InputMismatchException ex) { 
-			output = "Please use a numeric input.";
-		} catch (IllegalArgumentException iae) {
-			output = iae.getMessage();
-		}
-		return output;
+	public void endDialogue() {
+		interlocutor = null;
 	}
 
-	public String beginDialogue(char d) {
+	public String talk(int response, LinkedList<Character> args) throws EndOfDialogueEvent {
+		return interlocutor.talk(response, args, player); 
+	}
+
+	public String beginDialogue(char d) throws EndOfDialogueEvent {
 		interlocutor = location.beginDialogue(d);
 		String output = "There's no one to talk to there.";
 		try { 
-			output = interlocutor.beginDialogue(player);
-		} catch (EndOfDialogueException eode) {
-			output = eode.getMessage();
-			interlocutor = null;
-		} catch (Exception e) {
+			output = interlocutor.beginDialogue(player);	
+		} catch (NullPointerException npe) {
 
 		}
 		return output;
@@ -275,5 +259,4 @@ public class GameState implements Serializable {
 		return location.getTopoMapString();
 	}
 	
-
 }

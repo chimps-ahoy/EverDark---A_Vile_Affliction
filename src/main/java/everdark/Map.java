@@ -12,7 +12,7 @@ public class Map implements Serializable {
 	private int[][] topoMap;
 	private char[][] featMap;
 	private Entity[][] entMap;
-	private MapLink[][] links;
+	private Event[][] evtMap;
 	
 	private int playerC;//player's current column position
 	private int playerR;//player's current row position
@@ -30,7 +30,7 @@ public class Map implements Serializable {
 		this.topoMap = topoMap;
 		this.featMap = featMap;
 		this.entMap = entMap;
-		this.links = new MapLink[rows][cols];
+		this.evtMap = new Event[rows][cols];
 		ROWS = rows;
 		COLS = cols;
 		PERC_DELTA = percDelta;
@@ -53,8 +53,7 @@ public class Map implements Serializable {
 
 	public void addLink(Map destination, int r, int c, int endR, int endC) {
 		if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
-			links[r][c] = new MapLink(this, destination);
-			links[r][c].setEndPoint(endR, endC);
+			evtMap[r][c] = new MapLink(this, destination, endR, endC);
 		}
 	}
 
@@ -74,48 +73,48 @@ public class Map implements Serializable {
 		return output;
 	}
 
-	public String movePlayer(char d) throws MapLink {
+	public String movePlayer(char d) throws Event {
 	
 		String output = "";
 		
 		if ((d == 'n' && playerR == 0) || (d == 's' && playerR == ROWS-1) || (d == 'e' && playerC == COLS-1) || (d == 'w' && playerC == 0)) {//checking for out of bounds
-			output = "You can't walk there.\n";
+			output = "You can't walk there";
 		} else if ( ((d == 'n' && !passable(-1,0)) || (d == 's' && !passable(1,0)) || (d == 'e' && !passable(0,1)) || (d == 'w' && !passable(0,-1))) ) {
-			output = "Something blocks your path.\n";
+			output = "Something blocks your path";
 		} else if ((d == 'n' && !climbable(-1,0)) || (d == 's' && !climbable(1,0)) || (d == 'e' && !climbable(0,1)) || (d == 'w' && !climbable(0,-1))) {
-			output = "The change in elevation is too great.\n";
+			output = "The change in elevation is too great";
 		} else if (d == 'n') {
 			entMap[playerR-1][playerC] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerR--;			
-			output = "You take a step to the North.\n";
+			output = "You take a step to the North";
 			transportPlayer(output);
 		} else if (d == 's') {
 			entMap[playerR+1][playerC] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerR++;
-			output = "You take a step to the South.\n";
+			output = "You take a step to the South";
 			transportPlayer(output);
 		} else if (d == 'e') {
 			entMap[playerR][playerC+1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC++;
-			output = "You take a step to the East.\n";
+			output = "You take a step to the East";
 			transportPlayer(output);
 		} else if (d =='w') {
 			entMap[playerR][playerC-1] = entMap[playerR][playerC];
 			entMap[playerR][playerC] = null;
 			playerC--;
-			output = "You take a step to the West.\n";
+			output = "You take a step to the West";
 			transportPlayer(output);
 		} else {
-			output = "Unrecognized direction.\n";
+			output = "Unrecognized direction";
 		}
-		return output;
+		return output + ".\n";
 	}
 	
 	private boolean climbable(int dR, int dC) {//WARNING: does NOT check for out of bounds - this is only expected to be called by movePlayer() for now, which checks that itself
-		final int CLIMBING_FACTOR = entMap[playerR][playerC].getClimbing();
+		final int CLIMBING_FACTOR = entMap[playerR][playerC].getClimbing();//checks if a change in elevation can be traversed by the player
 		 return (Math.abs(topoMap[playerR][playerC] - topoMap[playerR+dR][playerC+dC]) <= CLIMBING_FACTOR);
 	}
 	
@@ -123,10 +122,10 @@ public class Map implements Serializable {
 		return !blocking(featMap[playerR+dR][playerC+dC]) && (entMap[playerR+dR][playerC+dC] == null);
 	}
 
-	private void transportPlayer(String output) throws MapLink {
-		if (links[playerR][playerC] != null) {
-			links[playerR][playerC].setMessage(output + " and travel to a new location.\n");
-			throw links[playerR][playerC];
+	private void transportPlayer(String output) throws Event {
+		if (evtMap[playerR][playerC] != null) {
+			evtMap[playerR][playerC].setMessage(output + " and travel to a new location.\n");
+			throw evtMap[playerR][playerC];
 		}
 	}
 	
@@ -182,7 +181,7 @@ public class Map implements Serializable {
 			for (int j = 0; j < COLS; j++) {
 				if (entMap[i][j] != null) {
 					output.append(entMap[i][j]);
-				} else if (links[i][j] != null) {
+				} else if (evtMap[i][j] != null) {
 					output.append(ConsoleColours.CYAN_BRIGHT).append('>').append(ConsoleColours.RESET);
 				} else if (featMap[i][j] == '~') {
 					output.append(ConsoleColours.BLUE_BRIGHT).append(featMap[i][j]).append(ConsoleColours.RESET);

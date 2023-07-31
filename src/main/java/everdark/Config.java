@@ -62,7 +62,8 @@ public class Config {
 							};
 						
 		Entity[][] wwEnt = new Entity[16][16];
-		
+		wwEnt[0][14] = new Frog(1);
+
 		char[][] wwFeat = {
 									{'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', 'T', ';', ';', '~', '~', '~'},
 									{';', ';', ';', 'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', '~', '~', '~'},
@@ -102,7 +103,11 @@ public class Config {
 								};
 						
 		Entity[][] twnEnt = new Entity[16][16];
-		
+
+		twnEnt[7][3] = new NPC.Maia();
+		twnEnt[5][3] = new Human(1);
+		twnEnt[11][6] = new NPC.Mathieu();
+	
 		char[][] twnFeat = {
 									{';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', '~', '~', '~'},
 									{';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', '~', '~', '~'},
@@ -201,6 +206,11 @@ public class Config {
 						 		 };
 						
 		Entity[][] tanEnt = new Entity[16][16];
+
+		tanEnt[1][1] = new NPC.Pirate();
+		tanEnt[4][2] = new NPC.Pirate();
+		tanEnt[14][5] = new NPC.Pirate();
+
 		
 		int[][] shipTopo = {
 									{-1, -1, -1, -1, -1},
@@ -220,12 +230,8 @@ public class Config {
 
 		Entity[][] shipEnt = new Entity[5][5];
 
-		wwEnt[0][14] = new Frog(1);
-		twnEnt[4][9] = new Human(1);
-		twnEnt[7][3] = new Human(1);
-		twnEnt[5][3] = new Human(1);
-		twnEnt[11][6] = new NPC.Mathieu();
-		
+		shipEnt[2][4] = new NPC.Captain();
+
 		//important permanent-ish stuff
 
 		String wwDesc = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n" +

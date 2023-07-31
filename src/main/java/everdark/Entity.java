@@ -45,12 +45,12 @@ public abstract class Entity implements Serializable{
 
 	} 
 
-	public String beginDialogue(Player player) throws EndOfDialogueException {
-		throw new EndOfDialogueException("They don't have anything to say to you.");
+	public String beginDialogue(Player player) throws EndOfDialogueEvent {
+		throw new EndOfDialogueEvent("They don't have anything to say to you.");
 	}
 
-	public String talk(int response, LinkedList<Character> args, Player player) throws EndOfDialogueException {
-		throw new EndOfDialogueException("They don't have anything to say to you.");
+	public String talk(int response, LinkedList<Character> args, Player player) throws EndOfDialogueEvent {
+		return beginDialogue(player);
 	}
 
 	public boolean equals(Entity other) {
