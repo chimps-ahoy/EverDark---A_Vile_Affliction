@@ -23,7 +23,7 @@ public class InputHandler {
 		String leadingCommand =(tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
 		LinkedList<Character> args = new LinkedList<>();
 		while (tokenizer.hasNext()) {
-			args.add(tokenizer.next().charAt(0));	
+			args.add(tokenizer.next().toLowerCase().charAt(0));	
 		}
 		String output = "Command not recognized.";
 
