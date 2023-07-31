@@ -26,7 +26,7 @@ public class GameState implements Serializable {
 	private String inName = "";
 	private char inAppear = 'c';
 	private int[] stats = new int[9];
-	private String[] iniText = {"Stength", "Endurance", "Dexterity", "Swiftness", "Intelligence", "Willpower", "Charisma", "Perception", "Intimidation"};
+	private String[] iniText = {"Strength", "Endurance", "Dexterity", "Swiftness", "Intelligence", "Willpower", "Charisma", "Perception", "Intimidation"};
 
 	public GameState(Map startingLocation) {
 		location = startingLocation;
