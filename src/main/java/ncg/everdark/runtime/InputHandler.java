@@ -51,14 +51,14 @@ public class InputHandler {
 					output = "Invalid Selection.";
 				}
 			} else if (leadingCommand.equals("move")) {
-				output = (args.peek() == null) ? "Please include a direction after the move command.\n" : "";
+				output = (args.isEmpty()) ? "Please include a direction after the move command.\n" : "";
 				for (char d : args) {
 					output += state.movePlayer(d);
 				}
 				output += state.getMapString();
 			} else if (leadingCommand.equals("speak")) {
 				output = "Please include a direction after the speak command.";
-				if (args.peek() != null) {
+				if (!args.isEmpty()) {
 					output = state.beginDialogue(args.pop());
 				}
 			} else if (leadingCommand.equals("look")) {

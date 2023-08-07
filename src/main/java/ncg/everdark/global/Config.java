@@ -1,6 +1,7 @@
 package ncg.everdark.global;
 
 import ncg.everdark.dialogue.DialogueTree;
+import ncg.everdark.events.Consequence;
 import ncg.everdark.gamedata.*;
 import ncg.everdark.entities.*;
 
@@ -69,9 +70,8 @@ public class Config {
 		Entity[][] wwEnt = new Entity[16][16];
 		wwEnt[0][14] = new Frog(1);
 
-		DialogueTree dialogue = new DialogueTree().add(new int[] {0}, "", "\"ew.\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.HOSTILE)
-																	.add(new int[] {0}, "", "\"Hello.\"").add(new int[] {0, 1}, "How are you?", "\"I'm good.\"");
-																
+		DialogueTree dialogue = new DialogueTree().add("Hello.").add(new int[] {0,1}, "Hello.", "\"Bye.\"")
+										.add(new int[] {0,2}, "Who are you?", "\"I am a test of the dialogue routines.\"");
 		NPC test = new NPC("Tester", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'c', 99);
 		test.setDialogue(dialogue);
 		wwEnt[4][4] = test;

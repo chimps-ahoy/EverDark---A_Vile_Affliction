@@ -26,7 +26,7 @@ public class NPC extends Entity {
 	}
 
 	public String talk(int response, Deque<Character> args, Player p) throws Event {
-		return dialogue.progress(p, this, response);
+		return dialogue.progress(p, this, response, args);
 	}	
 
 	public enum Opinion { UNDEFINED, HOSTILE, FEARFUL, NEUTRAL, FRIENDLY }
