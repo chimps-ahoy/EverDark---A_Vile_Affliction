@@ -58,7 +58,7 @@ public class Map implements Serializable {
 
 	public void addLink(Map destination, int r, int c, int endR, int endC) {
 		if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
-			evtMap[r][c] = new Event((state) -> "You travel to a new area. " + state.changeLocation(destination, endR, endC));
+			evtMap[r][c] = new Event("You travel to a new location. ", (state) -> state.changeLocation(destination, endR, endC));
 		}
 	}
 

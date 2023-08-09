@@ -3,7 +3,10 @@ package ncg.everdark.gamedata;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.LoadFromFileException;
 import ncg.everdark.entities.Entity;
+import ncg.everdark.entities.NPC;
+import ncg.everdark.entities.NPC.Opinion;
 import ncg.everdark.entities.Player;
+import ncg.everdark.entities.Player.Origin;
 import ncg.everdark.global.Config;
 
 import java.io.*;
@@ -162,6 +165,17 @@ public class GameState implements Serializable {
 
 	public String movePlayer(char d) throws Event {
 		return location.movePlayer(d);
+	}
+
+	public String setPlayerOrigin(Origin origin) {
+		player.setOrigin(origin);	
+		return "\n(What you said has set a fact about your life into stone.)";
+	}
+
+	public String setInterOpinion(Opinion opinion) {
+		NPC inter = (NPC)interlocutor;
+		inter.setOpinion(opinion);
+		return "\n(What you said has changed their thoughts about you.)";
 	}
 
 	public boolean inDialogue() {

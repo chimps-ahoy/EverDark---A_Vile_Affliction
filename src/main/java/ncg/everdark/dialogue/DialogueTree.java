@@ -27,17 +27,23 @@ public class DialogueTree implements Serializable {
 	public String progress(Player p, NPC q, int response, Deque<Character> args) throws Event {
 		String output = "";
 		boolean responseFound = false;
+		boolean lying = (args != null && args.contains('l'));
 
-		this.throwExits();//exits early if we're at an endpoint
+		if (curr.children.isEmpty()) {
+			this.throwExits(lying);//exits early if we're at an endpoint
+		}
+
 		for (Node child : curr.children) {
-			if (child.i == response && child.req.test(p,q)) {
+			if (responseFound = child.i == response && child.req.test(p,q)) {
 				curr = child;
-				responseFound = true;
 				break;
 			}
 		}
 
-		this.throwExits();// ^^^
+		if (curr.children.isEmpty()) {
+			this.throwExits(lying);//^^^
+		}
+
 		output = (responseFound) ? curr.dialogue : "Invalid Selection.";
 
 		Node prev = new Node("","",-1,null,null,null);
@@ -55,10 +61,9 @@ public class DialogueTree implements Serializable {
 		}
 	}
 
-	private void throwExits() throws Event {
-		if (curr.children.isEmpty()) {
+	private void throwExits(boolean lying) throws Event {
 			Event end;
-			if (curr.extraEffect != null) {
+			if (curr.extraEffect != null && !lying) {
 				end = new Event(curr.dialogue, curr.defaultEffect, curr.extraEffect, (state) -> {state.endDialogue();
 																															return "";
 																														  });
@@ -73,7 +78,6 @@ public class DialogueTree implements Serializable {
 			}
 			curr = head;
 			throw end; 
-		}
 	}
 
 	public DialogueTree add(int[] path, String response, String dialogue, Requirement req, Consequence defaultEffect, Consequence extraEffect) {

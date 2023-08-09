@@ -29,7 +29,7 @@ public class NPC extends Entity {
 		return dialogue.progress(p, this, response, args);
 	}	
 
-	public enum Opinion { UNDEFINED, HOSTILE, FEARFUL, NEUTRAL, FRIENDLY }
+	public enum Opinion { UNDEFINED, HOSTILE, FEARFUL, NEUTRAL, CURIOUS, FRIENDLY }
 
 	public int curStage() {
 		return dialogueStage;
@@ -47,8 +47,9 @@ public class NPC extends Entity {
 		this.opinion = opinion;
 	}
 
-	public void setDialogue(DialogueTree dialogue) {
+	public NPC setDialogue(DialogueTree dialogue) {
 		this.dialogue = dialogue;
+		return this;
 	}
 
 	public String toString() {
