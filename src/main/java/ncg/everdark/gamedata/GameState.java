@@ -211,7 +211,7 @@ public class GameState implements Serializable {
 			location = m;
 			startMusic();
 		}
-		location.spawnPlayer(player, playerR, playerC);
+		location.spawnEntity(player, playerR, playerC);
 		return location.getDesc();
 	} 
 

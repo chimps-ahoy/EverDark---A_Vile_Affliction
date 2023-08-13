@@ -1,5 +1,6 @@
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\entities\Human.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\entities\NPC.java
+C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\entities\Pirate.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\entities\Frog.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\events\EndOfDialogueEvent.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\entities\Player.java
@@ -15,4 +16,3 @@ C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\events\E
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\runtime\Main.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\entities\Entity.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\events\LoadFromFileException.java
-C:\Users\Sebastien\Documents\EverDark\v0.1.2\src\main\java\ncg\everdark\dialogue\Effect.java

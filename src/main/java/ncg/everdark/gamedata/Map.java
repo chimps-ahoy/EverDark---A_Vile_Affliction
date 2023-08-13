@@ -28,29 +28,29 @@ public class Map implements Serializable {
 	private static final String BLOCKING = "T#";
 	private static final String LIQUID = "~";
 
-	public Map(String name, String desc, int[][] topoMap, char[][] featMap, Entity[][] entMap, int rows, int cols, int percDelta){
+	public Map(String name, String desc, int[][] topoMap, char[][] featMap, int rows, int cols, int percDelta){
 		this.ID = mapCount++;
 		this.name = name;
 		this.desc = desc;
 		this.topoMap = topoMap;
 		this.featMap = featMap;
-		this.entMap = entMap;
+		this.entMap = new Entity[rows][cols];
 		this.evtMap = new Event[rows][cols];
 		ROWS = rows;
 		COLS = cols;
 		PERC_DELTA = percDelta;
 	}
 
-	public void spawnPlayer(Player player, int r, int c) {
+	public void spawnEntity(Entity e, int r, int c) {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
-				if (entMap[i][j] != null && entMap[i][j].equals(player)) {
+				if (entMap[i][j] != null && entMap[i][j].equals(e)) {
 					entMap[i][j] = null;
 				}
 			}
 		}
 		if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
-			entMap[r][c] = player;
+			entMap[r][c] = e;
 			playerC = c;
 			playerR = r;
 		}
@@ -189,6 +189,8 @@ public class Map implements Serializable {
 					output.append(ConsoleColours.CYAN_BRIGHT).append('>').append(ConsoleColours.RESET);
 				} else if (featMap[i][j] == '~') {
 					output.append(ConsoleColours.BLUE_BRIGHT).append(featMap[i][j]).append(ConsoleColours.RESET);
+				} else if (featMap[i][j] == '@') {
+					output.append(ConsoleColours.GREEN).append(featMap[i][j]).append(ConsoleColours.RESET);
 				} else if (featMap[i][j] != '\u0000') { 
 					output.append(featMap[i][j]);
 				} else {

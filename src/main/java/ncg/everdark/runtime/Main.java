@@ -25,9 +25,9 @@ public class Main {
 		String menu = "";
 		String title = "EverDark";
 		String subtitle = "---A Vile Affliction---";
-		for (int i = 0; i <= Config.HEIGHT; i++) {
+		/*for (int i = 0; i <= Config.HEIGHT; i++) {
 			menu += '\n';
-		}
+		}*/
 		for (int i = 0; i < Config.HEIGHT-2; i++) {
 			for (int j = 0; j < Config.WIDTH; j++) {
 				if (i == (Config.HEIGHT-2)/2 && j == (Config.WIDTH-title.length())/2) {

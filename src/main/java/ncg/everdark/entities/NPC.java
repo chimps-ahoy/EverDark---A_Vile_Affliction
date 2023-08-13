@@ -11,8 +11,85 @@ import java.util.function.BiPredicate;
 public class NPC extends Entity {
 
 	private Opinion opinion;	
-	private int dialogueStage;
+	private int dialogueStage;//may be depreciated after dialogue rework, but is used in DialogueTree code so cannot be removed. Probably just gonna leave it in
+									  //in the case that i find that one edge case that needs it
 	private DialogueTree dialogue;
+
+	public enum Opinion { UNDEFINED, HOSTILE, FEARFUL, NEUTRAL, CURIOUS, FRIENDLY }
+
+	public static final NPC MAIA = new NPC("Maia", 5, 5, 3, 2, 4, 2, 3, 3, 5, 1, 2, 'm', 93).setDialogue(new DialogueTree()
+						 .add("\"Please... I have children...\"", (p,q) -> q.getOpinion() == Opinion.FEARFUL)
+						 .add("\"Why don't you just leave already. You've already taken everything we have.\"",
+						 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == Opinion.HOSTILE)
+						 .add("\"You're that odd one Mathieu told me about. You say some strange things...\"", 
+						 (p,q) -> p.getOrigin() == Player.Origin.OTHER)
+						 .add("\"You say you don't know where you're from? Well, if you remember, you should let Mathieu know; he's in charge around here.\"",
+						 (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN)
+						 .add("\"So you're from around here? I'd love to get to know you some more. The kids have been wanting someone to play with too...\"",
+						 (p,q) -> p.getOrigin() == Player.Origin.FAIM)
+						 .add("\"Hello there, stranger.\"")
+						 .add(new int[] {5,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
+						 .add(new int[] {5,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
+						 .add(new int[] {5,3}, "Why is it so dark?", "\"What do you mean? Tonight is a full moon, and it shines so brightly.\"")
+						 .add(new int[] {5,4}, "Bye.", "\"Bye, then.\"")
+					    .add(new int[] {3,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
+						 .add(new int[] {3,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
+						 .add(new int[] {3,3}, "Why is it so dark?", "\"What do you mean? Tonight is a full moon, and it shines so brightly.\"")
+						 .add(new int[] {3,4}, "Bye.", "\"Bye, then.\"")
+						 .add(new int[] {5,2,1}, "When is sunrise?", "\"Sun... rise?\" She looks at you like you have two heads, \"Where are you from? And how old are you? " +
+							 "The sun has not risen here for thirty years. If there is somewhere it still shines, I'd love to go.\"",	
+						 (g) -> g.setInterOpinion(Opinion.CURIOUS))
+						 .add(new int[] {5,2,2}, "Of course.", "\"Yes.\"")
+						 .add(new int[] {3,2,1}, "When is sunrise?", "\"Sun... rise?\" She looks at you like you have two heads, \"Where are you from? And how old are you? " +
+							 "The sun has not risen here for thirty years. If there is somewhere it still shines, I'd love to go.\"", 
+						 (g) -> g.setInterOpinion(Opinion.CURIOUS))
+						 .add(new int[] {3,2,2}, "Of course.", "\"Yes.\""));
+
+	public static final NPC MATHIEU = new NPC("Mathieu", 5, 5, 5, 5, 2, 2, 3, 5, 2, 4, 2, 'm', 92).setDialogue(new DialogueTree()
+						 .add("\"Take what you want and begone. I can only stand your smell so long.\"", 
+						 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == Opinion.HOSTILE)
+						 .add("\"Have you remembered where you're from?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == Opinion.CURIOUS)
+						 .add("\"Hello there, friend.\"", (p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == Opinion.FRIENDLY)
+						 .add("\"Hello there, stranger. From where are you coming?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || p.getOrigin() == Player.Origin.UNDEFINED)
+						 .add(new int[] {1,1}, "Yes.", "\"Well, where is it, then?\"").add(new int[] {1,2}, "No.", "\"Well, let me know if you do.\"")
+						 .add(new int[] {3,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
+							 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(Opinion.FRIENDLY),
+							 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
+						 .add(new int[] {3,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
+							 (g) -> g.setInterOpinion(Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+						 .add(new int[] {3,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
+							 (g) -> g.setInterOpinion(Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
+						 .add(new int[] {3,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
+							 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.UNKNOWN))
+						 .add(new int[] {1,0,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
+							 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(Opinion.FRIENDLY),
+							 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
+						 .add(new int[] {1,0,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
+							 (g) -> g.setInterOpinion(Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+						 .add(new int[] {1,0,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
+							 (g) -> g.setInterOpinion(Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
+						 .add(new int[] {1,0,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
+							 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+						 .add("\"Hello there.\""));
+
+	public static final NPC ELE = new NPC("Ele", 1, 1, 1, 1, 1, 2, 1, 1, 3, 0, 1, 'e', 98).setDialogue(new DialogueTree()
+								.add("\"My doll isn't very good anymore, but I still play with it!\"",(p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == Opinion.FRIENDLY)
+								.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
+								"is falling out.", (p,q) -> p.getPerc() >= 5)
+								.add("The girl is too preoccupied playing with a doll to speak to you.")
+								.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"")
+								.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
+
+	public static final NPC OLIVER = new NPC("Oliver", 1, 1, 1, 1, 2, 3, 1, 1, 3, 0, 1, 'o', 99).setDialogue(
+										new DialogueTree().add("\"My mom says not to play in the woods to the north, but I want to so bad! The wind always whispers funny jokes " +
+											"in my ears...\""));
+
+	public static final NPC CAPTAIN = new NPC("Captain", 10, 10, 10, 10, 3, 4, 5, 8, 4, 10, 4, 'c', 100).setDialogue(new DialogueTree()
+														.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == Opinion.FRIENDLY)
+														.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
+														"his fat fingers.", (p,q) -> p.getPerc() >= 6)
+														.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getPerc() >= 3)
+														.add("The large man doesn't even acknowledge you."));
 
 	public NPC(String name, int maxHp, int hp, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, int id) {
 		super(name, maxHp, hp, str, endur, dex, swift, iq, wil, charm, intim, perc, appearMod, id);
@@ -28,8 +105,6 @@ public class NPC extends Entity {
 	public String talk(int response, Deque<Character> args, Player p) throws Event {
 		return dialogue.progress(p, this, response, args);
 	}	
-
-	public enum Opinion { UNDEFINED, HOSTILE, FEARFUL, NEUTRAL, CURIOUS, FRIENDLY }
 
 	public int curStage() {
 		return dialogueStage;
@@ -56,215 +131,4 @@ public class NPC extends Entity {
 		return ConsoleColours.BLACK_BRIGHT + super.toString() + ConsoleColours.RESET;
 	}
 
-	public static class Mathieu extends NPC {
-
-		public Mathieu() {
-			super("Mathieu", 1, 1, 5, 5, 2, 2, 4, 5, 2, 5, 4, 'M', 1);
-		}
-
-		public Mathieu(int stage) {
-			this();
-			setStage(stage);
-		}
-
-		public String beginDialogue(Player player) throws Event {
-			String output = "";
-			if (player.getOrigin() == Player.Origin.TANIERE || super.getOpinion() == NPC.Opinion.HOSTILE) {
-				throw new EndOfDialogueEvent("\"Just take what you want, and be quick with it. I can only put up with the stench of your kind for so long...\"");
-			} else if (player.getOrigin() == Player.Origin.FAIM || super.getOpinion() == NPC.Opinion.FRIENDLY) {
-				throw new EndOfDialogueEvent("\"Good day, neighbor.\"");
-			} else if (player.getOrigin() == Player.Origin.UNDEFINED) {
-				output = "\"Hello there. Where are you coming from, stranger?\"\n1 - I don't know.\n2 - The woods.\n3 - This village.\n4 - The town to the South, by the coast.";
-			} else if (player.getOrigin() == Player.Origin.UNKNOWN) {
-				output = "\"Have you remembered where you're from?\"\n1 - Yes\n2 - No";	
-			} else {
-				throw new EndOfDialogueEvent("\"Good day.\"");
-			}
-			return output;
-		}
-
-		public String talk(int response, Deque<Character> args, Player player) throws Event {
-			String output = "";
-			if (curStage() == 0 && response == 1) {
-				player.setOrigin(Player.Origin.UNKNOWN);
-				setStage(1);
-				throw new EndOfDialogueEvent("\"You don't know where you're from? Well, let me know if you remember.\"");
-			} else if (curStage() == 0 && response == 2) {
-				if (!args.contains('l')) {
-					player.setOrigin(Player.Origin.OTHER);
-				}
-				throw new EndOfDialogueEvent("\"What an odd place to come from...\"");
-			} else if (curStage() == 0 && response == 3) {
-				if (!args.contains('l')) {
-					player.setOrigin(Player.Origin.FAIM);
-			  	}
-				super.setOpinion(NPC.Opinion.FRIENDLY);
-				throw new EndOfDialogueEvent("\"Really? Have you been gone long? I don't think any of us recognize you, I'm sorry. Please make yourself at home, nonetheless.\"");
-			} else if (curStage() == 0 && response == 4) {
-				if (!args.contains('l')) {
-					player.setOrigin(Player.Origin.TANIERE);
-				}
-				super.setOpinion(NPC.Opinion.HOSTILE);
-				output = beginDialogue(player);
-			} else if (curStage() == 0) {
-				output = "Invalid Selection.\n1 - I don't know.\n2 - The woods.\n3 - This village.\n4 - The town to the South, by the coast.";
-			} else if (curStage() == 1 && response == 1) {
-				setStage(0);
-				output = "\"Well, where is it then?\"\n1 - I don't know.\n2 - The woods.\n3 - This village.\n4 - The town to the South, by the coast.";
-			} else if (curStage() == 1 && response == 2) {
-				throw new EndOfDialogueEvent("\"Well, alright then. Come back if you do.\"");
-			} else if (curStage() == 1) {
-				output = "Invalid Selection.\n1 - Yes\n2 - No";
-			} else {
-				throw new EndOfDialogueEvent("\"I shouldn't say this!\"");
-			}
-			return output;
-		}
-
-	}
-
-	public static class Maia extends NPC {
-
-		public Maia() {
-			super("Maia", 1, 1, 1, 3, 3, 2, 3, 2, 4, 1, 3, 'W', 2);
-		}
-
-		public Maia(int stage) {
-			this();
-			super.setStage(stage);
-		}
-
-		public String beginDialogue(Player player) throws Event {
-			String output = "\"Hello.\"";
-			if (player.getOrigin() == Player.Origin.TANIERE && super.getOpinion() == NPC.Opinion.FEARFUL) {
-				throw new EndOfDialogueEvent("\"Please... I have children...\"");
-			} else if (player.getOrigin() == Player.Origin.TANIERE && super.getOpinion() == NPC.Opinion.HOSTILE) {
-				throw new EndOfDialogueEvent("\"You beast... Just leave already, scum.\"");
-			} else if (player.getOrigin() == Player.Origin.OTHER) {
-				throw new EndOfDialogueEvent("\"Hello there, woodsman.\"");
-			} else if (player.getOrigin() == Player.Origin.TANIERE) {
-				output = "\"Why are you here? You ought to just stay in your slums.\"\n1 - I've come to take your food.\n" +
-																											"2 - I've come to take your wealth.\n" +
-																											"3 - I've come for your children.\n" +
-																											"4 - I've come for you.\n" +
-																											"5 - Just came to visit.";
-			} else if (player.getOrigin() == Player.Origin.UNKNOWN) {
-				output = "\"So you're the one who doesn't remember where they're from? How peculiar...\"\n1 - I don't know where this place is.\n" +
-																																	"2 - I have bad memory.\n3 - I think I remember.";
-			} else if (player.getOrigin() == Player.Origin.UNDEFINED) {
-				output = "\"Hello there, stranger.\"\n1 - Where am I?\n2 - Who are you?\n3 - Goodbye.";
-			} else if (player.getOrigin() == Player.Origin.FAIM) {
-				output = "\"So you're from here? I don't remember you.\"\n1 - I don't remember you.\n2 - I remember you.\n3 - How rude.\n4 - Goodbye.";
-			}
-			return output;
-		}
-
-		public String talk(int response, Deque<Character> args, Player player) throws Event {
-			String output = ""; 
-			if (super.curStage() == 0 && player.getOrigin() == Player.Origin.TANIERE && response == 1) {
-				throw new EndOfDialogueEvent("\"I haven't even a crumb. Your people already took it all.\"");
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.TANIERE && response == 2) {
-				output = "\"The only precious thing I have are my children.\"\n1 - Then I will take them.\n2 - Oh."; 
-				super.setStage(1);
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.TANIERE && response == 3) {
-				super.setOpinion(NPC.Opinion.HOSTILE);
-				output = beginDialogue(player);
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.TANIERE && response == 4) {
-				super.setOpinion(NPC.Opinion.FEARFUL);
-				output = beginDialogue(player);
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.TANIERE && response == 5) {
-				throw new EndOfDialogueEvent("\"We've been getting enough visits from your kind.\"");
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.UNKNOWN && response == 1) { 
-				throw new EndOfDialogueEvent("\"This village is called Faim.\"");
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.UNKNOWN && response == 2) { 
-				throw new EndOfDialogueEvent("\"Do you now?\"");
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.UNKNOWN && response == 3) { 
-				throw new EndOfDialogueEvent("\"You ought to tell Mathieu; he's in charge around here. He lives in the Southern house.\"");
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.UNDEFINED && response == 1) { 
-				output = "\"This village is called Faim.\"\n1 - Where am I?\n2 - Who are you?\n3 - Goodbye.";	
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.UNDEFINED && response == 2) { 
-				output = "\"I am " + super.getName() + ".\"\n1 - Where am I?\n2 - Who are you?\n3 - Goodbye.";	
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.UNDEFINED && response == 3) { 
-				throw new EndOfDialogueEvent("\"Goodbye.\"");	
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.FAIM && response == 1) {
-				throw new EndOfDialogueEvent("\"That makes two of us.\"");
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.FAIM && response == 2) {
-				throw new EndOfDialogueEvent("\"...\"");
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.FAIM && response == 3) {
-				throw new EndOfDialogueEvent("\"My apologies.\""); 
-			} else if (super.curStage() == 0 && player.getOrigin() == Player.Origin.FAIM && response == 4) {
-				throw new EndOfDialogueEvent("\"Goodbye.\""); 
-			} else if (super.curStage() == 1 && player.getOrigin() == Player.Origin.TANIERE && response == 1) {
-				super.setOpinion(NPC.Opinion.HOSTILE);
-				output = beginDialogue(player);
-			} else if (super.curStage() == 1 && player.getOrigin() == Player.Origin.TANIERE && response == 2) {
-				 throw new EndOfDialogueEvent("\"I suppose you couldn't understand that.\"");
-			} else {
-				output = "Invalid Selection.";
-			}
-			return output;
-		}
-	}
-
-	public static class Pirate extends NPC {
-		
-		private static int count = 2000;
-		private static final int RANGE = 2000;
-
-		public Pirate() { 
-			super("pirate", 10, 10, 5, 5, 2, 2, 1, 1, 1, 4, 2, 'p', (count++%RANGE) + RANGE);
-		}
-
-		public String beginDialogue(Player player) throws Event {
-			String output = "";
-			if (player.getOrigin() == Player.Origin.TANIERE || super.getOpinion() == NPC.Opinion.FRIENDLY) {
-				throw new EndOfDialogueEvent("\"Yar, mate! Good to see ye!\"");
-			} else {
-				output = "\"Yer far from home, landlubber.\"\n1 - This be me home!\n2 - That's right.";
-			}
-			return output;
-		}
-
-		public String talk(int response, Deque<Character> args, Player player) throws Event {
-			String output = "";
-			if (super.curStage() == 0 && player.getOrigin() == Player.Origin.UNDEFINED && response == 1) {
-				super.setOpinion(NPC.Opinion.FRIENDLY);
-				if (!args.contains('l')) {
-					player.setOrigin(Player.Origin.TANIERE);
-				}
-				output = beginDialogue(player);
-			} else if (super.curStage() == 0 && response == 1) {
-				throw new EndOfDialogueEvent("\"That ain't true!\"");
-			} else if (super.curStage() == 0 && response == 2) {
-				throw new EndOfDialogueEvent("");
-			} else {
-				output = "Invalid Selection.";
-			}
-			return output;
-		}
-
-	}
-
-	public static class Captain extends NPC {
-		
-		public Captain() {
-			super("Captain", 10, 10, 10, 10, 3, 2, 5, 3, 1, 7, 2, 'C', 3);
-		}
-
-		public Captain(int stage) {
-			this();
-			super.setStage(stage);
-		}
-
-		public String beginDialogue(Player player) throws Event {
-			String desc = "The burly man has no interest in talking to you.\nHe strongly reeks of alcohol.\nHe is fiddling with a necklace between his index finger and thumb.";
-			String[] details = desc.split("\n");
-			String output = details[0];
-			final int PERC_DELTA = 1;
-			for (int i = 1; i < details.length && player.getPerc() >= i*PERC_DELTA; i++) {
-				output += ' ' + details[i];
-			}
-			throw new EndOfDialogueEvent(output);
-		}
-	}
 }
