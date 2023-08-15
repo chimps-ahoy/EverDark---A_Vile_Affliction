@@ -4,9 +4,7 @@ import ncg.everdark.events.Event;
 import ncg.everdark.events.LoadFromFileException;
 import ncg.everdark.entities.Entity;
 import ncg.everdark.entities.NPC;
-import ncg.everdark.entities.NPC.Opinion;
 import ncg.everdark.entities.Player;
-import ncg.everdark.entities.Player.Origin;
 import ncg.everdark.global.Config;
 
 import java.io.*;
@@ -27,12 +25,13 @@ public class GameState implements Serializable {
 	private transient AudioInputStream as;
 	private transient Clip clip;
 
+//----ini stuff------------------
 	private int iniStage = 0;
 	private int availablePoints = 30;
 	private String inName = "";
 	private char inAppear = 'c';
 	private int[] stats = new int[9];
-	private String[] iniText = {"Strength", "Endurance", "Dexterity", "Swiftness", "Intelligence", "Willpower", "Charisma", "Intimidation", "Perception"};
+//---------------------------------
 
 	public GameState(Map startingLocation) {
 		location = startingLocation;
@@ -74,14 +73,14 @@ public class GameState implements Serializable {
 	"Intimidation - While Charisma can allow you to convince people to do things of their own volition, Intimidation is your ability to impose your will on others by force.\n" +
 	"Perception - This is a mental analogue to Swiftness and Dexterity. It is your character's precision and speed at observing things in their environment.\n\n";
 			}
-			output += "How many points would you like to put into " + iniText[iniStage-1] +"? (Remaining: " + availablePoints + ")";
+			output += "How many points would you like to put into " + Entity.Stat.values()[iniStage-1] +"? (Remaining: " + availablePoints + ")";
 			iniStage++;
 		} else if (iniStage >= 2 && iniStage <= 9) {
 			try { 
 				stats[iniStage-2] = Integer.parseInt(response);
 				if (stats[iniStage-2] >= 0 && stats[iniStage-2] <= availablePoints) {
 					availablePoints -= stats[iniStage-2];
-					output = "How many points would you like to put into " + iniText[iniStage-1] + "? (Remaining: " + availablePoints + ")";
+					output = "How many points would you like to put into " + Entity.Stat.values()[iniStage-1] + "? (Remaining: " + availablePoints + ")";
 					iniStage++;
 				} else { 
 					output = "You don't have enough points for that.";
@@ -111,7 +110,7 @@ public class GameState implements Serializable {
 				if (inAppear < 'a' || inAppear > 'z') {
 					output = "Invalid input. Try again.";
 				} else {
-					player = new Player(inName, stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], stats[7], stats[8], inAppear, 0);
+					player = new Player(inName, stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], stats[7], stats[8], inAppear);
 					output = changeLocation(Config.WW, 6, 6);
 				}
 		} else if (iniStage == 100) {
@@ -123,6 +122,7 @@ public class GameState implements Serializable {
 				throw new LoadFromFileException(finalState);
 			} catch (IOException|ClassNotFoundException|RuntimeException ex) {
 				output = "Save could not be loaded. An invalid option may have been input or the save may be corrupt or outdated. Please try again.";
+				//ex.printStackTrace();
 			}
 		}
 		return output;
@@ -167,12 +167,12 @@ public class GameState implements Serializable {
 		return location.movePlayer(d);
 	}
 
-	public String setPlayerOrigin(Origin origin) {
+	public String setPlayerOrigin(Player.Origin origin) {
 		player.setOrigin(origin);	
 		return "\n(What you said has set a fact about your life into stone.)";
 	}
 
-	public String setInterOpinion(Opinion opinion) {
+	public String setInterOpinion(NPC.Opinion opinion) {
 		NPC inter = (NPC)interlocutor;
 		inter.setOpinion(opinion);
 		return "\n(What you said has changed their thoughts about you.)";

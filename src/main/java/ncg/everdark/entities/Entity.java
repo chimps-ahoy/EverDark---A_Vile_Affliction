@@ -1,53 +1,50 @@
 package ncg.everdark.entities;
 
+import ncg.everdark.items.Item;
 import ncg.everdark.global.ConsoleColours;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.EndOfDialogueEvent;
 
+import java.util.Map;
+import java.util.EnumMap;
 import java.util.Deque;
-import java.io.*;
+import java.util.LinkedList;
+import java.io.Serializable;
 
 public abstract class Entity implements Serializable{
 
 	private String name;
-	//Physical stats TODO: hp -> bodypart system
-	private int maxHp;
-	private int hp;
-	private int str;
-	private int endur;
-	private int dex;
-	private int swift;
-	//Mental stats
-	private int iq; //couldnt call it int because that's a protected keyword. this is intelligence
-	private int wil;
-	private int charm;
-	private int intim;//intimidation
-	private int perc;//perception
+	//TODO: body part items
+	private Deque<Item> inv;
+	private Map<Stat,Integer> stats;
+
 	//----------------------------
 	private final char APPEAR_MOD; //the appearance modifier. the basic char for their appearance before it is affected by stuff like starvation
 	private char appearance;
 	
-	private final int ID;//each subclass of Entity will contain a static variable to count the instances of the class and automatically assign IDs. Unique NPCs
-			     //which have their own class, will have a set ID, but this must be decided so we don't get bad overlap. I think the player will have ID = 0,
-			     //and for NPCs we can count up from there. For generic enemies which will have a static counter, we can have that counter begin at 1k for one Entity
-			     //and 2k for the next etc.
-	public Entity(String name, int maxHp, int hp, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, int id) {
-		this.name = name;
-		this.maxHp = maxHp;
-		this.hp = hp;
-		this.str = str;
-		this.endur = endur;
-		this.dex = dex;
-		this.swift = swift;
-		this.iq = iq;
-		this.wil = wil;
-		this.charm = charm;
-		this.intim = intim;
-		this.perc = perc;
-		APPEAR_MOD = appearMod;
-		ID = id;
-		appearance = (str + endur >= dex + swift) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD));
+	private static int count = 0;
+	private final int ID;	
 
+	public Entity(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod) {//once body parts are added
+																																				//add an easy constructor for different creatures
+		this.name = name;
+		this.stats = new EnumMap<Stat,Integer>(Stat.class);
+		this.inv = new LinkedList<Item>();
+		this.inv.add(new Item(Item.TEST));
+
+		stats.put(Stat.STR,str);
+		stats.put(Stat.ENDUR,endur);
+		stats.put(Stat.DEX,dex);
+		stats.put(Stat.SWIFT,swift);
+		stats.put(Stat.INT,iq);
+		stats.put(Stat.WIL,wil);
+		stats.put(Stat.CHARM,charm);
+		stats.put(Stat.INTIM,intim);
+		stats.put(Stat.PERC,perc);
+
+		APPEAR_MOD = appearMod;
+		ID = count++;
+		appearance = (str + endur >= dex + swift) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD));
 	} 
 
 	public String beginDialogue(Player player) throws Event {
@@ -63,32 +60,71 @@ public abstract class Entity implements Serializable{
 	}
 
 	public String toString() {
-		return "" + ((str + endur >= dex + swift) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD)));
+		return "" + ((getStat(Stat.STR) + getStat(Stat.ENDUR) >= getStat(Stat.DEX) + getStat(Stat.SWIFT)) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD)));
 	}
 
-	public String stats() {
-		return "Name: " + name + " - " + this + "\nStr: " + str + "\nEndur: " + endur + "\nDex; " + dex + "\nSwift: " + swift + "\nInt: " + iq + "\nWill: " + wil
-		       + "\nCharm: " + charm + "\nIntim: " + intim + "\nPerc: " + perc;	
+	public String stats() {//TODO: display item stat buffs
+		StringBuilder output = new StringBuilder("Name: " + name + " - " + this);
+		for (Stat s : stats.keySet()) {
+			output.append('\n').append(s).append(" - ").append(this.getStat(s));
+		}
+		return output.toString();
 	}
+
 
 	public String getName() {
 		return name;
 	}
 	
-	public int getWil() {
-		return wil;
-	}
-
-	public int getCharm() {
-		return charm;
-	}
-
-	public int getPerc() {
-		return perc;
+	public int getStat(Stat	stat) {
+		int output = stats.get(stat);
+		for (Item item : inv) {
+			output += item.getBuff(stat);
+		}
+		return output;
 	}
 
 	public int getClimbing() {
-		return (int)(Math.sqrt(str * endur));
+		return (int)(Math.sqrt(this.getStat(Stat.STR) * this.getStat(Stat.ENDUR)));
+	}
+
+	public enum Stat {STR, ENDUR, DEX, SWIFT, INT, WIL, CHARM, INTIM, PERC;
+		public String toString() {
+			String output = "";
+			switch (this) {
+				case STR:
+					output = "Strength";
+					break;
+				case ENDUR:
+					output = "Endurance";
+					break;
+				case DEX:
+					output = "Dexterity";
+					break;
+				case SWIFT:
+					output = "Swiftness";
+					break;
+				case INT:
+					output = "Intelligence";
+					break;
+				case WIL:
+					output = "Willpower";
+					break;
+				case CHARM:
+					output = "Charisma";
+					break;
+				case INTIM:
+					output = "Intimidation";
+					break;
+				case PERC:
+					output = "Perception";
+					break;
+				default:
+					output = this.name();
+					break;
+			}
+			return output;
+		}
 	}
 
 }

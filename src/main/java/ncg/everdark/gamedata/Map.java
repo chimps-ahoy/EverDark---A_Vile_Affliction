@@ -4,6 +4,7 @@ import ncg.everdark.global.*;
 import ncg.everdark.events.Event;
 import ncg.everdark.entities.Entity;
 import ncg.everdark.entities.Player;
+
 import java.util.Scanner;
 import java.io.Serializable;
 import java.util.function.Function;
@@ -142,7 +143,7 @@ public class Map implements Serializable {
 	}
 
 	public String getDesc() {
-		int playerPerc = (entMap != null) ? (entMap[playerR][playerC].getPerc()) : (0);
+		int playerPerc = (entMap.length > 0) ? (entMap[playerR][playerC].getStat(Entity.Stat.PERC)) : (0);
 		String[] details = desc.split("\n");
 		String output = details[0];
 		for (int i = 1; i < details.length && playerPerc >= i*PERC_DELTA ; i++) {
