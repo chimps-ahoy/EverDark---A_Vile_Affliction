@@ -20,7 +20,6 @@ public abstract class Entity implements Serializable{
 
 	//----------------------------
 	private final char APPEAR_MOD; //the appearance modifier. the basic char for their appearance before it is affected by stuff like starvation
-	private char appearance;
 	
 	private static int count = 0;
 	private final int ID;	
@@ -44,7 +43,6 @@ public abstract class Entity implements Serializable{
 
 		APPEAR_MOD = appearMod;
 		ID = count++;
-		appearance = (str + endur >= dex + swift) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD));
 	} 
 
 	public String beginDialogue(Player player) throws Event {
@@ -60,7 +58,11 @@ public abstract class Entity implements Serializable{
 	}
 
 	public String toString() {
-		return "" + ((getStat(Stat.STR) + getStat(Stat.ENDUR) >= getStat(Stat.DEX) + getStat(Stat.SWIFT)) ? (Character.toUpperCase(APPEAR_MOD)) : (Character.toLowerCase(APPEAR_MOD)));
+		char lilGuy = Character.toLowerCase(APPEAR_MOD);
+		if (getStat(Stat.STR) + getStat(Stat.ENDUR) >= getStat(Stat.DEX) + getStat(Stat.SWIFT)) {
+			lilGuy = Character.toUpperCase(APPEAR_MOD);
+		}
+		return "" + lilGuy;
 	}
 
 	public String stats() {//TODO: display item stat buffs
