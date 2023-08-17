@@ -2,17 +2,16 @@ ncg\everdark\dialogue\Requirement.class
 ncg\everdark\events\Consequence.class
 ncg\everdark\entities\Player$Origin.class
 ncg\everdark\entities\Frog.class
-ncg\everdark\events\Event.class
+ncg\everdark\entities\Entity$Race.class
 ncg\everdark\global\Config.class
 ncg\everdark\runtime\Main.class
+ncg\everdark\items\Bodypart$Status.class
 ncg\everdark\runtime\InputHandler.class
 ncg\everdark\events\LoadFromFileException.class
-ncg\everdark\items\Item.class
 ncg\everdark\entities\Player.class
 ncg\everdark\entities\Pirate.class
 ncg\everdark\entities\Entity$Stat.class
 ncg\everdark\gamedata\Map.class
-ncg\everdark\dialogue\DialogueTree.class
 ncg\everdark\events\EndOfDialogueEvent.class
 ncg\everdark\entities\Entity$1.class
 ncg\everdark\entities\NPC$Opinion.class
@@ -21,3 +20,7 @@ ncg\everdark\entities\NPC.class
 ncg\everdark\entities\Entity.class
 ncg\everdark\gamedata\GameState.class
 ncg\everdark\dialogue\DialogueTree$Node.class
+ncg\everdark\items\Bodypart.class
+ncg\everdark\events\Event.class
+ncg\everdark\items\Item.class
+ncg\everdark\dialogue\DialogueTree.class

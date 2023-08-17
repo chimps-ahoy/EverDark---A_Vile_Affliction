@@ -17,7 +17,7 @@ public class Config {
 	public static final int WIDTH;
 	public static final int HEIGHT;
 	public static final boolean ANSI;
-	public static final String VERS = "v0.1.3";
+	public static final String VERS = "v0.2.0";
 	
 	public static final Map MAIN_MENU = new Map("main", "Would you like to load from file? (Y/N): ", null, null, 0, 0, 0);
 	public static final Map WW;

@@ -1,6 +1,7 @@
 package ncg.everdark.entities;
 
 import ncg.everdark.items.Item;
+import ncg.everdark.items.Bodypart;
 import ncg.everdark.global.ConsoleColours;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.EndOfDialogueEvent;
@@ -14,22 +15,24 @@ import java.io.Serializable;
 public abstract class Entity implements Serializable{
 
 	private String name;
-	//TODO: body part items
 	private Deque<Item> inv;
 	private Map<Stat,Integer> stats;
-
-	//----------------------------
 	private final char APPEAR_MOD; //the appearance modifier. the basic char for their appearance before it is affected by stuff like starvation
+	private final int NUM_PARTS;
 	
 	private static int count = 0;
 	private final int ID;	
 
-	public Entity(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod) {//once body parts are added
+	public Entity(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, Race race) {//once body parts are added
 																																				//add an easy constructor for different creatures
 		this.name = name;
 		this.stats = new EnumMap<Stat,Integer>(Stat.class);
 		this.inv = new LinkedList<Item>();
-		this.inv.add(new Item(Item.TEST));
+
+		inv.addAll(Bodypart.get(65, race));
+		this.NUM_PARTS = inv.size();//IMPORTANT - any other items added at construction need to be AFTER NUM_PARTS is set.
+
+		//inv.add(Item.TEST);
 
 		stats.put(Stat.STR,str);
 		stats.put(Stat.ENDUR,endur);
@@ -65,14 +68,19 @@ public abstract class Entity implements Serializable{
 		return "" + lilGuy;
 	}
 
-	public String stats() {//TODO: display item stat buffs
+	public String stats() {
 		StringBuilder output = new StringBuilder("Name: " + name + " - " + this);
 		for (Stat s : stats.keySet()) {
-			output.append('\n').append(s).append(" - ").append(this.getStat(s));
+			int buff = getItemBuffs(s);
+			output.append("\n" + s + " - " + stats.get(s));
+			if (buff > 0) {
+				output.append(" (+" + buff + ")");
+			} else if (buff < 0) {
+				output.append(" (" + buff + ")");
+			}
 		}
 		return output.toString();
 	}
-
 
 	public String getName() {
 		return name;
@@ -80,8 +88,14 @@ public abstract class Entity implements Serializable{
 	
 	public int getStat(Stat	stat) {
 		int output = stats.get(stat);
-		for (Item item : inv) {
-			output += item.getBuff(stat);
+		output += getItemBuffs(stat);	
+		return output;
+	}
+
+	private int getItemBuffs(Stat stat) {
+		int output = 0;
+		for (Item i : inv) {
+			output += i.getBuff(stat);
 		}
 		return output;
 	}
@@ -129,4 +143,16 @@ public abstract class Entity implements Serializable{
 		}
 	}
 
+	public enum Race {//TODO: precentages depend on race, etc
+		OTHER(new Bodypart[] {Bodypart.HEAD}),
+		HUMAN(new Bodypart[] {Bodypart.HEAD, Bodypart.ARM, Bodypart.ARM, Bodypart.LEG, Bodypart.LEG, Bodypart.TORSO}),
+		FROG(new Bodypart[] {Bodypart.HEAD, Bodypart.LEG, Bodypart.LEG, Bodypart.LEG, Bodypart.LEG, Bodypart.TORSO});
+
+		public final Bodypart[] PARTS;
+
+		Race(Bodypart[] parts) {
+			PARTS = parts;
+		}
+	}
+	
 }

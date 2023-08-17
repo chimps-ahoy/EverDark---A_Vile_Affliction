@@ -9,7 +9,7 @@ import java.util.Deque;
 public class Frog extends Entity {
 
 	public Frog(int lvl) {
-		super("frog", lvl*2, lvl, lvl/2, lvl*3, 5, 2, 0,(int)(0.5*Math.pow(lvl, 2)), 2, 'f');
+		super("frog", lvl*2, lvl, lvl/2, lvl*3, 5, 2, 0,(int)(0.5*Math.pow(lvl, 2)), 2, 'f', Entity.Race.FROG);
 	}
 
 	public String beginDialogue(Player player) throws Event {

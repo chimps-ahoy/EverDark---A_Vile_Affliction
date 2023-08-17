@@ -16,7 +16,7 @@ public class NPC extends Entity {
 
 	public enum Opinion { UNDEFINED, HOSTILE, FEARFUL, NEUTRAL, CURIOUS, FRIENDLY }
 
-	public static final NPC MAIA = new NPC("Maia", 3, 2, 4, 2, 3, 3, 5, 1, 2, 'm').setDialogue(new DialogueTree()
+	public static final NPC MAIA = new NPC("Maia", 3, 2, 4, 2, 3, 3, 5, 1, 2, 'm', Entity.Race.HUMAN).setDialogue(new DialogueTree()
 						 .add("\"Please... I have children...\"", (p,q) -> q.getOpinion() == Opinion.FEARFUL)
 						 .add("\"Why don't you just leave already. You've already taken everything we have.\"",
 						 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == Opinion.HOSTILE)
@@ -44,7 +44,7 @@ public class NPC extends Entity {
 						 (g) -> g.setInterOpinion(Opinion.CURIOUS))
 						 .add(new int[] {3,2,2}, "Of course.", "\"Yes.\""));
 
-	public static final NPC MATHIEU = new NPC("Mathieu", 5, 5, 2, 2, 3, 5, 2, 4, 2, 'm').setDialogue(new DialogueTree()
+	public static final NPC MATHIEU = new NPC("Mathieu", 5, 5, 2, 2, 3, 5, 2, 4, 2, 'm', Entity.Race.HUMAN).setDialogue(new DialogueTree()
 						 .add("\"Take what you want and begone. I can only stand your smell so long.\"", 
 						 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == Opinion.HOSTILE)
 						 .add("\"Have you remembered where you're from?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == Opinion.CURIOUS)
@@ -71,7 +71,7 @@ public class NPC extends Entity {
 							 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
 						 .add("\"Hello there.\""));
 
-	public static final NPC ELE = new NPC("Ele", 1, 1, 1, 2, 1, 1, 3, 0, 1, 'e').setDialogue(new DialogueTree()
+	public static final NPC ELE = new NPC("Ele", 1, 1, 1, 2, 1, 1, 3, 0, 1, 'e', Entity.Race.HUMAN).setDialogue(new DialogueTree()
 								.add("\"My doll isn't very good anymore, but I still play with it!\"",(p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == Opinion.FRIENDLY)
 								.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
 								"is falling out.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 5)
@@ -79,19 +79,19 @@ public class NPC extends Entity {
 								.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"")
 								.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
 
-	public static final NPC OLIVER = new NPC("Oliver", 1, 1, 2, 3, 1, 1, 3, 0, 1, 'o').setDialogue(
+	public static final NPC OLIVER = new NPC("Oliver", 1, 1, 2, 3, 1, 1, 3, 0, 1, 'o', Entity.Race.HUMAN).setDialogue(
 										new DialogueTree().add("\"My mom says not to play in the woods to the north, but I want to so bad! The wind always whispers funny jokes " +
 											"in my ears...\""));
 
-	public static final NPC CAPTAIN = new NPC("Captain", 10, 10, 3, 4, 5, 8, 4, 10, 4, 'c').setDialogue(new DialogueTree()
+	public static final NPC CAPTAIN = new NPC("Captain", 10, 10, 3, 4, 5, 8, 4, 10, 4, 'c', Entity.Race.HUMAN).setDialogue(new DialogueTree()
 														.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == Opinion.FRIENDLY)
 														.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
 														"his fat fingers.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
 														.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
 														.add("The large man doesn't even acknowledge you."));
 
-	public NPC(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod) {
-		super(name, str, endur, dex, swift, iq, wil, charm, intim, perc, appearMod);
+	public NPC(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, Entity.Race race) {
+		super(name, str, endur, dex, swift, iq, wil, charm, intim, perc, appearMod, race);
 		dialogueStage = 0;
 		opinion = Opinion.UNDEFINED;
 		dialogue = new DialogueTree();
