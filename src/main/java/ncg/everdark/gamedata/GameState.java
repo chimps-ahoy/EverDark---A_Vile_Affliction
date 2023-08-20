@@ -192,12 +192,7 @@ public class GameState implements Serializable {
 
 	public String beginDialogue(char d) throws Event {
 		interlocutor = location.getNeighbor(d);
-		String output = "There's no one to talk to there.";
-		try { 
-			output = interlocutor.beginDialogue(player);	
-		} catch (NullPointerException npe) {
-
-		}
+		String output = (interlocutor != null) ? interlocutor.beginDialogue(player) : "There's no one to talk to there.";
 		return output;
 	}
 
@@ -217,6 +212,10 @@ public class GameState implements Serializable {
 
 	public String getPlayerStats() {
 		return player.stats();
+	}
+
+	public String getInv() {
+		return player.stuff();
 	}
 	
 	public void startMusic() {//this is ONLY needed to start the music upon loading a save, because the music objects are not serializable so they break upon exiting and reloading.

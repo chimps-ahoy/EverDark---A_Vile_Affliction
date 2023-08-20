@@ -72,6 +72,8 @@ public class InputHandler {
 				}
 			} else if (leadingCommand.equals("stats")) {
 				output = state.getPlayerStats();
+			} else if (leadingCommand.equals("stuff")) {
+				output = state.getInv();
 			} else if (leadingCommand.equals("save")) {
 				output = state.save();
 			} else if (leadingCommand.equals("exit")) {

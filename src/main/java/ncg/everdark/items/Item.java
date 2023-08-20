@@ -77,6 +77,10 @@ public class Item implements Serializable {
 		return buffs.get(stat);
 	}
 
+	public String toString() {
+		return this.NAME + " - " + this.WEIGHT + "kg - " + this.VALUE + "g";
+	}
+
 	//TODO: figure out how going to handle different items and stuff. probably just do it the way its done here, but it can be Thought About
 	public static final Item TEST = new Item("test", 1.0, 2.0).put(Stat.STR,10);
 

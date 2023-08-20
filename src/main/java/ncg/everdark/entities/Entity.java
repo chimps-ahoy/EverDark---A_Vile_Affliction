@@ -9,7 +9,9 @@ import ncg.everdark.events.EndOfDialogueEvent;
 import java.util.Map;
 import java.util.EnumMap;
 import java.util.Deque;
+import java.util.List;
 import java.util.LinkedList;
+import java.util.Arrays;
 import java.io.Serializable;
 
 public abstract class Entity implements Serializable{
@@ -32,7 +34,7 @@ public abstract class Entity implements Serializable{
 		inv.addAll(Bodypart.get(65, race));
 		this.NUM_PARTS = inv.size();//IMPORTANT - any other items added at construction need to be AFTER NUM_PARTS is set.
 
-		//inv.add(Item.TEST);
+		inv.add(Item.TEST);
 
 		stats.put(Stat.STR,str);
 		stats.put(Stat.ENDUR,endur);
@@ -78,6 +80,14 @@ public abstract class Entity implements Serializable{
 			} else if (buff < 0) {
 				output.append(" (" + buff + ")");
 			}
+		}
+		return output.toString();
+	}
+
+	public String stuff() {
+		StringBuilder output = new StringBuilder();
+		for (Item item : inv) {
+			output.append(item + "\n");
 		}
 		return output.toString();
 	}
@@ -144,13 +154,21 @@ public abstract class Entity implements Serializable{
 	}
 
 	public enum Race {//TODO: precentages depend on race, etc
-		OTHER(new Bodypart[] {Bodypart.HEAD}),
-		HUMAN(new Bodypart[] {Bodypart.HEAD, Bodypart.ARM, Bodypart.ARM, Bodypart.LEG, Bodypart.LEG, Bodypart.TORSO}),
-		FROG(new Bodypart[] {Bodypart.HEAD, Bodypart.LEG, Bodypart.LEG, Bodypart.LEG, Bodypart.LEG, Bodypart.TORSO});
 
-		public final Bodypart[] PARTS;
+		OTHER(Arrays.asList(new Bodypart("head", 1))),
 
-		Race(Bodypart[] parts) {
+		HUMAN((Arrays.asList(new Bodypart("head", 0.0723),
+									new Bodypart("left arm", 0.04335), new Bodypart("right arm", 0.04335),
+									new Bodypart("left leg", 0.16555), new Bodypart("right leg", 0.16555),
+									new Bodypart("torso", 0.5099)))),
+
+		FROG(Arrays.asList(new Bodypart("head", 0.2667), new Bodypart ("torso", 0.5333),
+								 new Bodypart("front left leg", 0.04), new Bodypart("front right leg", 0.04),
+								 new Bodypart("hind left leg", 0.06), new Bodypart("hind right leg", 0.06)));
+
+		public final List<Bodypart> PARTS;
+
+		Race(List<Bodypart> parts) {
 			PARTS = parts;
 		}
 	}

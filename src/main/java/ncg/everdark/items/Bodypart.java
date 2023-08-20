@@ -26,7 +26,7 @@ public class Bodypart extends Item {
 	}
 
 	public static List<Bodypart> get(double weight, Race race) {
-		List<Bodypart> parts = new ArrayList<Bodypart>(race.PARTS.length);
+		List<Bodypart> parts = new ArrayList<Bodypart>(race.PARTS.size());
 		for (Bodypart part : race.PARTS) {
 			parts.add(get(weight, part));
 		}	
@@ -36,6 +36,7 @@ public class Bodypart extends Item {
 	private static Bodypart get(double weight, Bodypart proto) {
 		return new Bodypart(proto.NAME, weight*proto.WEIGHT);
 	}
+
 	public enum Status {
 		GOOD(100),
 		FINE(75),
@@ -49,10 +50,5 @@ public class Bodypart extends Item {
 			this.THRESHOLD = i;
 		}
 	}
-
-	public static final Bodypart LEG = new Bodypart("leg", 16.8);//weights in the prototypes represent PRECENTAGES
-	public static final Bodypart ARM = new Bodypart("arm", 5.7);//TODO: percent depends on race?
-	public static final Bodypart HEAD = new Bodypart("head", 8.26);
-	public static final Bodypart TORSO = new Bodypart("torso", 55.1);
 
 }
