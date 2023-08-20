@@ -27,7 +27,7 @@ public class InputHandler {
 	public String handle(String input) {
 
 		Scanner tokenizer = new Scanner(input.toLowerCase());
-		String leadingCommand =(tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
+		String leadingCommand = (tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
 		Deque<Character> args = new ArrayDeque<Character>();
 		while (tokenizer.hasNext()) {
 			args.add(tokenizer.next().toLowerCase().charAt(0));	
