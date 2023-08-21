@@ -29,7 +29,8 @@ public class GUI extends UI {
 	private static final Color EVER = new Color(118, 118, 118);
 	private static final Color DARK = new Color(25, 25, 30);
 
-	public GUI() {
+	public GUI() {//TODO: HTML and COLOURS!!!
+					  //will need to edit Config to include html color tags
 		super();
 		topographicView = false;
 
@@ -44,19 +45,23 @@ public class GUI extends UI {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		map = new JEditorPane("plain", "EverDark");
+		map = new JEditorPane("plain", "");
 		map.setEditable(false);
 		prep(map, 20);
 
-		status = new JEditorPane("plain", "status");
+		status = new JEditorPane("plain", "");
 		status.setEditable(false);
 		prep(status, 12);
 
-		inv = new JEditorPane("plain", "stuff");
+		inv = new JEditorPane("plain", "");
 		inv.setEditable(false);
 		prep(inv, 12);
 
-		console = new JEditorPane("plain", "Welcome to EverDark.\nWould you like to load from file? (Y/N)");
+		StringBuilder buffer = new StringBuilder(99);;
+		for (int i = 0; i < 99; i++) {
+			buffer.append('\n');
+		}
+		console = new JEditorPane("plain", "Welcome to EverDark.\nWould you like to load from file? (Y/N)" + buffer);
 		console.setEditable(false);
 		prep(console, 12);
 		JScrollPane consoleHost = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

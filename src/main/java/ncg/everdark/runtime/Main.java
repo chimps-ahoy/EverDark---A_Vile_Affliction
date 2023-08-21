@@ -8,13 +8,13 @@ import javax.swing.SwingUtilities;
 public class Main {	
 	public static void main(String[] args) {
 	
-		UI ui = new GUI();
-		/*if (args != null && args.length > 0) {
-			ui = new GUI();	
-		} else {
+		UI ui = null;
+		if (args != null && args.length > 0) {
 			System.out.println(drawMenu());
-			ui = new TUI();
-		}*/
+			ui = new TUI();	
+		} else {
+			ui = new GUI();
+		}
 		SwingUtilities.invokeLater(ui::start);	
 	}
 
