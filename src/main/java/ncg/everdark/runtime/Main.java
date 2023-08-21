@@ -1,24 +1,21 @@
 package ncg.everdark.runtime;
 
 import ncg.everdark.global.Config;
-import ncg.everdark.gamedata.GameState;
+import ncg.everdark.ui.*;
 
-import java.util.Scanner;
+import javax.swing.SwingUtilities;
 
 public class Main {	
 	public static void main(String[] args) {
 	
-		System.out.print(drawMenu());
-		
-		//game runtime
-		GameState g = new GameState(Config.MAIN_MENU);
-		InputHandler ioHandler = new InputHandler(g);
-		Scanner in = new Scanner(System.in);
-		
-		while (ioHandler.acceptingInput()) {
-			System.out.println(ioHandler.handle(in.nextLine()));
-		}
-		System.exit(0);
+		UI ui = new GUI();
+		/*if (args != null && args.length > 0) {
+			ui = new GUI();	
+		} else {
+			System.out.println(drawMenu());
+			ui = new TUI();
+		}*/
+		SwingUtilities.invokeLater(ui::start);	
 	}
 
 	public static String drawMenu() {

@@ -49,10 +49,6 @@ public class Config {
 		ANSI = (values[4].toLowerCase().charAt(0) == 'y');
 		
 		System.out.println("Generating maps...");//-------------------------------------------------------------------------------------------------
-		try {
-			Thread.sleep(500);
-		} catch (Exception e) {}
-
 		int[][] wwTopo = { 
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
@@ -222,10 +218,6 @@ public class Config {
 								};
 
 		System.out.println("Writing descriptions...");//--------------------------------------------------------------------------------
-		try {
-			Thread.sleep(500);
-		} catch (Exception e) {}
-
 		String wwDesc = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n" +
 		"A light breeze flows between the trees and almost sounds like hushed voices.\n" +
 		"Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
@@ -247,9 +239,6 @@ public class Config {
 								"The air is damp and smells of mildew and alcohol.\n";
 
 		System.out.println("Finalizing maps...");//-------------------------------------------------------------------------------
-		try {
-			Thread.sleep(500);
-		} catch (Exception e) {}
 		WW =  new Map("whispering woods", wwDesc, wwTopo, wwFeat, 16, 16, 2);
 		TWN = new Map("town", twnDesc, twnTopo, twnFeat, 16, 16, 1);
 		TNO = new Map("wilderness", tnoDesc, tnoTopo, tnoFeat, 16, 16, 3);
@@ -257,10 +246,6 @@ public class Config {
 		SHIP = new Map("ship", shipDesc, shipTopo, shipFeat, 5, 5, 2);
 
 		System.out.println("Spawning Entities...");//--------------------------------------------------------------------------------------
-	   try {
-			Thread.sleep(500);
-		} catch (Exception e) {}
-
 		WW.spawnEntity(new Frog(1), 0, 14);
 
 		TWN.spawnEntity(NPC.ELE, 5, 3);
@@ -278,10 +263,6 @@ public class Config {
 		SHIP.spawnEntity(NPC.CAPTAIN, 2, 4);
 
 		System.out.println("Adding links...");//-------------------------------------------------------------------------------
-		try {
-			Thread.sleep(500);
-		} catch (Exception e) {}
-
 
 		for (int i = 0; i < 16; i++) {
 			WW.addLink(TWN, 15, (i%13), 1, (i%13));
