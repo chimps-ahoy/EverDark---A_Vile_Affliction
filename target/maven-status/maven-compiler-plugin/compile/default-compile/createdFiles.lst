@@ -3,6 +3,7 @@ ncg\everdark\events\Consequence.class
 ncg\everdark\entities\Player$Origin.class
 ncg\everdark\entities\Frog.class
 ncg\everdark\entities\Entity$Race.class
+ncg\everdark\ui\ConsoleColours.class
 ncg\everdark\global\Config.class
 ncg\everdark\runtime\Main.class
 ncg\everdark\items\Bodypart$Status.class
@@ -15,7 +16,6 @@ ncg\everdark\gamedata\Map.class
 ncg\everdark\events\EndOfDialogueEvent.class
 ncg\everdark\entities\Entity$1.class
 ncg\everdark\entities\NPC$Opinion.class
-ncg\everdark\global\ConsoleColours.class
 ncg\everdark\ui\UI.class
 ncg\everdark\ui\GUI$1.class
 ncg\everdark\entities\NPC.class
@@ -26,4 +26,6 @@ ncg\everdark\items\Bodypart.class
 ncg\everdark\events\Event.class
 ncg\everdark\items\Item.class
 ncg\everdark\ui\TUI.class
+ncg\everdark\ui\CFG$Colour.class
 ncg\everdark\dialogue\DialogueTree.class
+ncg\everdark\ui\CFG.class

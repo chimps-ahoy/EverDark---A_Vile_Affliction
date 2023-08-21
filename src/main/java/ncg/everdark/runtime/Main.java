@@ -7,13 +7,21 @@ import javax.swing.SwingUtilities;
 
 public class Main {	
 	public static void main(String[] args) {
-	
+		
+		boolean legacy = (args != null && args.length > 0);
+		try {
+			CFG.ini("config.txt", legacy);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
 		UI ui = null;
-		if (args != null && args.length > 0) {
+		if (legacy) {
 			System.out.println(drawMenu());
 			ui = new TUI();	
 		} else {
-			ui = new GUI();
+			ui = new GUI(CFG.getWidth(), CFG.getHeight());
 		}
 		SwingUtilities.invokeLater(ui::start);	
 	}

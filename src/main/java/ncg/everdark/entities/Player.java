@@ -1,6 +1,7 @@
 package ncg.everdark.entities;
 
-import ncg.everdark.global.ConsoleColours;
+import ncg.everdark.ui.CFG;
+import ncg.everdark.ui.CFG.Colour;
 
 public class Player extends Entity {
 
@@ -25,7 +26,7 @@ public class Player extends Entity {
 	//influence the now-NPC's dialogue? This is a FAR off pipedream, I'd say think about this LAST, maybe for v1.2 or wtv yk
 
 	public String toString() {
-		return ConsoleColours.YELLOW_BOLD + super.toString() + ConsoleColours.RESET;
+		return CFG.colour(super.toString(), Colour.BRIGHT_YELLOW);
 	}
 
 }

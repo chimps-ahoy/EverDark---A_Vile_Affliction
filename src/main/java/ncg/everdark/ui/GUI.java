@@ -3,7 +3,6 @@ package ncg.everdark.ui;
 import ncg.everdark.gamedata.GameState;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.LoadFromFileException;
-import ncg.everdark.global.Config;
 
 import java.util.Scanner;
 import java.util.Deque;
@@ -31,16 +30,16 @@ public class GUI extends UI {
 	private static final Color EVER = new Color(118, 118, 118);
 	private static final Color DARK = new Color(25, 25, 30);
 
-	public GUI() {//TODO: HTML and COLOURS!!!
+	public GUI(int x, int y) {//TODO: HTML and COLOURS!!!
 					  //will need to edit Config to include html color tags
 		super();
 		topographicView = false;
 
 		frame = new JFrame();
 		frame.setLayout(new BorderLayout(10, 5));
-		frame.setTitle("EverDark - A Vile Affliction " + Config.VERS);
-		frame.setIconImage(new ImageIcon("global/logo.png").getImage());//TODO: FIX THIS FILEPATH!!!! ARGHH!!!!!
-		frame.setPreferredSize(new Dimension(1000, 800));
+		frame.setTitle("EverDark - A Vile Affliction");
+		frame.setIconImage(new ImageIcon(CFG.getGlobalPath() + "logo.png").getImage());
+		frame.setPreferredSize(new Dimension(x, y));
 		frame.setResizable(false);
 		frame.setUndecorated(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,7 +111,7 @@ public class GUI extends UI {
 		j.setBackground(DARK);
 		j.setForeground(Color.WHITE);
 		try {
-			j.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("global/VT323-Regular.ttf")).deriveFont(fontSize));//TODO: fix
+			j.setFont(Font.createFont(Font.TRUETYPE_FONT, new File(CFG.getGlobalPath() + "VT323-Regular.ttf")).deriveFont(fontSize));
 		} catch (IOException|FontFormatException ex) {
 			ex.printStackTrace();
 			System.exit(1);
@@ -189,6 +188,6 @@ public class GUI extends UI {
 		}
 		in.setText("");
 	}
-
+	
 
 }
