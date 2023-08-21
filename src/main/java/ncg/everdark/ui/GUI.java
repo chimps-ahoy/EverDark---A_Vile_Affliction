@@ -37,6 +37,7 @@ public class GUI extends UI {
 		frame = new JFrame();
 		frame.setLayout(new BorderLayout(10, 5));
 		frame.setTitle("EverDark - A Vile Affliction " + Config.VERS);
+		frame.setIconImage(new ImageIcon("global/logo.png").getImage());//TODO: FIX THIS FILEPATH!!!! ARGHH!!!!!
 		frame.setPreferredSize(new Dimension(1000, 800));
 		frame.setResizable(false);
 		frame.setUndecorated(true);
