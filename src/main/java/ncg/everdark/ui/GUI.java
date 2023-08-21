@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class GUI extends UI {
 
@@ -48,15 +50,15 @@ public class GUI extends UI {
 
 		map = new JEditorPane("plain", "");
 		map.setEditable(false);
-		prep(map, 20);
+		prep(map, 24);
 
 		status = new JEditorPane("plain", "");
 		status.setEditable(false);
-		prep(status, 12);
+		prep(status, 20);
 
 		inv = new JEditorPane("plain", "");
 		inv.setEditable(false);
-		prep(inv, 12);
+		prep(inv, 20);
 
 		StringBuilder buffer = new StringBuilder(99);;
 		for (int i = 0; i < 99; i++) {
@@ -64,11 +66,11 @@ public class GUI extends UI {
 		}
 		console = new JEditorPane("plain", "Welcome to EverDark.\nWould you like to load from file? (Y/N)" + buffer);
 		console.setEditable(false);
-		prep(console, 12);
+		prep(console, 20);
 		JScrollPane consoleHost = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		in = new JTextField("What do you do?");
-		prep(in, 12);
+		prep(in, 20);
 
 		in.addFocusListener(new FocusListener() {
 											public void focusGained(FocusEvent e) {
@@ -105,11 +107,16 @@ public class GUI extends UI {
 		p.add(j, gbc);
 	}
 
-	private void prep(JComponent j, int fontSize) {
+	private void prep(JComponent j, float fontSize) {
 		j.setOpaque(true);
 		j.setBackground(DARK);
 		j.setForeground(Color.WHITE);
-		j.setFont(new Font("Courier New", Font.PLAIN, fontSize));
+		try {
+			j.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("global/VT323-Regular.ttf")).deriveFont(fontSize));//TODO: fix
+		} catch (IOException|FontFormatException ex) {
+			ex.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 	public void start() {
