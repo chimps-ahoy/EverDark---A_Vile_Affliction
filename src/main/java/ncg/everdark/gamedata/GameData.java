@@ -17,7 +17,7 @@ public class GameData {
 	public static final Map SHIP;
 
 	static  {
-		System.out.println("Generating maps...");//-------------------------------------------------------------------------------------------------
+		//System.out.println("Generating maps...");//-------------------------------------------------------------------------------------------------
 		int[][] wwTopo = { 
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
@@ -186,7 +186,7 @@ public class GameData {
 									{'=', '=', '=', '=', '='},
 								};
 
-		System.out.println("Writing descriptions...");//--------------------------------------------------------------------------------
+		//System.out.println("Writing descriptions...");//--------------------------------------------------------------------------------
 		String wwDesc = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n" +
 		"A light breeze flows between the trees and almost sounds like hushed voices.\n" +
 		"Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
@@ -207,14 +207,14 @@ public class GameData {
 		String shipDesc = "The floorboards creek as you step into the cabin of the ship.\n" +
 								"The air is damp and smells of mildew and alcohol.\n";
 
-		System.out.println("Finalizing maps...");//-------------------------------------------------------------------------------
+		//System.out.println("Finalizing maps...");//-------------------------------------------------------------------------------
 		STARTING_LOCATION =  new Map("whispering woods", wwDesc, wwTopo, wwFeat, 16, 16, 2);
 		TWN = new Map("town", twnDesc, twnTopo, twnFeat, 16, 16, 1);
 		TNO = new Map("wilderness", tnoDesc, tnoTopo, tnoFeat, 16, 16, 3);
 		TAN = new Map("taniere", tanDesc, tanTopo, tanFeat, 16, 16, 2);
 		SHIP = new Map("ship", shipDesc, shipTopo, shipFeat, 5, 5, 2);
 
-		System.out.println("Spawning Entities...");//--------------------------------------------------------------------------------------
+		//System.out.println("Spawning Entities...");//--------------------------------------------------------------------------------------
 		STARTING_LOCATION.spawnEntity(new Frog(1), 0, 14);
 
 		TWN.spawnEntity(NPC.ELE, 5, 3);
@@ -231,7 +231,7 @@ public class GameData {
 
 		SHIP.spawnEntity(NPC.CAPTAIN, 2, 4);
 
-		System.out.println("Adding links...");//-------------------------------------------------------------------------------
+		//System.out.println("Adding links...");//-------------------------------------------------------------------------------
 
 		for (int i = 0; i < 16; i++) {
 			STARTING_LOCATION.addLink(TWN, 15, (i%13), 1, (i%13));

@@ -42,6 +42,13 @@ public class CFG {
 		savePath = values[3];
 		musicPath = values[4];
 		colour = (values[5].toLowerCase().charAt(0) == 'y');
+
+		if (width > 200 && legacy) {
+			width /= 10;
+		}
+		if (height > 100 && legacy) {
+			height /= 10;
+		}
 		
 		if (legacy && colour) {
 			colourTags.put(Colour.BLACK, ConsoleColours.BLACK);
