@@ -1,6 +1,7 @@
 package ncg.everdark.entities;
 
-import ncg.everdark.global.ConsoleColours;
+import ncg.everdark.ui.CFG;
+import ncg.everdark.ui.CFG.Colour;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.EndOfDialogueEvent;
 
@@ -17,7 +18,7 @@ public class Frog extends Entity {
 	}
 
 	public String toString() {
-		return ConsoleColours.GREEN + super.toString() + ConsoleColours.RESET;
+		return CFG.colour(super.toString(), Colour.GREEN);
 	}
 
 }

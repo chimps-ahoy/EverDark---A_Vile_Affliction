@@ -1,6 +1,7 @@
 package ncg.everdark.entities;
 
-import ncg.everdark.global.ConsoleColours;
+import ncg.everdark.ui.CFG;
+import ncg.everdark.ui.CFG.Colour;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.EndOfDialogueEvent;
 import ncg.everdark.dialogue.DialogueTree;
@@ -127,7 +128,7 @@ public class NPC extends Entity {
 	}
 
 	public String toString() {
-		return ConsoleColours.BLACK_BRIGHT + super.toString() + ConsoleColours.RESET;
+		return CFG.colour(super.toString(), Colour.GRAY);
 	}
 
 }

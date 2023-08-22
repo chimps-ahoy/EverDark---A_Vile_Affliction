@@ -1,6 +1,7 @@
 package ncg.everdark.gamedata;
 
-import ncg.everdark.global.*;
+import ncg.everdark.ui.CFG;
+import ncg.everdark.ui.CFG.Colour;
 import ncg.everdark.events.Event;
 import ncg.everdark.entities.Entity;
 import ncg.everdark.entities.Player;
@@ -165,17 +166,17 @@ public class Map implements Serializable {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				if (i == playerR && j == playerC) {
-					output.append(ConsoleColours.YELLOW_BOLD).append(Math.abs(topoMap[i][j])).append(ConsoleColours.RESET);//highlights the player location in  yellow
+					output.append(CFG.colour(Math.abs(topoMap[i][j]), Colour.BRIGHT_YELLOW));
 				} else if (Math.abs(topoMap[i][j]) > 9) {
-					output.append(ConsoleColours.RED).append('!').append(ConsoleColours.RESET);//anything greater or less than 9 is used for like pits, which will just be shown as !
+					output.append(CFG.colour("!", Colour.RED));
 				} else if (topoMap[i][j] < 0) {
-					output.append(ConsoleColours.BLACK_BRIGHT).append(Math.abs(topoMap[i][j])).append(ConsoleColours.RESET);//negatives display as red?
+					output.append(CFG.colour(Math.abs(topoMap[i][j]),Colour.GRAY));
 				} else {
 					output.append(topoMap[i][j]);
 				}
-				output.append(' ');
+				output.append(" ");
 			}
-			output.append('\n');
+			output.append("\n");
 		}
 		return output.toString();
 	}
@@ -187,19 +188,19 @@ public class Map implements Serializable {
 				if (entMap[i][j] != null) {
 					output.append(entMap[i][j]);
 				} else if (evtMap[i][j] != null) {
-					output.append(ConsoleColours.CYAN_BRIGHT).append('>').append(ConsoleColours.RESET);
+					output.append(CFG.colour(">", Colour.CYAN));
 				} else if (featMap[i][j] == '~') {
-					output.append(ConsoleColours.BLUE_BRIGHT).append(featMap[i][j]).append(ConsoleColours.RESET);
+					output.append(CFG.colour(featMap[i][j], Colour.BLUE));
 				} else if (featMap[i][j] == '@') {
-					output.append(ConsoleColours.GREEN).append(featMap[i][j]).append(ConsoleColours.RESET);
+					output.append(CFG.colour(featMap[i][j], Colour.GREEN));
 				} else if (featMap[i][j] != '\u0000') { 
 					output.append(featMap[i][j]);
 				} else {
 					output.append(topoMap[i][j]);
 				}
-				output.append(' ');
+				output.append(" ");
 			}
-			output.append('\n');
+			output.append("\n");
 		}
 		return output.toString();
 	}

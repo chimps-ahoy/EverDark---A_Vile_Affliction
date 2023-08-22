@@ -2,7 +2,6 @@ package ncg.everdark.entities;
 
 import ncg.everdark.items.Item;
 import ncg.everdark.items.Bodypart;
-import ncg.everdark.global.ConsoleColours;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.EndOfDialogueEvent;
 

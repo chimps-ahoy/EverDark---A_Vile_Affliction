@@ -5,6 +5,7 @@ import ncg.everdark.entities.Entity.Stat;
 import java.util.Map;
 import java.util.EnumMap;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class Item implements Serializable {
 
@@ -78,7 +79,8 @@ public class Item implements Serializable {
 	}
 
 	public String toString() {
-		return this.NAME + " - " + this.WEIGHT + "kg - " + this.VALUE + "g";
+		DecimalFormat df = new DecimalFormat("0.00");
+		return this.NAME + " - " + df.format(this.WEIGHT) + "kg - " + df.format(this.VALUE) + "g";
 	}
 
 	//TODO: figure out how going to handle different items and stuff. probably just do it the way its done here, but it can be Thought About

@@ -5,7 +5,7 @@ import ncg.everdark.events.LoadFromFileException;
 import ncg.everdark.entities.Entity;
 import ncg.everdark.entities.NPC;
 import ncg.everdark.entities.Player;
-import ncg.everdark.global.Config;
+import ncg.everdark.ui.CFG;
 
 import java.io.*;
 import java.util.Deque;
@@ -43,7 +43,7 @@ public class GameState implements Serializable {
 	public String ini(String response) throws LoadFromFileException {
 		String output = "";
 		GameState finalState = null;
-		File[] fileList = (new File(Config.SAVE_PATH)).listFiles();
+		File[] fileList = (new File(CFG.getSavePath())).listFiles();
 
 		if (iniStage == 0) {//would you like to load from file?
 			if (response.toLowerCase().charAt(0) != 'y') {
@@ -111,7 +111,7 @@ public class GameState implements Serializable {
 					output = "Invalid input. Try again.";
 				} else {
 					player = new Player(inName, stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], stats[7], stats[8], inAppear);
-					output = changeLocation(Config.WW, 6, 6);
+					output = changeLocation(GameData.STARTING_LOCATION, 6, 6);
 				}
 		} else if (iniStage == 100) {
 			String loadMessage = "";
@@ -141,7 +141,7 @@ public class GameState implements Serializable {
 	public String save(String name) {
 		String output = "";
 		try {
-			String fileName = Config.SAVE_PATH + name + ".ed";
+			String fileName = CFG.getSavePath() + name + ".ed";
 			FileOutputStream fos = new FileOutputStream(fileName);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(this);
@@ -220,7 +220,7 @@ public class GameState implements Serializable {
 	
 	public void startMusic() {//this is ONLY needed to start the music upon loading a save, because the music objects are not serializable so they break upon exiting and reloading.
 		try {
-			music = new File(Config.MUSIC_PATH + location.getName() + ".wav");
+			music = new File(CFG.getMusicPath() + location.getName() + ".wav");
 			as = AudioSystem.getAudioInputStream(music);
 			clip = AudioSystem.getClip();
 			clip.open(as);

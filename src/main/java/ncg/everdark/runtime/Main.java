@@ -1,47 +1,54 @@
 package ncg.everdark.runtime;
 
-import ncg.everdark.global.Config;
-import ncg.everdark.gamedata.GameState;
+import ncg.everdark.ui.*;
 
-import java.util.Scanner;
+import javax.swing.SwingUtilities;
 
 public class Main {	
 	public static void main(String[] args) {
-	
-		System.out.print(drawMenu());
 		
-		//game runtime
-		GameState g = new GameState(Config.MAIN_MENU);
-		InputHandler ioHandler = new InputHandler(g);
-		Scanner in = new Scanner(System.in);
-		
-		while (ioHandler.acceptingInput()) {
-			System.out.println(ioHandler.handle(in.nextLine()));
+		boolean legacy = (args != null && args.length > 0);
+		try {
+			CFG.ini("config.txt", legacy);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
 		}
-		System.exit(0);
+		
+		UI ui = null;
+		if (legacy) {
+			System.out.println(drawMenu());
+			ui = new TUI();	
+		} else {
+			ui = new GUI(CFG.getWidth(), CFG.getHeight());
+		}
+		SwingUtilities.invokeLater(ui::start);	
 	}
 
 	public static String drawMenu() {
 		String menu = "";
 		String title = "EverDark";
 		String subtitle = "---A Vile Affliction---";
+		String VERS = "v0.1.4G";
+		int WIDTH = CFG.getWidth();
+		int HEIGHT = CFG.getHeight();
 		/*for (int i = 0; i <= Config.HEIGHT; i++) {
 			menu += '\n';
 		}*/
-		for (int i = 0; i < Config.HEIGHT-2; i++) {
-			for (int j = 0; j < Config.WIDTH; j++) {
-				if (i == (Config.HEIGHT-2)/2 && j == (Config.WIDTH-title.length())/2) {
+		for (int i = 0; i < HEIGHT-2; i++) {
+			for (int j = 0; j < WIDTH; j++) {
+				if (i == (HEIGHT-2)/2 && j == (WIDTH-title.length())/2) {
 					menu += title;
 					j += title.length()-1;
-				} else if (i == (Config.HEIGHT-2)/2 + 1 && j == (Config.WIDTH-subtitle.length())/2) {
+				} else if (i == (HEIGHT-2)/2 + 1 && j == (WIDTH-subtitle.length())/2) {
 					menu += subtitle;
 					j += subtitle.length()-1;
-				} else if (i == Config.HEIGHT-3 && j == Config.WIDTH-Config.VERS.length()-1) {
-					menu += Config.VERS;
-					j += Config.VERS.length()-1;
-				} else if (i == 0 || (i == Config.HEIGHT-3 && j > 0 && j < Config.WIDTH-1)) {
+				} else if (i == HEIGHT-3 && j == WIDTH-VERS.length()-1) {
+					menu += VERS;
+					j += VERS.length()-1;
+				} else if (i == 0 || (i == HEIGHT-3 && j > 0 && j < WIDTH-1)) {
 					menu += '_';
-				} else if (j == 0 || j == Config.WIDTH-1) {
+				} else if (j == 0 || j == WIDTH-1) {
 					menu += '|';
 				} else {
 					menu += " ";

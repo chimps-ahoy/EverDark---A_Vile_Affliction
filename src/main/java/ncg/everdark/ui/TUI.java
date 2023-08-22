@@ -1,6 +1,5 @@
-package ncg.everdark.runtime;
+package ncg.everdark.ui;
 
-import ncg.everdark.global.Config;
 import ncg.everdark.gamedata.GameState;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.LoadFromFileException;
@@ -10,21 +9,13 @@ import java.util.InputMismatchException;
 import java.util.Deque;
 import java.util.ArrayDeque;
 
-public class InputHandler { 
+public class TUI extends UI { 
 
-	private GameState state;
-	private boolean acceptingInput;
-
-	public InputHandler(GameState state) { 
-		this.state = state;
-		acceptingInput = true;
+	public TUI() { 
+		super();
 	}
 
-	public boolean acceptingInput() {
-		return acceptingInput;
-	}
-
-	public String handle(String input) {
+	public void handle(String input) {
 
 		Scanner tokenizer = new Scanner(input.toLowerCase());
 		String leadingCommand = (tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
@@ -35,56 +26,64 @@ public class InputHandler {
 		String output = "Command not recognized.";
 
 		try {
-			if (!state.initialized()) {
+			if (!super.state.initialized()) {
 				try {
-					output = state.ini(input);
+					output = super.state.ini(input);
 				} catch (LoadFromFileException lfle) {
-					state.stopMusic();
-					state = lfle.getState();
-					state.startMusic();
-					output = state.getLocationDesc();
+					super.state.stopMusic();
+					super.state = lfle.getState();
+					super.state.startMusic();
+					output = super.state.getLocationDesc();
 				}
-			} else if (state.inDialogue()) { 
+			} else if (super.state.inDialogue()) { 
 				try {
-					output = state.talk(Integer.parseInt(leadingCommand), args);
+					output = super.state.talk(Integer.parseInt(leadingCommand), args);
 				} catch (InputMismatchException|IllegalArgumentException ex) {
 					output = "Invalid Selection.";
 				}
 			} else if (leadingCommand.equals("move")) {
 				output = (args.isEmpty()) ? "Please include a direction after the move command.\n" : "";
 				for (char d : args) {
-					output += state.movePlayer(d);
+					output += super.state.movePlayer(d);
 				}
-				output += state.getMapString();
+				output += super.state.getMapString();
 			} else if (leadingCommand.equals("speak")) {
 				output = "Please include a direction after the speak command.";
 				if (!args.isEmpty()) {
-					output = state.beginDialogue(args.pop());
+					output = super.state.beginDialogue(args.pop());
 				}
 			} else if (leadingCommand.equals("look")) {
-				output = state.getLocationDesc();
+				output = super.state.getLocationDesc();
 			} else if (leadingCommand.equals("survey")) {
-				output = "You survey the area for changes in elevation.\n" + state.getTopoMapString();
+				output = "You survey the area for changes in elevation.\n" + super.state.getTopoMapString();
 			} else if (leadingCommand.equals("clear")) {
 				output = "";
-				for (int i = 0; i < Config.HEIGHT; i++) {
+				for (int i = 0; i < CFG.getHeight(); i++) {
 					output += '\n';
 				}
 			} else if (leadingCommand.equals("stats")) {
-				output = state.getPlayerStats();
+				output = super.state.getPlayerStats();
 			} else if (leadingCommand.equals("stuff")) {
-				output = state.getInv();
+				output = super.state.getInv();
 			} else if (leadingCommand.equals("save")) {
-				output = state.save();
+				output = super.state.save();
 			} else if (leadingCommand.equals("exit")) {
 				acceptingInput = false;
-				state.close();
+				super.state.close();
 				output = "Bye!";
 			}
 		} catch (Event e) {
-			output = e.update(state);
+			output = e.update(super.state);
 		}
-		return output + '\n';
+		System.out.println(output + '\n');
+	}
+
+	public void start() {
+		Scanner in = new Scanner(System.in);
+		while (super.acceptingInput) {
+			handle(in.nextLine());
+		}
+		System.exit(0);
 	}
 
 }
