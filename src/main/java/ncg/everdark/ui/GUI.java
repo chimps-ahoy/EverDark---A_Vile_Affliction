@@ -62,6 +62,7 @@ public class GUI extends UI {
 		for (int i = 0; i < 99; i++) {
 			buffer.append('\n');
 		}
+
 		console = new JEditorPane("plain", "Welcome to EverDark.\nWould you like to load from file? (Y/N)" + buffer);
 		console.setEditable(false);
 		prep(console, 20);
@@ -83,7 +84,6 @@ public class GUI extends UI {
 
 		try {
 			Font f = Font.createFont(Font.TRUETYPE_FONT, new File(CFG.getGlobalPath() + "VT323-Regular.ttf")).deriveFont(12f);
-			System.out.println(f);
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(f);
 		} catch (IOException|FontFormatException ex) {
 			ex.printStackTrace();
@@ -133,7 +133,6 @@ public class GUI extends UI {
 	}
 
 	public void handle(String input) {
-
 		Scanner tokenizer = new Scanner(input.toLowerCase());
 		String leadingCommand = (tokenizer.hasNext()) ? tokenizer.next() : "placeholder";
 		Deque<Character> args = new ArrayDeque<Character>();
@@ -141,6 +140,7 @@ public class GUI extends UI {
 			args.add(tokenizer.next().toLowerCase().charAt(0));	
 		}
 		String output = "Command not recognized.";
+		topographicView = false;
 
 		try {
 			if (!super.state.initialized()) {
@@ -172,7 +172,7 @@ public class GUI extends UI {
 				output = super.state.getLocationDesc();
 			} else if (leadingCommand.equals("survey")) {
 				output = "You survey the area for changes in elevation.\n";
-				map.setText(super.state.getTopoMapString());
+				topographicView = true;
 			} else if (leadingCommand.equals("save")) {
 				output = super.state.save();
 			} else if (leadingCommand.equals("exit")) {
@@ -184,7 +184,7 @@ public class GUI extends UI {
 		} catch (Event e) {
 			output = e.update(super.state);
 		}
-		console.setText(console.getText() + output + '\n');
+		console.setText(console.getText() + input + '\n' + output + '\n');
 		if (super.state.initialized()) {
 			status.setText(formatHTML(super.state.getPlayerStats(), 20));
 			inv.setText(formatHTML(super.state.getInv(), 20));
