@@ -61,10 +61,9 @@ public class CFG {
 			colourTags.put(Colour.BRIGHT_MAGENTA, ConsoleColours.PURPLE_BRIGHT);
 			colourTags.put(Colour.BRIGHT_WHITE, ConsoleColours.WHITE_BRIGHT);
 			colourTags.put(Colour.RESET, ConsoleColours.RESET);
-		/*
 		} else if (colour) {
 			String htmlTag = "<span style=\"color:";
-			String close = "\">";
+			String close = ";\">";
 			colourTags.put(Colour.BLACK, htmlTag + "#19191E" + close);
 			colourTags.put(Colour.WHITE, htmlTag + "#AAAAAA" + close);
 			colourTags.put(Colour.GRAY, htmlTag + "#555555" + close);
@@ -81,7 +80,7 @@ public class CFG {
 			colourTags.put(Colour.BRIGHT_RED, htmlTag + "#FF5555" + close);
 			colourTags.put(Colour.BRIGHT_MAGENTA, htmlTag + "#FF55FF" + close);
 			colourTags.put(Colour.BRIGHT_WHITE, htmlTag + "#FFFFFF" + close);
-			colourTags.put(Colour.RESET, htmlTag + "</span>");*/
+			colourTags.put(Colour.RESET, "</span>");
 		} else {
 			for (Colour c : Colour.values()) {
 				colourTags.put(c, "");

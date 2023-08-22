@@ -30,8 +30,7 @@ public class GUI extends UI {
 	private static final Color EVER = new Color(118, 118, 118);
 	private static final Color DARK = new Color(25, 25, 30);
 
-	public GUI(int x, int y) {//TODO: HTML and COLOURS!!!
-					  //will need to edit Config to include html color tags
+	public GUI(int x, int y) {
 		super();
 		topographicView = false;
 
@@ -47,15 +46,15 @@ public class GUI extends UI {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		map = new JEditorPane("plain", "");
+		map = new JEditorPane("text/html", "");
 		map.setEditable(false);
 		prep(map, 24);
 
-		status = new JEditorPane("plain", "");
+		status = new JEditorPane("text/html", "");
 		status.setEditable(false);
 		prep(status, 20);
 
-		inv = new JEditorPane("plain", "");
+		inv = new JEditorPane("text/html", "");
 		inv.setEditable(false);
 		prep(inv, 20);
 
@@ -81,6 +80,15 @@ public class GUI extends UI {
 										});
 
 		in.addActionListener(ae -> handle(in.getText()));
+
+		try {
+			Font f = Font.createFont(Font.TRUETYPE_FONT, new File(CFG.getGlobalPath() + "VT323-Regular.ttf")).deriveFont(12f);
+			System.out.println(f);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(f);
+		} catch (IOException|FontFormatException ex) {
+			ex.printStackTrace();
+			System.exit(1);
+		}
 
 		add(map, panel, gbc, 0, 0, 1, 1, 0.5, 0.5);
 		add(status, panel, gbc, 1, 0 ,1 ,1, 0.25, 0.5);
@@ -178,16 +186,20 @@ public class GUI extends UI {
 		}
 		console.setText(console.getText() + output + '\n');
 		if (super.state.initialized()) {
-			status.setText(super.state.getPlayerStats());
-			inv.setText(super.state.getInv());
+			status.setText(formatHTML(super.state.getPlayerStats(), 20));
+			inv.setText(formatHTML(super.state.getInv(), 20));
 		}
 		if (topographicView) {
-			map.setText(super.state.getTopoMapString());
+			map.setText(formatHTML(super.state.getTopoMapString(), 24));
 		} else {
-			map.setText(super.state.getMapString());
+			map.setText(formatHTML(super.state.getMapString(), 24));
 		}
 		in.setText("");
 	}
 	
+	private static String formatHTML(String s, int size) {
+		return "<html><body><p style =\"font-family: 'VT323', monospace; font-size:" + size +
+		  ";color:#FFFFFF;\">" + s.replace("\n", "<br>") + "</p></body></html>";
+	}
 
 }
