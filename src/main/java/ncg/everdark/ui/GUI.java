@@ -24,6 +24,7 @@ public class GUI extends UI {
 	private JEditorPane inv;
 	private JEditorPane console;
 	private JTextField in;
+	private Font font;
 
 	private boolean topographicView;
 
@@ -33,6 +34,14 @@ public class GUI extends UI {
 	public GUI(int x, int y) {
 		super();
 		topographicView = false;
+
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, new File(CFG.getGlobalPath() + "VT323-Regular.ttf")).deriveFont(12f);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+		} catch (IOException|FontFormatException ex) {
+			System.out.println("The font could not be found. Please make sure the font file provided with the game is within your set 'global' directory. Quitting...");
+			System.exit(1);
+		}
 
 		frame = new JFrame();
 		frame.setLayout(new BorderLayout(10, 5));
@@ -48,15 +57,15 @@ public class GUI extends UI {
 
 		map = new JEditorPane("text/html", "");
 		map.setEditable(false);
-		prep(map, 24);
+		prep(map, 32);
 
 		status = new JEditorPane("text/html", "");
 		status.setEditable(false);
-		prep(status, 20);
+		prep(status, 40);
 
 		inv = new JEditorPane("text/html", "");
 		inv.setEditable(false);
-		prep(inv, 20);
+		prep(inv, 40);
 
 		StringBuilder buffer = new StringBuilder(99);;
 		for (int i = 0; i < 99; i++) {
@@ -65,11 +74,11 @@ public class GUI extends UI {
 
 		console = new JEditorPane("plain", "Welcome to EverDark.\nWould you like to load from file? (Y/N)" + buffer);
 		console.setEditable(false);
-		prep(console, 20);
+		prep(console, 40);
 		JScrollPane consoleHost = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		in = new JTextField("What do you do?");
-		prep(in, 20);
+		prep(in, 40);
 
 		in.addFocusListener(new FocusListener() {
 											public void focusGained(FocusEvent e) {
@@ -82,18 +91,12 @@ public class GUI extends UI {
 
 		in.addActionListener(ae -> handle(in.getText()));
 
-		try {
-			Font f = Font.createFont(Font.TRUETYPE_FONT, new File(CFG.getGlobalPath() + "VT323-Regular.ttf")).deriveFont(12f);
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(f);
-		} catch (IOException|FontFormatException ex) {
-			ex.printStackTrace();
-			System.exit(1);
-		}
+		
 
-		add(map, panel, gbc, 0, 0, 1, 1, 0.5, 0.5);
+		add(map, panel, gbc, 0, 0, 1, 1, 0.35, 0.25);
 		add(status, panel, gbc, 1, 0 ,1 ,1, 0.25, 0.5);
-		add(inv, panel, gbc, 2, 0, 1, 1, 0.25, 0.5);
-		add(consoleHost, panel, gbc, 0, 1, 5, 1, 1, 0.7);
+		add(inv, panel, gbc, 2, 0, 1, 1, 0.37, 0.5);
+		add(consoleHost, panel, gbc, 0, 1, 5, 1, 1, 1);
 		add(in, panel, gbc, 0, 2, 5, 1, 1, 0.005);
 
 		panel.setBackground(EVER);
@@ -114,16 +117,11 @@ public class GUI extends UI {
 		p.add(j, gbc);
 	}
 
-	private void prep(JComponent j, float fontSize) {
+	private void prep(JComponent j, int fontSize) {
 		j.setOpaque(true);
 		j.setBackground(DARK);
 		j.setForeground(Color.WHITE);
-		try {
-			j.setFont(Font.createFont(Font.TRUETYPE_FONT, new File(CFG.getGlobalPath() + "VT323-Regular.ttf")).deriveFont(fontSize));
-		} catch (IOException|FontFormatException ex) {
-			ex.printStackTrace();
-			System.exit(1);
-		}
+		j.setFont(font.deriveFont((float)(CFG.getHeight()/fontSize)));
 	}
 
 	public void start() {
@@ -186,13 +184,13 @@ public class GUI extends UI {
 		}
 		console.setText(console.getText() + input + '\n' + output + '\n');
 		if (super.state.initialized()) {
-			status.setText(formatHTML(super.state.getPlayerStats(), 20));
-			inv.setText(formatHTML(super.state.getInv(), 20));
+			status.setText(formatHTML(super.state.getPlayerStats(), CFG.getHeight() / 40));
+			inv.setText(formatHTML(super.state.getInv(), CFG.getHeight() / 40));
 		}
 		if (topographicView) {
-			map.setText(formatHTML(super.state.getTopoMapString(), 24));
+			map.setText(formatHTML(super.state.getTopoMapString(), CFG.getHeight() / 32));
 		} else {
-			map.setText(formatHTML(super.state.getMapString(), 24));
+			map.setText(formatHTML(super.state.getMapString(), CFG.getHeight() / 32));
 		}
 		in.setText("");
 	}
