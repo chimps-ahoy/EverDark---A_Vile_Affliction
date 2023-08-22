@@ -1,53 +1,22 @@
-package ncg.everdark.global;
+package ncg.everdark.gamedata;
 
 import ncg.everdark.dialogue.DialogueTree;
 import ncg.everdark.events.Consequence;
-import ncg.everdark.gamedata.*;
 import ncg.everdark.entities.*;
 
 import java.io.*;
 import java.util.Scanner;
 
-public class Config {
+public class GameData {
 
-	private static final int n = 5;
-	private static String[] values = new String[n];
-	public static final String MUSIC_PATH;
-	public static final String SAVE_PATH;
-	public static final int WIDTH;
-	public static final int HEIGHT;
-	public static final boolean ANSI;
-	public static final String VERS = "v0.1.4";
-	
 	public static final Map MAIN_MENU = new Map("main", "Would you like to load from file? (Y/N): ", null, null, 0, 0, 0);
-	public static final Map WW;
+	public static final Map STARTING_LOCATION;
 	public static final Map TWN;
 	public static final Map TNO;
 	public static final Map TAN;
 	public static final Map SHIP;
 
 	static  {
-		File f = null;
-		Scanner lineScanner = null;
-		try {
-			f = new File("config.txt");
-			lineScanner = new Scanner(f);
-			for (int i = 0; i<n; i++) {
-				Scanner valueGetter = new Scanner(lineScanner.nextLine());
-				valueGetter.useDelimiter(": ");
-				valueGetter.next();
-				values[i] = valueGetter.next();
-			}
-		} catch (Exception e) {
-			System.out.println("Game Data could not be initialized. Files may be missing or corrupt.");
-			System.exit(1);
-		}
-		WIDTH = Integer.parseInt(values[0]);
-		HEIGHT = Integer.parseInt(values[1]);
-		SAVE_PATH = values[2];
-		MUSIC_PATH = values[3];
-		ANSI = (values[4].toLowerCase().charAt(0) == 'y');
-		
 		System.out.println("Generating maps...");//-------------------------------------------------------------------------------------------------
 		int[][] wwTopo = { 
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
@@ -239,14 +208,14 @@ public class Config {
 								"The air is damp and smells of mildew and alcohol.\n";
 
 		System.out.println("Finalizing maps...");//-------------------------------------------------------------------------------
-		WW =  new Map("whispering woods", wwDesc, wwTopo, wwFeat, 16, 16, 2);
+		STARTING_LOCATION =  new Map("whispering woods", wwDesc, wwTopo, wwFeat, 16, 16, 2);
 		TWN = new Map("town", twnDesc, twnTopo, twnFeat, 16, 16, 1);
 		TNO = new Map("wilderness", tnoDesc, tnoTopo, tnoFeat, 16, 16, 3);
 		TAN = new Map("taniere", tanDesc, tanTopo, tanFeat, 16, 16, 2);
 		SHIP = new Map("ship", shipDesc, shipTopo, shipFeat, 5, 5, 2);
 
 		System.out.println("Spawning Entities...");//--------------------------------------------------------------------------------------
-		WW.spawnEntity(new Frog(1), 0, 14);
+		STARTING_LOCATION.spawnEntity(new Frog(1), 0, 14);
 
 		TWN.spawnEntity(NPC.ELE, 5, 3);
 		TWN.spawnEntity(NPC.MAIA, 7, 3);
@@ -265,8 +234,8 @@ public class Config {
 		System.out.println("Adding links...");//-------------------------------------------------------------------------------
 
 		for (int i = 0; i < 16; i++) {
-			WW.addLink(TWN, 15, (i%13), 1, (i%13));
-			TWN.addLink(WW, 0, (i%13), 14, (i%13));
+			STARTING_LOCATION.addLink(TWN, 15, (i%13), 1, (i%13));
+			TWN.addLink(STARTING_LOCATION, 0, (i%13), 14, (i%13));
 			TWN.addLink(TNO, 15, (i%10), 1, (i%10));
 			TNO.addLink(TWN, 0, (i%10), 14, (i%10));
 		}

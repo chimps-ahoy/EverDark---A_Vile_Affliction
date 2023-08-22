@@ -1,7 +1,6 @@
 package ncg.everdark.ui;
 
-import ncg.everdark.gamedata.GameState;
-import ncg.everdark.global.Config;
+import ncg.everdark.gamedata.*;
 
 public abstract class UI {
 
@@ -9,7 +8,7 @@ public abstract class UI {
 	protected boolean acceptingInput;
 
 	public UI() {
-		this.state = new GameState(Config.MAIN_MENU);
+		this.state = new GameState(GameData.MAIN_MENU);
 		this.acceptingInput = true;
 	}
 

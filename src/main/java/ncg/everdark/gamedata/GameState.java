@@ -5,7 +5,6 @@ import ncg.everdark.events.LoadFromFileException;
 import ncg.everdark.entities.Entity;
 import ncg.everdark.entities.NPC;
 import ncg.everdark.entities.Player;
-import ncg.everdark.global.Config;
 import ncg.everdark.ui.CFG;
 
 import java.io.*;
@@ -112,7 +111,7 @@ public class GameState implements Serializable {
 					output = "Invalid input. Try again.";
 				} else {
 					player = new Player(inName, stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], stats[7], stats[8], inAppear);
-					output = changeLocation(Config.WW, 6, 6);
+					output = changeLocation(GameData.STARTING_LOCATION, 6, 6);
 				}
 		} else if (iniStage == 100) {
 			String loadMessage = "";

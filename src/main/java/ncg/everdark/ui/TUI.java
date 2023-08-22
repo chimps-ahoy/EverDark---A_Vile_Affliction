@@ -1,6 +1,5 @@
 package ncg.everdark.ui;
 
-import ncg.everdark.global.Config;
 import ncg.everdark.gamedata.GameState;
 import ncg.everdark.events.Event;
 import ncg.everdark.events.LoadFromFileException;
@@ -59,7 +58,7 @@ public class TUI extends UI {
 				output = "You survey the area for changes in elevation.\n" + super.state.getTopoMapString();
 			} else if (leadingCommand.equals("clear")) {
 				output = "";
-				for (int i = 0; i < Config.HEIGHT; i++) {
+				for (int i = 0; i < CFG.getHeight(); i++) {
 					output += '\n';
 				}
 			} else if (leadingCommand.equals("stats")) {
