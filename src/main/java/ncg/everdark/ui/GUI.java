@@ -183,10 +183,12 @@ public class GUI extends UI {
 			output = e.update(super.state);
 		}
 		console.setText(console.getText() + input + '\n' + output + '\n');
-		if (super.state.initialized()) {
-			status.setText(formatHTML(super.state.getPlayerStats(), CFG.getHeight() / 40));
-			inv.setText(formatHTML(super.state.getInv(), CFG.getHeight() / 40));
-		}
+		updateDisplay();
+	}
+
+	private void updateDisplay() {
+		status.setText(formatHTML(super.state.getPlayerStats(), CFG.getHeight() / 40));
+		inv.setText(formatHTML(super.state.getInv(), CFG.getHeight() / 40));
 		if (topographicView) {
 			map.setText(formatHTML(super.state.getTopoMapString(), CFG.getHeight() / 32));
 		} else {

@@ -28,9 +28,9 @@ public class GameState implements Serializable {
 //----ini stuff------------------
 	private int iniStage = 0;
 	private int availablePoints = 30;
-	private String inName = "";
-	private char inAppear = 'c';
-	private int[] stats = new int[9];
+	private String inName = "?";
+	private char inAppear = '?';
+	private int[] stats = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 //---------------------------------
 
 	public GameState(Map startingLocation) {
@@ -211,11 +211,24 @@ public class GameState implements Serializable {
 	} 
 
 	public String getPlayerStats() {
-		return player.stats();
+		StringBuilder output = new StringBuilder("Name: " + inName + " - " + inAppear);
+		if (initialized()) {
+			return player.stats();
+		} else {
+			for (Entity.Stat s : Entity.Stat.values()) {
+				char stat = (stats[s.ordinal()] >= 0) ? (char)('0' + stats[s.ordinal()]) : '?';
+				output.append(	"\n" + s + " - " + stat);
+			}
+		}
+		return output.toString();
 	}
 
 	public String getInv() {
-		return player.stuff();
+		String output = "";
+		if (initialized()) {
+			output = player.stuff();
+		}
+		return output;
 	}
 	
 	public void startMusic() {//this is ONLY needed to start the music upon loading a save, because the music objects are not serializable so they break upon exiting and reloading.
