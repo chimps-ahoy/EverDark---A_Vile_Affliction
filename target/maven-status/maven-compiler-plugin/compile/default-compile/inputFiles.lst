@@ -5,6 +5,7 @@ C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\gamedat
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\items\Bodypart.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\entities\Player.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\entities\NPC.java
+C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\gamedata\GameBuilder.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\dialogue\Requirement.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\dialogue\DialogueTree.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\gamedata\GameState.java
@@ -12,7 +13,6 @@ C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\entitie
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\ui\GUI.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\ui\UI.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\events\EndOfDialogueEvent.java
-C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\gamedata\GameData.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\ui\CFG.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\ui\ConsoleColours.java
 C:\Users\Sebastien\Documents\EverDark\v0.1.4G\src\main\java\ncg\everdark\ui\TUI.java

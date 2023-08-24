@@ -4,19 +4,17 @@ import ncg.everdark.dialogue.DialogueTree;
 import ncg.everdark.events.Consequence;
 import ncg.everdark.entities.*;
 
-import java.io.*;
 import java.util.Scanner;
 
-public class GameData {
+public class GameBuilder {//this is ONLY to be used for development so i can construct the .game file quickly, should be removed for releases
+	public static void buildGame()  {
+		Map MAIN_MENU = new Map("main", "Would you like to load from file? (Y/N): ", null, null, 0, 0, 0);
+		Map STARTING_LOCATION;
+		Map TWN;
+		Map TNO;
+		Map TAN;
+		Map SHIP;
 
-	public static final Map MAIN_MENU = new Map("main", "Would you like to load from file? (Y/N): ", null, null, 0, 0, 0);
-	public static final Map STARTING_LOCATION;
-	public static final Map TWN;
-	public static final Map TNO;
-	public static final Map TAN;
-	public static final Map SHIP;
-
-	static  {
 		//System.out.println("Generating maps...");//-------------------------------------------------------------------------------------------------
 		int[][] wwTopo = { 
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
@@ -243,6 +241,12 @@ public class GameData {
 		TAN.addLink(TNO, 0, 11, 14, 0);
 		TAN.addLink(SHIP, 8, 13, 2, 0);
 		SHIP.addLink(TAN, 2, 2, 8, 12);
+		try {
+			System.out.println("Building game...");
+			new GameState.GameData(MAIN_MENU, STARTING_LOCATION, 6, 6).save("global/EverDark");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
-
 }

@@ -8,7 +8,7 @@ public abstract class UI {
 	protected boolean acceptingInput;
 
 	public UI() {
-		this.state = new GameState(GameData.MAIN_MENU);
+		this.state = new GameState();
 		this.acceptingInput = true;
 	}
 

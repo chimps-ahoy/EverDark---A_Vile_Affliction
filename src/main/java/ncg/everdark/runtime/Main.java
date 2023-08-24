@@ -1,17 +1,36 @@
 package ncg.everdark.runtime;
 
+import ncg.everdark.gamedata.*;
 import ncg.everdark.ui.*;
 
 import javax.swing.SwingUtilities;
 
 public class Main {	
 	public static void main(String[] args) {
+
+		GameBuilder.buildGame();//remove from release
+										
+		boolean legacy = false;
+		String config = "config.txt";
+		String gamefile = "EverDark.game";
 		
-		boolean legacy = (args != null && args.length > 0);
+		if (args != null && args.length > 0) {
+			legacy = (args[0].toLowerCase().equals("tui"));
+			config = (args.length > 1) ? args[1] : "config.txt";
+			gamefile = (args.length > 2) ? args[2] : "EverDark.game";
+		}
+
 		try {
-			CFG.ini("config.txt", legacy);
+			CFG.ini(config, legacy);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Config file not found or formatted incorrectly. Please check your config.");
+			System.exit(-1);
+		}
+		try {
+			GameState.loadGame(CFG.getGlobalPath() + gamefile);
+		} catch (Exception e) {
+			System.out.println("Game data could not be loaded. Please ensure your Global directory is set correctly in config.txt and that it contains the .game file");
+			//e.printStackTrace();
 			System.exit(-1);
 		}
 		
@@ -32,9 +51,6 @@ public class Main {
 		String VERS = "v0.1.4G";
 		int WIDTH = CFG.getWidth();
 		int HEIGHT = CFG.getHeight();
-		/*for (int i = 0; i <= Config.HEIGHT; i++) {
-			menu += '\n';
-		}*/
 		for (int i = 0; i < HEIGHT-2; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 				if (i == (HEIGHT-2)/2 && j == (WIDTH-title.length())/2) {

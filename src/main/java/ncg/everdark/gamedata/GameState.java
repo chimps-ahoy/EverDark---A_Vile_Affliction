@@ -31,10 +31,11 @@ public class GameState implements Serializable {
 	private String inName = "?";
 	private char inAppear = '?';
 	private int[] stats = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
-//---------------------------------
+//-----global---------------------
+	private static GameData gd = null;
 
-	public GameState(Map startingLocation) {
-		location = startingLocation;
+	public GameState() {
+		location = gd.menu;
 		player = null;
 		startMusic();	
 		save("new game");
@@ -111,7 +112,7 @@ public class GameState implements Serializable {
 					output = "Invalid input. Try again.";
 				} else {
 					player = new Player(inName, stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], stats[7], stats[8], inAppear);
-					output = changeLocation(GameData.STARTING_LOCATION, 6, 6);
+					output = changeLocation(gd.startingLocation, gd.startR, gd.startC);
 				}
 		} else if (iniStage == 100) {
 			String loadMessage = "";
@@ -126,6 +127,10 @@ public class GameState implements Serializable {
 			}
 		}
 		return output;
+	}
+
+	public static void loadGame(String gameFilePath) throws IOException, FileNotFoundException, ClassNotFoundException {
+		gd = GameData.load(new File(gameFilePath));	
 	}
 	
 	public boolean initialized() {
@@ -271,6 +276,39 @@ public class GameState implements Serializable {
 
 	public String getTopoMapString() {
 		return location.getTopoMapString();
+	}
+
+	public static class GameData implements Serializable {
+		public Map menu;
+		public Map startingLocation;
+		public int startR;
+		public int startC;
+
+		public GameData(Map menu, Map startingLocation, int startR, int startC) {
+			this.menu = menu;
+			this.startingLocation = startingLocation;
+			this.startR = startR;
+			this.startC = startC;
+		}
+
+		public void save(String filePath) throws IOException, FileNotFoundException {//NOTE: this is used PRIOR TO CFG INITIALIZATION
+																											  //CANNOT RELY ON CFG
+			String fileName =  filePath + ".game";
+			FileOutputStream fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this);
+			oos.close();
+			fos.close();
+		}
+
+		public static GameData load(File f) throws IOException, FileNotFoundException, ClassNotFoundException {
+			FileInputStream fis = new FileInputStream(f);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			GameData loaded = (GameData)(ois.readObject());
+			ois.close();
+			fis.close();
+			return loaded;
+		}
 	}
 	
 }

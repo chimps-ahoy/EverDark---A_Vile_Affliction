@@ -4,7 +4,6 @@ ncg\everdark\entities\Player$Origin.class
 ncg\everdark\entities\Frog.class
 ncg\everdark\entities\Entity$Race.class
 ncg\everdark\ui\ConsoleColours.class
-ncg\everdark\gamedata\GameData.class
 ncg\everdark\runtime\Main.class
 ncg\everdark\items\Bodypart$Status.class
 ncg\everdark\events\LoadFromFileException.class
@@ -20,9 +19,11 @@ ncg\everdark\ui\UI.class
 ncg\everdark\ui\GUI$1.class
 ncg\everdark\entities\NPC.class
 ncg\everdark\entities\Entity.class
+ncg\everdark\gamedata\GameState$GameData.class
 ncg\everdark\gamedata\GameState.class
 ncg\everdark\dialogue\DialogueTree$Node.class
 ncg\everdark\items\Bodypart.class
+ncg\everdark\gamedata\GameBuilder.class
 ncg\everdark\events\Event.class
 ncg\everdark\items\Item.class
 ncg\everdark\ui\TUI.class
