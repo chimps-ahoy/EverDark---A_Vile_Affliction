@@ -121,8 +121,11 @@ public class Map implements Serializable {
 	}
 	
 	private boolean climbable(int dR, int dC) {//WARNING: does NOT check for out of bounds - this is only expected to be called by movePlayer() for now, which checks that itself
-		final int CLIMBING_FACTOR = entMap[playerR][playerC].getClimbing();//checks if a change in elevation can be traversed by the player
-		 return (Math.abs(topoMap[playerR][playerC] - topoMap[playerR+dR][playerC+dC]) <= CLIMBING_FACTOR);
+		double playerClimbing = entMap[playerR][playerC].getClimbing();
+		int CLIMBING_FACTOR = Math.round(Math.round(playerClimbing));//checks if a change in elevation can be traversed by the player
+		//System.out.println(playerClimbing);
+		//System.out.println(CLIMBING_FACTOR);
+		return (Math.abs(topoMap[playerR][playerC] - topoMap[playerR+dR][playerC+dC]) <= CLIMBING_FACTOR);
 	}
 	
 	private boolean passable(int dR, int dC) {//same as climbable but for obstacles

@@ -52,7 +52,7 @@ public class Item implements Serializable {
 		this.VALUE = VALUE;
 		this.buffs = new EnumMap<Stat,Integer>(Stat.class);
 		this.IS_LOCKED = flags[0];
-		this.IS_HIDDEN = flags[1];
+		this.IS_HIDDEN = (flags.length > 1) ? flags[1] : false;
 		for (Stat stat : Stat.values()) {
 			buffs.put(stat,0);
 		}
@@ -78,12 +78,16 @@ public class Item implements Serializable {
 		return buffs.get(stat);
 	}
 
+	public boolean equals(Item i) {
+		return (this.ID == i.ID);
+	}
+
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return this.NAME + " - " + df.format(this.WEIGHT) + "kg - " + df.format(this.VALUE) + "g";
 	}
 
 	//TODO: figure out how going to handle different items and stuff. probably just do it the way its done here, but it can be Thought About
-	public static final Item TEST = new Item("test", 1.0, 2.0).put(Stat.STR,10);
+	public static final Item TEST = new Item("test", 1.0, 2.0, true);//.put(Stat.STR,10);
 
 }

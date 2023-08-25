@@ -1,5 +1,7 @@
 package ncg.everdark.entities;
 
+import ncg.everdark.ui.CFG;
+import ncg.everdark.ui.CFG.Colour;
 import ncg.everdark.items.Item;
 import ncg.everdark.items.Bodypart;
 import ncg.everdark.events.Event;
@@ -12,11 +14,12 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Arrays;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public abstract class Entity implements Serializable{
 
 	private String name;
-	private Deque<Item> inv;
+	private List<Item> inv;
 	private Map<Stat,Integer> stats;
 	private final char APPEAR_MOD; //the appearance modifier. the basic char for their appearance before it is affected by stuff like starvation
 	private final int NUM_PARTS;
@@ -30,10 +33,10 @@ public abstract class Entity implements Serializable{
 		this.stats = new EnumMap<Stat,Integer>(Stat.class);
 		this.inv = new LinkedList<Item>();
 
-		inv.addAll(Bodypart.get(65, race));
+		inv.addAll(Bodypart.getBody(65, race));
 		this.NUM_PARTS = inv.size();//IMPORTANT - any other items added at construction need to be AFTER NUM_PARTS is set.
 
-		inv.add(Item.TEST);
+		//inv.add(Item.TEST);
 
 		stats.put(Stat.STR,str);
 		stats.put(Stat.ENDUR,endur);
@@ -80,14 +83,28 @@ public abstract class Entity implements Serializable{
 				output.append(" (" + buff + ")");
 			}
 		}
+		output.append("\n\n");
+		for (Item item : inv.subList(0, NUM_PARTS)) {
+			output.append(item + "\n");
+		}
 		return output.toString();
 	}
 
 	public String stuff() {
-		StringBuilder output = new StringBuilder();
+		StringBuilder output = new StringBuilder("Carrying:\n");
 		for (Item item : inv) {
-			output.append(item + "\n");
+			String locked = (item.IS_LOCKED) ? CFG.colour(" (locked)", Colour.RED) : "";
+			if (!item.IS_HIDDEN) {
+				output.append(item + locked + "\n");
+			}
 		}
+
+		DecimalFormat df = new DecimalFormat("0.00");
+		String carryingWeight = df.format(getWeight(NUM_PARTS, inv.size()));
+		String invValue = df.format(getInvValue());	
+
+		output.append("\nWeight: " + carryingWeight + "kg, Value: " + invValue + "g");
+
 		return output.toString();
 	}
 
@@ -103,14 +120,33 @@ public abstract class Entity implements Serializable{
 
 	private int getItemBuffs(Stat stat) {
 		int output = 0;
-		for (Item i : inv) {
-			output += i.getBuff(stat);
+		for (Item item : inv) {
+			output += item.getBuff(stat);
 		}
 		return output;
 	}
 
-	public int getClimbing() {
-		return (int)(Math.sqrt(this.getStat(Stat.STR) * this.getStat(Stat.ENDUR)));
+	private double getWeight(int a, int b) {
+		double output = 0;
+		for (Item item : inv.subList(a, b)) {
+			output += item.WEIGHT;	
+		}
+		return output;
+	}
+
+	private double getInvValue() {
+		double output = 0;
+		for (Item item : inv) {
+			output += item.VALUE;
+		}
+		return output;
+	}
+
+	public double getClimbing() {
+		double bodyweight = getWeight(0, NUM_PARTS);
+		double carriedweight = getWeight(NUM_PARTS, inv.size());
+		double strengthFactor = Math.sqrt(this.getStat(Stat.STR) * this.getStat(Stat.ENDUR));
+		return (bodyweight * strengthFactor) / (bodyweight + carriedweight);
 	}
 
 	public enum Stat {STR, ENDUR, DEX, SWIFT, INT, WIL, CHARM, INTIM, PERC;

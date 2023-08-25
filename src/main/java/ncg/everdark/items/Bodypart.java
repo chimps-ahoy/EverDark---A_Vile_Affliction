@@ -1,5 +1,7 @@
 package ncg.everdark.items;
 
+import ncg.everdark.ui.CFG;
+import ncg.everdark.ui.CFG.Colour;
 import ncg.everdark.entities.Entity.Race;
 
 import java.util.List;
@@ -14,7 +16,11 @@ public class Bodypart extends Item {
 		this.hp = 100;
 	}
 
-	public Status status() {
+	public String toString() {
+		return this.NAME + " - " + this.status();
+	}
+
+	private Status status() {
 		Status output = Status.GOOD;
 		for (Status s : Status.values()) {
 			if (this.hp >= s.THRESHOLD) {
@@ -25,7 +31,7 @@ public class Bodypart extends Item {
 		return output;
 	}
 
-	public static List<Bodypart> get(double weight, Race race) {
+	public static List<Bodypart> getBody(double weight, Race race) {
 		List<Bodypart> parts = new ArrayList<Bodypart>(race.PARTS.size());
 		for (Bodypart part : race.PARTS) {
 			parts.add(get(weight, part));
@@ -38,16 +44,22 @@ public class Bodypart extends Item {
 	}
 
 	public enum Status {
-		GOOD(100),
-		FINE(75),
-		INJURED(50),
-		BROKEN(25),
-		MISSING(0);
+		GOOD(100, Colour.GREEN),
+		FINE(75, Colour.WHITE),
+		INJURED(50, Colour.BRIGHT_YELLOW),
+		BROKEN(25, Colour.RED),
+		MISSING(0, Colour.GRAY);
 		
 		public final int THRESHOLD;
+		public final Colour COLOUR;
 
-		Status(int i) {
-			this.THRESHOLD = i;
+		Status(int threshold, Colour colour) {
+			this.THRESHOLD = threshold;
+			this.COLOUR = colour;
+		}
+
+		public String toString() {
+			return CFG.colour(this.name(), this.COLOUR);
 		}
 	}
 
