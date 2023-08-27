@@ -9,7 +9,12 @@ import java.util.Scanner;
 public class GameBuilder {//this is ONLY to be used for development so i can construct the .game file quickly, should be removed for releases
 	public static void buildGame()  {
 		Map MAIN_MENU = new Map("main", "Would you like to load from file? (Y/N): ", null, null, 0, 0, 0);
-		Map STARTING_LOCATION;
+		Map WW;
+		Map CAVE_1;
+		Map CAVE_2;
+		Map CAVE_3;
+		Map CAVE_4;
+		Map CAVE_5;
 		Map TWN;
 		Map TNO;
 		Map TAN;
@@ -36,12 +41,12 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 							};
 						
 		char[][] wwFeat = {
-									{'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', 'T', ';', ';', '~', '@', '~'},
-									{';', ';', ';', 'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', '~', '~', '~'},
-									{';', ';', ';', ';', ';', ';', ';', ';', ';', 'T', ';', ';', ';', '~', '~', '~'},
-									{';', ';', ';', 'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', '@', '~', '~'},
-									{';', ';', ';', ';', ';', ';', ';', 'T', ';', ';', ';', ';', ';', '~', '~', '~'},
-									{';', ';', 'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', 'T', '~', '~', '@'},
+									{'^', '^', '^', '^', '^', '^', '^', '^', ';', ';', 'T', ';', ';', '~', '@', '~'},
+									{'^', '^', '^', '^', '^', '^', '^', ';', ';', ';', ';', ';', ';', '~', '~', '~'},
+									{'^', '^', '^', ';', '^', ';', ';', ';', ';', 'T', ';', ';', ';', '~', '~', '~'},
+									{'^', '^', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', '@', '~', '~'},
+									{'^', '^', ';', ';', ';', ';', ';', 'T', ';', ';', ';', ';', ';', '~', '~', '~'},
+									{'^', ';', 'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', 'T', '~', '~', '@'},
 									{';', ';', ';', ';', ';', ';', ';', 'T', ';', ';', ';', ';', ';', '~', '~', '~'},
 									{';', 'T', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', 'T', '~', '~', '~'},
 									{';', ';', ';', ';', ';', ';', ';', 'T', ';', ';', ';', ';', ';', '~', '@', '~'},
@@ -53,7 +58,23 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 									{';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', '~', '~', '~'},
 									{';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', ';', '~', '@', '~'},
 								};
-						
+
+		int[][] cavTopo = {
+									{-1, -1, -1, -1, -1},
+									{-1, -1, -1, -1, -1},
+									{-1, -1, -1, -1, -1},
+									{-1, -1, -1, -1, -1},
+									{-1, -1, -1, -1, -1}
+								};
+
+		char[][] cavFeat = {
+									{'*', '*', '*', '*', '*'},
+									{'*', '*', '*', '*', '*'},
+									{'*', '*', '*', '*', '*'},
+									{'*', '*', '*', '*', '*'},
+									{'*', '*', '*', '*', '*'}
+								};
+
 		int[][] twnTopo = { 
 									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
 									{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
@@ -189,6 +210,9 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		"A light breeze flows between the trees and almost sounds like hushed voices.\n" +
 		"Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
 
+		String caveDesc = "The cold, dank air clings to your skin within the dark cave.\nTo the left and right are entrances that lead deeper into the earth,\nYou can hear " +
+								"water dripping onto the stone floor.\n";
+
 		String twnDesc = "A little town on the outskirts of a forest.\n" +
 						"The sound of rushing water from a river to the East can be heard, but otherwise it is deadly silent.\n" +
 						"It seems oddly devoid of life.\n";
@@ -206,14 +230,19 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 								"The air is damp and smells of mildew and alcohol.\n";
 
 		//System.out.println("Finalizing maps...");//-------------------------------------------------------------------------------
-		STARTING_LOCATION =  new Map("whispering woods", wwDesc, wwTopo, wwFeat, 16, 16, 2);
+		WW =  new Map("whispering woods", wwDesc, wwTopo, wwFeat, 16, 16, 2);
+		CAVE_1 = new Map("cave", caveDesc, cavTopo, cavFeat, 5, 5, 2);
+		CAVE_2 = new Map("cave", caveDesc, cavTopo, cavFeat, 5, 5, 2);
+		CAVE_3 = new Map("cave", caveDesc, cavTopo, cavFeat, 5, 5, 2);
+		CAVE_4 = new Map("cave", caveDesc, cavTopo, cavFeat, 5, 5, 2);
+		CAVE_5 = new Map("cave", "Congrats! You solved it, connor :)", cavTopo, cavFeat, 5, 5, 2);
 		TWN = new Map("town", twnDesc, twnTopo, twnFeat, 16, 16, 1);
 		TNO = new Map("wilderness", tnoDesc, tnoTopo, tnoFeat, 16, 16, 3);
 		TAN = new Map("taniere", tanDesc, tanTopo, tanFeat, 16, 16, 2);
 		SHIP = new Map("ship", shipDesc, shipTopo, shipFeat, 5, 5, 2);
 
 		//System.out.println("Spawning Entities...");//--------------------------------------------------------------------------------------
-		STARTING_LOCATION.spawnEntity(new Frog(1), 0, 14);
+		WW.spawnEntity(new Frog(1), 0, 14);
 
 		TWN.spawnEntity(NPC.ELE, 5, 3);
 		TWN.spawnEntity(NPC.MAIA, 7, 3);
@@ -232,18 +261,29 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		//System.out.println("Adding links...");//-------------------------------------------------------------------------------
 
 		for (int i = 0; i < 16; i++) {
-			STARTING_LOCATION.addLink(TWN, 15, (i%13), 1, (i%13));
-			TWN.addLink(STARTING_LOCATION, 0, (i%13), 14, (i%13));
+			WW.addLink(TWN, 15, (i%13), 1, (i%13));
+			TWN.addLink(WW, 0, (i%13), 14, (i%13));
 			TWN.addLink(TNO, 15, (i%10), 1, (i%10));
 			TNO.addLink(TWN, 0, (i%10), 14, (i%10));
 		}
+		WW.addLink(CAVE_1, 2, 3, 2, 2);
+		CAVE_1.addLink(CAVE_2, 2, 0, 2, 2);
+		CAVE_1.addLink(CAVE_1, 2, 4, 2, 2);
+		CAVE_2.addLink(CAVE_3, 2, 0, 2, 2);
+		CAVE_2.addLink(CAVE_1, 2, 4, 2, 2);
+		CAVE_3.addLink(CAVE_4, 2, 4, 2, 2);
+		CAVE_3.addLink(CAVE_1, 2, 0, 2, 2);
+		CAVE_4.addLink(CAVE_5, 2, 4, 2, 2);
+		CAVE_4.addLink(CAVE_1, 2, 0, 2, 2);
+		CAVE_1.addLink(WW, 4, 2, 2, 3);
+		CAVE_5.addLink(WW, 4, 2, 2, 3);
 		TNO.addLink(TAN, 15, 0, 0, 10); 
 		TAN.addLink(TNO, 0, 11, 14, 0);
 		TAN.addLink(SHIP, 8, 13, 2, 0);
 		SHIP.addLink(TAN, 2, 2, 8, 12);
 		try {
 			System.out.println("Building game...");
-			new GameState.GameData(MAIN_MENU, STARTING_LOCATION, 6, 6).save("global/EverDark");
+			new GameState.GameData(MAIN_MENU, WW, 6, 6).save("global/EverDark");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);

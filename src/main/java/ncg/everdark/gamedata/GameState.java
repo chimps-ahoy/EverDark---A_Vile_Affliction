@@ -21,6 +21,8 @@ public class GameState implements Serializable {
 	private Entity interlocutor;//the person currently in dialogue with
 	//private Entity combatant - for combat?
 	private Map location;
+
+//-----Music IO stuff-------------(TODO: might be able to remove 'music' from global scope)
 	private transient File music;
 	private transient AudioInputStream as;
 	private transient Clip clip;
@@ -207,7 +209,6 @@ public class GameState implements Serializable {
 	
 	public String changeLocation(Map m, int playerR, int playerC) {
 		if (!location.equals(m)) { 
-			stopMusic();
 			location = m;
 			startMusic();
 		}
@@ -221,7 +222,7 @@ public class GameState implements Serializable {
 			return player.stats();
 		} else {
 			for (Entity.Stat s : Entity.Stat.values()) {
-				char stat = (stats[s.ordinal()] >= 0) ? (char)('0' + stats[s.ordinal()]) : '?';
+				String stat = (stats[s.ordinal()] >= 0 && stats[s.ordinal()] <= availablePoints) ? (Integer.toString(stats[s.ordinal()])) : "?";
 				output.append(	"\n" + s + " - " + stat);
 			}
 		}
@@ -238,18 +239,18 @@ public class GameState implements Serializable {
 	
 	public void startMusic() {//this is ONLY needed to start the music upon loading a save, because the music objects are not serializable so they break upon exiting and reloading.
 		try {
-			music = new File(CFG.getMusicPath() + location.getName() + ".wav");
-			as = AudioSystem.getAudioInputStream(music);
-			clip = AudioSystem.getClip();
-			clip.open(as);
-			this.playMusic();
+			File newTrack = new File(CFG.getMusicPath() + location.getName() + ".wav");
+			if (!newTrack.equals(music)) {
+				stopMusic();
+				music = newTrack;
+				as = AudioSystem.getAudioInputStream(music);
+				clip = AudioSystem.getClip();
+				clip.open(as);
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
+			}
 		} catch (Exception e) {
 			//we have no music but everything still works
 		}
-	}
-
-	public void playMusic() {
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
 	public void stopMusic() {

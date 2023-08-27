@@ -81,8 +81,9 @@ public class NPC extends Entity {
 								.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
 
 	public static final NPC OLIVER = new NPC("Oliver", 1, 1, 2, 3, 1, 1, 3, 0, 1, 'o', Entity.Race.HUMAN).setDialogue(
-										new DialogueTree().add("\"My mom says not to play in the woods to the north, but I want to so bad! The wind always whispers funny jokes " +
-											"in my ears...\""));
+										new DialogueTree().add("\"The woods to the north can be so scary! I went in the cave once, and even though I took two " + 
+											"steps left and two steps right, I still didn't end up back in the same place! ...Maybe I should listen to mom when she " + 
+											"says not to play there...\""));
 
 	public static final NPC CAPTAIN = new NPC("Captain", 10, 10, 3, 4, 5, 8, 4, 10, 4, 'c', Entity.Race.HUMAN).setDialogue(new DialogueTree()
 														.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == Opinion.FRIENDLY)
