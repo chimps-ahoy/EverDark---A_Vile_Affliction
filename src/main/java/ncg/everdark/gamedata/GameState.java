@@ -182,7 +182,7 @@ public class GameState implements Serializable {
 	public String setInterOpinion(NPC.Opinion opinion) {
 		NPC inter = (NPC)interlocutor;
 		inter.setOpinion(opinion);
-		return "\n(What you said has changed their thoughts about you.)";
+		return "\n(What you said has changed their thoughts about you, and the thoughts of those they know.)";
 	}
 
 	public boolean inDialogue() {
