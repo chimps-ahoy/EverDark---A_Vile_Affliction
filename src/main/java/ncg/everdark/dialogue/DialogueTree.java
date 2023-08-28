@@ -48,7 +48,7 @@ public class DialogueTree implements Serializable {
 
 		Node prev = new Node("","",-1,null,null,null);
 		for (Node child : curr.children) {
-			output += (child.i == prev.i) ? "" : "\n" + child.i + " - " + child.response;
+			output += (child.i == prev.i || !child.req.test(p,q)) ? "" : "\n" + child.i + " - " + child.response;
 			prev = child;
 		}
 

@@ -91,12 +91,25 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 											"says not to play there...\""));
 
 		NPC CAPTAIN = new NPC("Captain", 10, 10, 3, 4, 5, 8, 4, 10, 4, 'c', Entity.Race.HUMAN);
-		CAPTAIN.setDialogue(new DialogueTree()
-				.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
-				.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
-				"his fat fingers.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
-				.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
-				.add("The large man doesn't even acknowledge you."));
+		
+		NPC FROGPRINCESS = new NPC("Frog Princess", 1, 3, 2, 5, 1, 1, 1, 1, 1, 'f', Entity.Race.FROG);
+		FROGPRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", (p,q) -> !p.has(Item.FROG_AMULET))
+						.add("\"Please contact my father right away!\"", (p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS)
+						.add("\"Have you come to change your mind about helping me? Please, I do not know what to do.\"", (p,q) -> q.getOpinion() == NPC.Opinion.FEARFUL)
+						.add("\"Hello?\"", (p,q) -> p.has(Item.FROG_AMULET))
+						.add(new int[] {3,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
+						.add(new int[] {3,2}, "Leave.", "The frog looks... oddly sad?")
+						.add(new int[] {3,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
+							"\"Please listen, the spirits of these woods cursed me to be a frog. My father lives in Taniere and he has not seen me for so long. " +
+							"He must be so worried. Can you help me?\"")
+						.add(new int[] {3,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
+						.add(new int[] {3,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS))
+						.add(new int[] {3,0,0,2}, "Decline.", "\"Oh...\"", (g) -> g.setInterOpinion(NPC.Opinion.FEARFUL))
+						.add(new int[] {3,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS))
+						.add(new int[] {3,0,1,2}, "Decline.", "\"Oh...\"", (g) -> g.setInterOpinion(NPC.Opinion.FEARFUL))
+						.add(new int[] {2,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS))
+						.add(new int[] {2,2}, "No.", "\"Oh...\"", (g) -> g.setInterOpinion(NPC.Opinion.FEARFUL))
+						.add("\"ribbit.\""));
 
 		MATHIEU.addRelationship(MAIA);
 		MATHIEU.addRelationship(ELE);
@@ -104,6 +117,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		MAIA.addRelationship(OLIVER);
 		MAIA.addRelationship(ELE);
 		OLIVER.addRelationship(ELE);
+		CAPTAIN.addRelationship(FROGPRINCESS);
 
 		//System.out.println("Generating maps...");//-------------------------------------------------------------------------------------------------
 		int[][] wwTopo = { 
@@ -327,7 +341,14 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		SHIP = new Map("ship", shipDesc, shipTopo, shipFeat, 5, 5, 2);
 
 		//System.out.println("Spawning Entities...");//--------------------------------------------------------------------------------------
-		WW.spawnEntity(new Frog(1), 0, 14);
+		WW.spawnEntity(FROGPRINCESS, 0, 14);
+
+		NPC FROGKING = new NPC("Frog King", 10, 10, 2, 5, 1, 1, 1, 1, 1, 'f', Entity.Race.FROG);
+		FROGKING.setDialogue(new DialogueTree().add("The fat frog shifts backwards slightly, revealing an amulet hidden under its stomach.")
+				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", (g) -> {CAVE_5.spawnEntity(null, 0, 2); return g.givePlayer(Item.FROG_AMULET);})
+				  .add(new int[] {0,2}, "Leave it.", "The frog tilts its head and stares at you in confusion, before moving to conceal the amulet once again."));
+
+		CAVE_5.spawnEntity(FROGKING, 0, 2);
 
 		TWN.spawnEntity(ELE, 5, 3);
 		TWN.spawnEntity(MAIA, 7, 3);
@@ -342,6 +363,32 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		TAN.spawnEntity(new Pirate(3), 14, 5);
 
 		SHIP.spawnEntity(CAPTAIN, 2, 4);
+		CAPTAIN.setDialogue(new DialogueTree()
+				.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
+				.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
+				"his fat fingers.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
+				.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
+				.add("The large man doesn't even acknowledge you.")
+				.add(new int[] {0,1}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
+						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
+						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
+							"creaking and even rocking the ship slightly as he stomps away.";})
+				.add(new int[] {0,2}, "Leave.", "")
+				.add(new int[] {1,1}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
+						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
+						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
+							"creaking and even rocking the ship slightly as he stomps away.";})
+				.add(new int[] {1,2}, "Leave.", "")
+				.add(new int[] {2,1}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
+						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
+						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
+							"creaking and even rocking the ship slightly as he stomps away.";})
+				.add(new int[] {2,2}, "Leave.", "")
+				.add(new int[] {3,1}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
+						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
+						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
+							"creaking and even rocking the ship slightly as he stomps away.";})
+				.add(new int[] {3,2}, "Leave.", ""));
 
 		//System.out.println("Adding links...");//-------------------------------------------------------------------------------
 

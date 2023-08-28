@@ -89,5 +89,6 @@ public class Item implements Serializable {
 
 	//TODO: figure out how going to handle different items and stuff. probably just do it the way its done here, but it can be Thought About
 	public static final Item TEST = new Item("test", 1.0, 2.0, true);//.put(Stat.STR,10);
+	public static final Item FROG_AMULET = new Item("Frog Amulet", 0.02, 10).put(Stat.CHARM, 3);
 
 }

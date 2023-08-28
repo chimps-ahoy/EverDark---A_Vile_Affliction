@@ -53,8 +53,11 @@ public class Map implements Serializable {
 		}
 		if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
 			entMap[r][c] = e;
-			playerC = c;
-			playerR = r;
+			if (e != null && e.getClass() == Player.class) {//this probably isn't the best way (at least not my preferred way),
+																			//but this way I can SAY i've used reflection which makes me look cool B)
+				playerC = c;
+				playerR = r;
+			}
 		}
 	}
 
@@ -141,7 +144,7 @@ public class Map implements Serializable {
 	}
 
 	public String getDesc() {
-		int playerPerc = (entMap.length > 0) ? (entMap[playerR][playerC].getStat(Entity.Stat.PERC)) : (0);
+		int playerPerc = (entMap[playerR][playerC] != null) ? (entMap[playerR][playerC].getStat(Entity.Stat.PERC)) : (0);
 		String[] details = desc.split("\n");
 		String output = details[0];
 		for (int i = 1; i < details.length && playerPerc >= i*PERC_DELTA ; i++) {
