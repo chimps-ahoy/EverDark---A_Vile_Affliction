@@ -5,6 +5,7 @@ import ncg.everdark.events.LoadFromFileException;
 import ncg.everdark.entities.Entity;
 import ncg.everdark.entities.NPC;
 import ncg.everdark.entities.Player;
+import ncg.everdark.items.Item;
 import ncg.everdark.ui.CFG;
 
 import java.io.*;
@@ -183,6 +184,18 @@ public class GameState implements Serializable {
 		NPC inter = (NPC)interlocutor;
 		inter.setOpinion(opinion);
 		return "\n(What you said has changed their thoughts about you, and the thoughts of those they know.)";
+	}
+
+	public String givePlayer(Item item) {
+		player.addToInventory(item);
+		boolean startsWithVowel = ("AEIOUaeiou".indexOf(item.NAME.charAt(0)) >= 0);
+		String article = (startsWithVowel) ? "an " : "a ";
+		String output = (item.IS_HIDDEN) ? "" : "\nYou got " + article + item.NAME + ".";
+		return output;
+	}	
+
+	public String removeFromPlayer(int itemIndex) {
+		return player.removeFromInventory(itemIndex);
 	}
 
 	public boolean inDialogue() {

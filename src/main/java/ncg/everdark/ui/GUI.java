@@ -31,7 +31,7 @@ public class GUI extends UI {
 	private static final Color EVER = new Color(118, 118, 118);
 	private static final Color DARK = new Color(25, 25, 30);
 
-	public GUI(int x, int y) {
+	public GUI() {
 		super();
 		topographicView = false;
 
@@ -47,7 +47,7 @@ public class GUI extends UI {
 		frame.setLayout(new BorderLayout(10, 5));
 		frame.setTitle("EverDark - A Vile Affliction");
 		frame.setIconImage(new ImageIcon(CFG.getGlobalPath() + "logo.png").getImage());
-		frame.setPreferredSize(new Dimension(x, y));
+		frame.setPreferredSize(new Dimension(CFG.getWidth(), CFG.getHeight()));
 		frame.setResizable(false);
 		frame.setUndecorated(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -171,6 +171,11 @@ public class GUI extends UI {
 			} else if (leadingCommand.equals("survey")) {
 				output = "You survey the area for changes in elevation.\n";
 				topographicView = true;
+			} else if (leadingCommand.equals("drop")) {
+				output = (args.isEmpty()) ? "What do you want to drop?" : "";	
+				for (char c : args) {
+					output += super.state.removeFromPlayer(Character.digit(c,10));
+				}
 			} else if (leadingCommand.equals("save")) {
 				output = super.state.save();
 			} else if (leadingCommand.equals("exit")) {

@@ -3,7 +3,6 @@ package ncg.everdark.entities;
 import ncg.everdark.ui.CFG;
 import ncg.everdark.ui.CFG.Colour;
 import ncg.everdark.events.Event;
-import ncg.everdark.events.EndOfDialogueEvent;
 import ncg.everdark.dialogue.DialogueTree;
 
 import java.util.Deque;
@@ -25,7 +24,6 @@ public class NPC extends Entity {
 		opinion = Opinion.UNDEFINED;
 		dialogue = new DialogueTree();
 		relationships = new ArrayDeque<NPC>();
-		relationships.add(this);
 	}
 
 	public String beginDialogue(Player p) throws Event {
@@ -64,9 +62,8 @@ public class NPC extends Entity {
 		}
 	}
 
-	public NPC setDialogue(DialogueTree dialogue) {
+	public void setDialogue(DialogueTree dialogue) {
 		this.dialogue = dialogue;
-		return this;
 	}
 
 	public String toString() {

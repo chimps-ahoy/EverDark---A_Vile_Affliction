@@ -33,7 +33,7 @@ public class Main {
 			//e.printStackTrace();
 			System.exit(-1);
 		}
-		UI ui = (legacy) ? new TUI() : new GUI(CFG.getWidth(), CFG.getHeight());
+		UI ui = (legacy) ? new TUI() : new GUI();
 		SwingUtilities.invokeLater(ui::start);	
 	}
 }

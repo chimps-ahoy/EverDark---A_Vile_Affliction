@@ -123,8 +123,6 @@ public class Map implements Serializable {
 	private boolean climbable(int dR, int dC) {//WARNING: does NOT check for out of bounds - this is only expected to be called by movePlayer() for now, which checks that itself
 		double playerClimbing = entMap[playerR][playerC].getClimbing();
 		int CLIMBING_FACTOR = Math.round(Math.round(playerClimbing));//checks if a change in elevation can be traversed by the player
-		//System.out.println(playerClimbing);
-		//System.out.println(CLIMBING_FACTOR);
 		return (Math.abs(topoMap[playerR][playerC] - topoMap[playerR+dR][playerC+dC]) <= CLIMBING_FACTOR);
 	}
 	
@@ -139,11 +137,7 @@ public class Map implements Serializable {
 	}
 	
 	private boolean blocking(char feature) {//checks if a map feature is blocking
-		boolean output = false;
-		for (int i = 0; i < BLOCKING.length() && !output; i++) {
-			output = (feature == BLOCKING.charAt(i));
-		}
-		return output;
+		return (BLOCKING.indexOf(feature) >= 0);
 	}
 
 	public String getDesc() {

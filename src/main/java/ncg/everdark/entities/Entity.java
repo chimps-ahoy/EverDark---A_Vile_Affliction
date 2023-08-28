@@ -60,6 +60,20 @@ public abstract class Entity implements Serializable{
 		return beginDialogue(player);
 	}
 
+	public void addToInventory(Item item) {
+		inv.add(item);
+	}
+
+	public String removeFromInventory(int itemIndex) {
+		String output = "You can't drop that.";
+		itemIndex += NUM_PARTS - 1;
+		if (itemIndex >= 0 && itemIndex < inv.size() && !inv.get(itemIndex).IS_LOCKED) {
+			String itemName = inv.remove(itemIndex).NAME;
+			output = "You drop the " + itemName + ".";
+		}
+		return output;
+	}
+
 	public boolean equals(Entity other) {
 		return other != null && this.ID == other.ID;
 	}
@@ -95,7 +109,8 @@ public abstract class Entity implements Serializable{
 		for (Item item : inv) {
 			String locked = (item.IS_LOCKED) ? CFG.colour(" (locked)", Colour.RED) : "";
 			if (!item.IS_HIDDEN) {
-				output.append(item + locked + "\n");
+				int i = inv.indexOf(item) - NUM_PARTS + 1;
+				output.append(i + ": " + item + locked + "\n");
 			}
 		}
 
