@@ -36,7 +36,7 @@ public abstract class Entity implements Serializable{
 		inv.addAll(Bodypart.getBody(65, race));
 		this.NUM_PARTS = inv.size();//IMPORTANT - any other items added at construction need to be AFTER NUM_PARTS is set.
 
-		inv.add(Item.FROG_AMULET);
+		//inv.add(Item.FROG_AMULET);
 
 		stats.put(Stat.STR,str);
 		stats.put(Stat.ENDUR,endur);
@@ -64,7 +64,7 @@ public abstract class Entity implements Serializable{
 		inv.add(item);
 	}
 
-	public String removeFromInventory(int itemIndex) {
+	public String drop(int itemIndex) {
 		String output = "You can't drop that.";
 		itemIndex += NUM_PARTS - 1;
 		if (itemIndex >= 0 && itemIndex < inv.size() && !inv.get(itemIndex).IS_LOCKED) {
@@ -72,6 +72,10 @@ public abstract class Entity implements Serializable{
 			output = "You drop the " + itemName + ".";
 		}
 		return output;
+	}
+
+	public void removeItem(Item item) {
+		inv.remove(item);
 	}
 
 	public boolean has(Item item) {

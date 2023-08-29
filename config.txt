@@ -1,5 +1,5 @@
-Screen width (# of character columns in legacy mode, pixels in graphical mode): 1920
-Screen height (# of character columns in legacy mode, pixels in graphical mode): 1080
+Screen width (# of character columns in legacy mode, pixels in graphical mode): 800
+Screen height (# of character columns in legacy mode, pixels in graphical mode): 600
 Filepath for game data (root being the everdark directory): global/
 Filepath for game saves (root being the everdark directory): saves/
 Filepath for music files (root being the everdark directory): global/music/

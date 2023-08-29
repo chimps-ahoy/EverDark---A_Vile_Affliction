@@ -195,7 +195,11 @@ public class GameState implements Serializable {
 	}	
 
 	public String removeFromPlayer(int itemIndex) {
-		return player.removeFromInventory(itemIndex);
+		return player.drop(itemIndex);
+	}
+
+	public void removeFromPlayer(Item item) {
+		player.removeItem(item);
 	}
 
 	public boolean inDialogue() {
