@@ -186,6 +186,7 @@ public class GUI extends UI {
 			}
 		} catch (Event e) {
 			output = e.update(super.state);
+			//e.printStackTrace();
 		}
 		console.setText(console.getText() + input + '\n' + output + '\n');
 		updateDisplay();

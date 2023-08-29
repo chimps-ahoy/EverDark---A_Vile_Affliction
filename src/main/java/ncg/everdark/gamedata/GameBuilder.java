@@ -96,8 +96,8 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		Item FROG_AMULET = new Item("Frog Amulet", 0.2, 10).put(Stat.CHARM, 3);
 		NPC FROG_PRINCESS = new NPC("Frog Princess", 1, 3, 2, 5, 1, 1, 1, 1, 1, 'f', Entity.Race.FROG);
 		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", (p,q) -> !p.has(FROG_AMULET))
-						.add("\"Please contact my father right away!\"", (p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS)
-						.add("\"Have you come to change your mind about helping me? Please, I do not know what to do.\"", (p,q) -> q.getOpinion() == NPC.Opinion.FEARFUL)
+						.add(new int[] {1}, "", "\"Please contact my father right away!\"")
+						.add(new int[] {2}, "", "\"Have you come to change your mind about helping me? Please, I do not know what to do.\"")
 						.add("\"Hello?\"", (p,q) -> p.has(FROG_AMULET))
 						.add(new int[] {3,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
 						.add(new int[] {3,2}, "Leave.", "The frog looks... oddly sad?")
@@ -105,12 +105,24 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 							"\"Please listen, the spirits of these woods cursed me to be a frog. My father lives in Taniere and he has not seen me for so long. " +
 							"He must be so worried. Can you help me?\"")
 						.add(new int[] {3,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
-						.add(new int[] {3,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS))
-						.add(new int[] {3,0,0,2}, "Decline.", "\"Oh...\"", (g) -> g.setInterOpinion(NPC.Opinion.FEARFUL))
-						.add(new int[] {3,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS))
-						.add(new int[] {3,0,1,2}, "Decline.", "\"Oh...\"", (g) -> g.setInterOpinion(NPC.Opinion.FEARFUL))
-						.add(new int[] {2,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS))
-						.add(new int[] {2,2}, "No.", "\"Oh...\"", (g) -> g.setInterOpinion(NPC.Opinion.FEARFUL))
+						.add(new int[] {3,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+																																										g.setInterStage(1);
+																																										CAPTAIN.setStage(1);
+																																										return"";
+																																									})
+						.add(new int[] {3,0,0,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {3,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+																																										g.setInterStage(1);
+																																										CAPTAIN.setStage(1);
+																																										return"";
+																																									})
+						.add(new int[] {3,0,1,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {2,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+																																								g.setInterStage(1);
+																																								CAPTAIN.setStage(1);
+																																								return"";
+																																							})
+						.add(new int[] {2,2}, "No.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
 						.add("\"ribbit.\""));
 
 		MATHIEU.addRelationship(MAIA);
@@ -371,27 +383,28 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
 				.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
 				.add("The large man doesn't even acknowledge you.")
-				.add(new int[] {0,1}, "Leave.", "\"See ya then, lad...\"")
-				.add(new int[] {0,2}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
-						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
-						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
-							"creaking and even rocking the ship slightly as he stomps away.";})
-				.add(new int[] {1,1}, "Leave.", "Just as he didn't notice you approach, he doesn't notice you leaving.")
-				.add(new int[] {1,2}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
-						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
-						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
-							"creaking and even rocking the ship slightly as he stomps away.";})
-				.add(new int[] {2,1}, "Leave.", "Just as he didn't notice you approach, he doesn't notice you leaving.")
-				.add(new int[] {2,2}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
-						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
-						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
-							"creaking and even rocking the ship slightly as he stomps away.";})
-				.add(new int[] {3,1}, "Leave.", "Just as he didn't notice you approach, he doesn't notice you leaving.")
-				.add(new int[] {3,2}, "There is a frog in the whispering woods that claims to be your daughter, transformed by a curse.",
-						"\"L-lad? That be true? Yer not pulling on me leg?\" He appears to be brought to tears, \"Blast it, I'll go there myself! I need to see for me self!\"",
-						(p,q) -> q.getOpinion() == NPC.Opinion.CURIOUS, (g) -> {SHIP.spawnEntity(null, 2, 4);return "The man storms out of the ship cabin, floorboards " +
-							"creaking and even rocking the ship slightly as he stomps away.";}));
-
+				.add(new int[] {1}, "\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
+				.add(new int[] {1}, "The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
+				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
+				.add(new int[] {1}, "The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
+				.add(new int[] {1}, "The large man doesn't even acknowledge you.")
+				.add(new int[] {4,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"L-lad? That be true? Yer not pullin' on me leg?\" Tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+				.add(new int[] {4,2}, "Leave.", "\"Bye then, lad...\"")
+				.add(new int[] {5,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the treat, "
+											+ "but tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+				.add(new int[] {5,2}, "Leave.", "The man does not even notice you leave. He stares, transfixed, at the chain.")
+				.add(new int[] {6,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the threat, \"Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+				.add(new int[] {6,2}, "Leave.", "The man does not even notice you leave. He continues starting at the chain in his hand.")
+				.add(new int[] {7,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"That be true? If ye be lyin' to me... Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship.";})
+				.add(new int[] {7,2}, "Leave.", "The man does not even notice you leave."));
 
 		//System.out.println("Adding links...");//-------------------------------------------------------------------------------
 

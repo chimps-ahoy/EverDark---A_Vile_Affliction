@@ -36,8 +36,6 @@ public abstract class Entity implements Serializable{
 		inv.addAll(Bodypart.getBody(65, race));
 		this.NUM_PARTS = inv.size();//IMPORTANT - any other items added at construction need to be AFTER NUM_PARTS is set.
 
-		//inv.add(Item.FROG_AMULET);
-
 		stats.put(Stat.STR,str);
 		stats.put(Stat.ENDUR,endur);
 		stats.put(Stat.DEX,dex);

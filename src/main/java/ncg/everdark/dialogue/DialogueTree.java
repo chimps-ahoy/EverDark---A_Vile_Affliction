@@ -99,12 +99,20 @@ public class DialogueTree implements Serializable {
 		return this.add(path, response, dialogue, req, null, null);
 	}
 
+	public DialogueTree add(int[] path, String dialogue, Requirement req) {
+		return this.add(path, "", dialogue, req, null, null);
+	}
+
 	public DialogueTree add(int[] path, String response, String dialogue, Consequence defaultEffect) {
 		return this.add(path, response, dialogue, (p,q) -> true, defaultEffect, null);
 	}
 
 	public DialogueTree add(int[] path, String response, String dialogue) {
 		return this.add(path, response, dialogue, (p,q) -> true, null, null);
+	}
+
+	public DialogueTree add(int[] path, String dialogue) {
+		return this.add(path, "", dialogue, (p,q) -> true, null, null);
 	}
 
 	public DialogueTree add(String dialogue, Requirement req, Consequence defaultEffect) {//adding a start with a requirement and effect

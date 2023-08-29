@@ -186,6 +186,11 @@ public class GameState implements Serializable {
 		return "\n(What you said has changed their thoughts about you, and the thoughts of those they know.)";
 	}
 
+	public void setInterStage(int stage) {
+		NPC inter = (NPC)interlocutor;
+		inter.setStage(stage);
+	}
+
 	public String givePlayer(Item item) {
 		player.addToInventory(item);
 		boolean startsWithVowel = ("AEIOUaeiou".indexOf(item.NAME.charAt(0)) >= 0);
