@@ -6,9 +6,7 @@ import ncg.everdark.events.Event;
 import ncg.everdark.entities.Entity;
 import ncg.everdark.entities.Player;
 
-import java.util.Scanner;
 import java.io.Serializable;
-import java.util.function.Function;
 
 public class Map implements Serializable {
 	
@@ -62,9 +60,7 @@ public class Map implements Serializable {
 	}
 
 	public void addLink(Map destination, int r, int c, int endR, int endC) {
-		if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
-			evtMap[r][c] = new Event("You travel to a new location. ", (state) -> state.changeLocation(destination, endR, endC));
-		}
+		evtMap[r][c] = new Event("You travel to a new location. ", (state) -> state.changeLocation(destination, endR, endC));
 	}
 
 	public Entity getNeighbor(char d) {

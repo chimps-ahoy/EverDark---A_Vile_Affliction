@@ -1,7 +1,6 @@
 ncg\everdark\dialogue\Requirement.class
 ncg\everdark\events\Consequence.class
 ncg\everdark\entities\Player$Origin.class
-ncg\everdark\entities\Frog.class
 ncg\everdark\entities\Entity$Race.class
 ncg\everdark\ui\ConsoleColours.class
 ncg\everdark\runtime\Main.class

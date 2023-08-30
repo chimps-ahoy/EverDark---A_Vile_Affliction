@@ -9,12 +9,12 @@ public class Event extends Throwable {
 	public Event(String message, Consequence... effects) {
 		super(message);
 		this.effect = (state) -> { 
-											String output = "";
-											for (Consequence effect : effects) {
-												output += effect.apply(state);
-											}	
-											return output;
-									    };
+									String output = "";
+										for (Consequence effect : effects) {
+											output += effect.apply(state);
+										}	
+									return output;
+								};
 	}
 
 	public Event(String message, Consequence effect) {
