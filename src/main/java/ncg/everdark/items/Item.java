@@ -71,8 +71,9 @@ public class Item implements Serializable {
 		return buffs.get(stat);
 	}
 
-	public boolean equals(Item i) {
-		return (i != null && this.NAME == i.NAME);
+	public boolean equals(Object i) {
+		Item o = (Item)(i);
+		return this.NAME.equals(o.NAME);
 	}
 
 	public String toString() {
@@ -80,8 +81,7 @@ public class Item implements Serializable {
 		return this.NAME + " - " + df.format(this.WEIGHT) + "kg - " + df.format(this.VALUE) + "g";
 	}
 
-	//TODO: figure out how going to handle different items and stuff. probably just do it the way its done here, but it can be Thought About
 	public static final Item TEST = new Item("test", 1.0, 2.0, true);//.put(Stat.STR,10);
-	//public static final Item FROG_AMULET = new Item("Frog Amulet", 0.02, 10).put(Stat.CHARM, 3);
+	public static final Item FROG_AMULET = new Item("Frog Amulet", 0.02, 10).put(Stat.CHARM, 3);
 
 }

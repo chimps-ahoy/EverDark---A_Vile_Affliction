@@ -31,7 +31,7 @@ public class Main {
 			GameState.loadGame(CFG.getGlobalPath() + gamefile);
 		} catch (Exception e) {
 			System.out.println("Game data could not be loaded. Please ensure your Global directory is set correctly in config.txt and that it contains the .game file");
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.exit(-1);
 		}
 		UI ui = (legacy) ? new TUI() : new GUI();

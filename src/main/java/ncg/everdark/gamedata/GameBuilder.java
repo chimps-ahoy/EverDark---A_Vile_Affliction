@@ -1,14 +1,16 @@
 package ncg.everdark.gamedata;
 
 import ncg.everdark.ui.CFG;
-import ncg.everdark.dialogue.DialogueTree;
+import ncg.everdark.dialogue.*;
 import ncg.everdark.entities.*;
 import ncg.everdark.entities.Entity.Stat;
+import ncg.everdark.entities.Player.Origin;
+import ncg.everdark.entities.NPC.Opinion;
 import ncg.everdark.items.Item;
 
 public class GameBuilder {//this is ONLY to be used for development so i can construct the .game file quickly, should be removed for releases
 	
-	private static Item FROG_AMULET = new Item("Frog Amulet", 0.2, 10).put(Stat.CHARM, 3);
+	//private static Item FROG_AMULET = new Item("Frog Amulet", 0.2, 10).put(Stat.CHARM, 3);
 
 	public static void buildGame()  {
 		
@@ -284,15 +286,15 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 	private static void writeDialogue(NPC MAIA, NPC MATHIEU, NPC ELE, NPC OLIVER, NPC CAPTAIN, NPC FROG_PRINCESS, NPC FROG_KING,
 									  Map WW, Map CAVE_1, Map CAVE_2, Map CAVE_3, Map CAVE_4, Map CAVE_5, Map TWN, Map TNO, Map TAN, Map SHIP) {
 		MAIA.setDialogue(new DialogueTree()
-			 .add("\"Please... I have children...\"", (p,q) -> q.getOpinion() == NPC.Opinion.FEARFUL)
+			 .add("\"Please... I have children...\"", new OpinionRequirement(Opinion.FEARFUL))
 			 .add("\"Why don't you just leave already. You've already taken everything we have.\"",
-			 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.HOSTILE)
+			 new OriginRequirement(Origin.TANIERE))
 			 .add("\"You're that odd one Mathieu told me about. You say some strange things...\"", 
-			 (p,q) -> p.getOrigin() == Player.Origin.OTHER || q.getOpinion() == NPC.Opinion.NEUTRAL)
+			 new OriginRequirement(Origin.OTHER))
 			 .add("\"You say you don't know where you're from? Well, if you remember, you should let Mathieu know; he's in charge around here.\"",
-			 (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == NPC.Opinion.CURIOUS)
+			 new OriginRequirement(Origin.UNKNOWN))
 			 .add("\"So you're from around here? I'd love to get to know you some more. The kids have been wanting someone to play with too...\"",
-			 (p,q) -> p.getOrigin() == Player.Origin.FAIM)
+			 new OriginRequirement(Origin.FAIM))
 			 .add("\"Hello there, stranger.\"")
 			 .add(new int[] {5,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
 			 .add(new int[] {5,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
@@ -312,36 +314,36 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		
 		MATHIEU.setDialogue(new DialogueTree()
 				 .add("\"Take what you want and begone. I can only stand your smell so long.\"", 
-				 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.HOSTILE)
-				 .add("\"Have you remembered where you're from?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == NPC.Opinion.CURIOUS)
-				 .add("\"Hello there, friend.\"", (p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == NPC.Opinion.FRIENDLY)
-				 .add("\"Hello there, stranger. From where are you coming?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || p.getOrigin() == Player.Origin.UNDEFINED)
+				 new OriginRequirement(Origin.TANIERE))
+				 .add("\"Have you remembered where you're from?\"", new OriginRequirement(Origin.UNKNOWN))
+				 .add("\"Hello there, friend.\"", new OriginRequirement(Origin.FAIM))
+				 .add("\"Hello there, stranger. From where are you coming?\"", new OriginRequirement(Origin.UNDEFINED))
 				 .add(new int[] {1,1}, "Yes.", "\"Well, where is it, then?\"").add(new int[] {1,2}, "No.", "\"Well, let me know if you do.\"")
 				 .add(new int[] {3,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
 					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(NPC.Opinion.FRIENDLY),
-					 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
+					 (g) -> g.setPlayerOrigin(Origin.FAIM))
 				 .add(new int[] {3,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+					 (g) -> g.setInterOpinion(Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Origin.OTHER))
 				 .add(new int[] {3,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
+					 (g) -> g.setInterOpinion(Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Origin.TANIERE))
 				 .add(new int[] {3,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
-					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.UNKNOWN))
+					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Origin.UNKNOWN))
 				 .add(new int[] {1,0,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
-					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(NPC.Opinion.FRIENDLY),
-					 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
+					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(Opinion.FRIENDLY),
+					 (g) -> g.setPlayerOrigin(Origin.FAIM))
 				 .add(new int[] {1,0,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+					 (g) -> g.setInterOpinion(Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Origin.OTHER))
 				 .add(new int[] {1,0,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
+					 (g) -> g.setInterOpinion(Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Origin.TANIERE))
 				 .add(new int[] {1,0,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
-					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Origin.OTHER))
 				 .add("\"Hello there.\""));
 
 		
 		ELE.setDialogue(new DialogueTree()
-			.add("\"My doll isn't very good anymore, but I still play with it!\"",(p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == NPC.Opinion.FRIENDLY)
+			.add("\"My doll isn't very good anymore, but I still play with it!\"", new OriginRequirement(Origin.FAIM))
 			.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
-			"is falling out.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 5)
+			"is falling out.", new StatRequirement(Stat.PERC, 5, 1))
 			.add("The girl is too preoccupied playing with a doll to speak to you.")
 			.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"", (g) -> g.givePlayer(new Item("Old doll", 0.2, 0.0)))
 			.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
@@ -353,15 +355,15 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 
 		
 		CAPTAIN.setDialogue(new DialogueTree()
-				.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
+				.add("\"Yar, lad...\"", new OriginRequirement(Origin.TANIERE))
 				.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
-				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
-				.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
+				"his fat fingers. He reeks of booze.", new StatRequirement(Stat.PERC, 6, 1))
+				.add("The large man doesn't even acknowledge you. He reeks of booze.", new StatRequirement(Stat.PERC, 3, 1))
 				.add("The large man doesn't even acknowledge you.")
-				.add(new int[] {1}, "\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
+				.add(new int[] {1}, "\"Yar, lad...\"", (new OriginRequirement(Origin.TANIERE)))
 				.add(new int[] {1}, "The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
-				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
-				.add(new int[] {1}, "The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
+				"his fat fingers. He reeks of booze.", new StatRequirement(Stat.PERC, 6, 1))
+				.add(new int[] {1}, "The large man doesn't even acknowledge you. He reeks of booze.", new StatRequirement(Stat.PERC, 3, 1))
 				.add(new int[] {1}, "The large man doesn't even acknowledge you.")
 				.add(new int[] {4,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"L-lad? That be true? Yer not pullin' on me leg?\" Tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
@@ -382,10 +384,10 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 				.add(new int[] {7,2}, "Leave.", "The man does not even notice you leave."));
 		
 		
-		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", (p,q) -> !p.has(FROG_AMULET))
+		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", new ItemRequirement(Item.FROG_AMULET, false))
 						.add(new int[] {1}, "", "\"Please contact my father right away!\"")
 						.add(new int[] {2}, "", "\"Have you come to change your mind about helping me? Please, I do not know what to do.\"")
-						.add("\"Hello?\"", (p,q) -> p.has(FROG_AMULET))
+						.add("\"Hello?\"", new ItemRequirement(Item.FROG_AMULET))
 						.add(new int[] {3,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
 						.add(new int[] {3,2}, "Leave.", "The frog looks... oddly sad?")
 						.add(new int[] {3,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
@@ -414,7 +416,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 						
 		
 		FROG_KING.setDialogue(new DialogueTree().add("The fat frog shifts backwards slightly, revealing an amulet hidden under its stomach.")
-				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", (g) -> {CAVE_5.spawnEntity(null, 0, 2); return g.givePlayer(FROG_AMULET);})
+				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", (g) -> {CAVE_5.spawnEntity(null, 0, 2); return g.givePlayer(Item.FROG_AMULET);})
 				  .add(new int[] {0,2}, "Leave it.", "The frog tilts its head and stares at you in confusion, before moving to conceal the amulet once again."));
 
 	}

@@ -11,6 +11,7 @@ ncg\everdark\entities\Pirate.class
 ncg\everdark\entities\Entity$Stat.class
 ncg\everdark\ui\GUI.class
 ncg\everdark\gamedata\Map.class
+ncg\everdark\dialogue\ItemRequirement.class
 ncg\everdark\events\EndOfDialogueEvent.class
 ncg\everdark\entities\Entity$1.class
 ncg\everdark\entities\NPC$Opinion.class
@@ -23,9 +24,12 @@ ncg\everdark\gamedata\GameState.class
 ncg\everdark\dialogue\DialogueTree$Node.class
 ncg\everdark\items\Bodypart.class
 ncg\everdark\gamedata\GameBuilder.class
+ncg\everdark\dialogue\StatRequirement.class
 ncg\everdark\events\Event.class
 ncg\everdark\items\Item.class
 ncg\everdark\ui\TUI.class
 ncg\everdark\ui\CFG$Colour.class
 ncg\everdark\dialogue\DialogueTree.class
+ncg\everdark\dialogue\OpinionRequirement.class
+ncg\everdark\dialogue\OriginRequirement.class
 ncg\everdark\ui\CFG.class
