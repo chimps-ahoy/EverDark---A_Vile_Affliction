@@ -1,5 +1,6 @@
 package ncg.everdark.gamedata;
 
+import ncg.everdark.ui.CFG;
 import ncg.everdark.dialogue.DialogueTree;
 import ncg.everdark.entities.*;
 import ncg.everdark.entities.Entity.Stat;
@@ -7,203 +8,23 @@ import ncg.everdark.items.Item;
 
 public class GameBuilder {//this is ONLY to be used for development so i can construct the .game file quickly, should be removed for releases
 	
-	private static Map MAIN_MENU;
-	private static Map WW;
-	private static Map CAVE_1;
-	private static Map CAVE_2;
-	private static Map CAVE_3;
-	private static Map CAVE_4;
-	private static Map CAVE_5;
-	private static Map TWN;
-	private static Map TNO;
-	private static Map TAN;
-	private static Map SHIP;
-	
-	private static NPC MAIA;
-	private static NPC MATHIEU;
-	private static NPC ELE;
-	private static NPC OLIVER;
-	private static NPC CAPTAIN;
-	private static NPC FROG_PRINCESS;
-	private static NPC FROG_KING;
-	
 	private static Item FROG_AMULET = new Item("Frog Amulet", 0.2, 10).put(Stat.CHARM, 3);
 
 	public static void buildGame()  {
-		System.out.println("Making NPCs...");
-		makeNPCs();
-		System.out.println("Setting relationships...");
-		setRelationships();
-		System.out.println("Writing dialogue...");
-		writeDialogue();
-		System.out.println("Building maps...");
-		buildMaps();
-		System.out.println("Populating maps...");
-		populateMaps();
-		System.out.println("Adding links...");
-		addLinks();
-		System.out.println("Creating EverDark.game...");
-		saveToFile();
-	}
-	
-	private static void makeNPCs() {
-		MAIA = new NPC("Maia", 3, 2, 4, 2, 3, 3, 5, 1, 2, 'm', Entity.Race.HUMAN);
-		MATHIEU = new NPC("Mathieu", 5, 5, 2, 2, 3, 5, 2, 4, 2, 'm', Entity.Race.HUMAN);
-		ELE = new NPC("Ele", 1, 1, 1, 2, 1, 1, 3, 0, 1, 'e', Entity.Race.HUMAN);
-		OLIVER = new NPC("Oliver", 1, 1, 2, 3, 1, 1, 3, 0, 1, 'o', Entity.Race.HUMAN);
-		CAPTAIN = new NPC("Captain", 10, 10, 3, 4, 5, 8, 4, 10, 4, 'c', Entity.Race.HUMAN);
-		FROG_PRINCESS = new NPC("Frog Princess", 1, 3, 2, 5, 1, 1, 1, 1, 1, 'f', Entity.Race.FROG);
-		FROG_KING = new NPC("Frog King", 10, 10, 2, 5, 1, 1, 1, 1, 1, 'f', Entity.Race.FROG);
-	}
-	
-	private static void setRelationships() {
-		MATHIEU.addRelationship(MAIA);
-		MATHIEU.addRelationship(ELE);
-		MATHIEU.addRelationship(OLIVER);
-		MAIA.addRelationship(OLIVER);
-		MAIA.addRelationship(ELE);
-		OLIVER.addRelationship(ELE);
-		CAPTAIN.addRelationship(FROG_PRINCESS);
-	}
-	
-	private static void writeDialogue() {
-		MAIA.setDialogue(new DialogueTree()
-			 .add("\"Please... I have children...\"", (p,q) -> q.getOpinion() == NPC.Opinion.FEARFUL)
-			 .add("\"Why don't you just leave already. You've already taken everything we have.\"",
-			 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.HOSTILE)
-			 .add("\"You're that odd one Mathieu told me about. You say some strange things...\"", 
-			 (p,q) -> p.getOrigin() == Player.Origin.OTHER || q.getOpinion() == NPC.Opinion.NEUTRAL)
-			 .add("\"You say you don't know where you're from? Well, if you remember, you should let Mathieu know; he's in charge around here.\"",
-			 (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == NPC.Opinion.CURIOUS)
-			 .add("\"So you're from around here? I'd love to get to know you some more. The kids have been wanting someone to play with too...\"",
-			 (p,q) -> p.getOrigin() == Player.Origin.FAIM)
-			 .add("\"Hello there, stranger.\"")
-			 .add(new int[] {5,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
-			 .add(new int[] {5,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
-			 .add(new int[] {5,3}, "Why is it so dark?", "\"What do you mean? Tonight is a full moon, and it shines so brightly.\"")
-			 .add(new int[] {5,4}, "Bye.", "\"Bye, then.\"")
-			 .add(new int[] {3,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
-			 .add(new int[] {3,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
-			 .add(new int[] {3,3}, "Why is it so dark?", "\"What do you mean? Tonight is a full moon, and it shines so brightly.\"")
-			 .add(new int[] {3,4}, "Bye.", "\"Bye, then.\"")
-			 .add(new int[] {5,2,1}, "When is sunrise?", "\"Sun... rise?\" She looks at you like you have two heads, \"Where are you from? And how old are you? " +
-				 "The sun has not risen here for thirty years. If there is somewhere it still shines, I'd love to go.\"")
-			 .add(new int[] {5,2,2}, "Of course.", "\"Yes.\"")
-			 .add(new int[] {3,2,1}, "When is sunrise?", "\"Sun... rise?\" She looks at you like you have two heads, \"Where are you from? And how old are you? " +
-				 "The sun has not risen here for thirty years. If there is somewhere it still shines, I'd love to go.\"")
-			 .add(new int[] {3,2,2}, "Of course.", "\"Yes.\""));
-
 		
-		MATHIEU.setDialogue(new DialogueTree()
-				 .add("\"Take what you want and begone. I can only stand your smell so long.\"", 
-				 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.HOSTILE)
-				 .add("\"Have you remembered where you're from?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == NPC.Opinion.CURIOUS)
-				 .add("\"Hello there, friend.\"", (p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == NPC.Opinion.FRIENDLY)
-				 .add("\"Hello there, stranger. From where are you coming?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || p.getOrigin() == Player.Origin.UNDEFINED)
-				 .add(new int[] {1,1}, "Yes.", "\"Well, where is it, then?\"").add(new int[] {1,2}, "No.", "\"Well, let me know if you do.\"")
-				 .add(new int[] {3,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
-					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(NPC.Opinion.FRIENDLY),
-					 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
-				 .add(new int[] {3,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
-				 .add(new int[] {3,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
-				 .add(new int[] {3,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
-					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.UNKNOWN))
-				 .add(new int[] {1,0,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
-					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(NPC.Opinion.FRIENDLY),
-					 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
-				 .add(new int[] {1,0,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
-				 .add(new int[] {1,0,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
-					 (g) -> g.setInterOpinion(NPC.Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
-				 .add(new int[] {1,0,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
-					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
-				 .add("\"Hello there.\""));
-
+		Map MAIN_MENU = null;
+		Map WW = null;
+		Map CAVE_1 = null;
+		Map CAVE_2 = null;
+		Map CAVE_3 = null;
+		Map CAVE_4 = null;
+		Map CAVE_5 = null;
+		Map TWN = null;
+		Map TNO = null;
+		Map TAN = null;
+		Map SHIP = null;
 		
-		ELE.setDialogue(new DialogueTree()
-			.add("\"My doll isn't very good anymore, but I still play with it!\"",(p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == NPC.Opinion.FRIENDLY)
-			.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
-			"is falling out.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 5)
-			.add("The girl is too preoccupied playing with a doll to speak to you.")
-			.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"", (g) -> g.givePlayer(new Item("Old doll", 0.2, 0.0)))
-			.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
-
-		
-		OLIVER.setDialogue(new DialogueTree().add("\"The woods to the north can be so scary! I went in the cave once, and even though I took two " + 
-											"steps left and two steps right, I still didn't end up back in the same place! ...Maybe I should listen to mom when she " + 
-											"says not to play there...\""));
-
-		
-		CAPTAIN.setDialogue(new DialogueTree()
-				.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
-				.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
-				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
-				.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
-				.add("The large man doesn't even acknowledge you.")
-				.add(new int[] {1}, "\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
-				.add(new int[] {1}, "The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
-				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
-				.add(new int[] {1}, "The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
-				.add(new int[] {1}, "The large man doesn't even acknowledge you.")
-				.add(new int[] {4,1}, "There is a frog in the whispering woods that claims to be your daughter.",
-											"\"L-lad? That be true? Yer not pullin' on me leg?\" Tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
-				.add(new int[] {4,2}, "Leave.", "\"Bye then, lad...\"")
-				.add(new int[] {5,1}, "There is a frog in the whispering woods that claims to be your daughter.",
-											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the treat, "
-											+ "but tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
-				.add(new int[] {5,2}, "Leave.", "The man does not even notice you leave. He stares, transfixed, at the chain.")
-				.add(new int[] {6,1}, "There is a frog in the whispering woods that claims to be your daughter.",
-											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the threat, \"Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
-				.add(new int[] {6,2}, "Leave.", "The man does not even notice you leave. He continues starting at the chain in his hand.")
-				.add(new int[] {7,1}, "There is a frog in the whispering woods that claims to be your daughter.",
-											"\"That be true? If ye be lyin' to me... Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship.";})
-				.add(new int[] {7,2}, "Leave.", "The man does not even notice you leave."));
-		
-		
-		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", (p,q) -> !p.has(FROG_AMULET))
-						.add(new int[] {1}, "", "\"Please contact my father right away!\"")
-						.add(new int[] {2}, "", "\"Have you come to change your mind about helping me? Please, I do not know what to do.\"")
-						.add("\"Hello?\"", (p,q) -> p.has(FROG_AMULET))
-						.add(new int[] {3,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
-						.add(new int[] {3,2}, "Leave.", "The frog looks... oddly sad?")
-						.add(new int[] {3,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
-							"\"Please listen, the spirits of these woods cursed me to be a frog. My father lives in Taniere and he has not seen me for so long. " +
-							"He must be so worried. Can you help me?\"")
-						.add(new int[] {3,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
-						.add(new int[] {3,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
-																																										g.setInterStage(1);
-																																										CAPTAIN.setStage(1);
-																																										return"";
-																																									})
-						.add(new int[] {3,0,0,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
-						.add(new int[] {3,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
-																																										g.setInterStage(1);
-																																										CAPTAIN.setStage(1);
-																																										return"";
-																																									})
-						.add(new int[] {3,0,1,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
-						.add(new int[] {2,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
-																																								g.setInterStage(1);
-																																								CAPTAIN.setStage(1);
-																																								return"";
-																																							})
-						.add(new int[] {2,2}, "No.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
-						.add("\"ribbit.\""));
-						
-		
-		FROG_KING.setDialogue(new DialogueTree().add("The fat frog shifts backwards slightly, revealing an amulet hidden under its stomach.")
-				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", (g) -> {CAVE_5.spawnEntity(null, 0, 2); return g.givePlayer(FROG_AMULET);})
-				  .add(new int[] {0,2}, "Leave it.", "The frog tilts its head and stares at you in confusion, before moving to conceal the amulet once again."));
-
-	}
-	
-	private static void buildMaps() {
+		System.out.println("Generating topographies and features...");
 		int[][] wwTopo = { 
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
 								{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
@@ -388,6 +209,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 									{'=', '=', '=', '=', '='},
 								};
 
+		System.out.println("Writing descriptions...");
 		String wwDesc = "You find yourself surrounded by forest, lightly illuminated by the full moon overhead.\n" +
 		"A light breeze flows between the trees and almost sounds like hushed voices.\n" +
 		"Despite the light from the moon, the entire forest looks dull. The trees' hue are desaturated and the whole area feels devoid of life.\n";
@@ -411,6 +233,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		String shipDesc = "The floorboards creek as you step into the cabin of the ship.\n" +
 								"The air is damp and smells of mildew and alcohol.\n";
 
+		System.out.println("Building maps...");
 		MAIN_MENU = new Map("main", "Would you like to load from file? (Y/N): ", null, null, 0, 0, 0);
 		WW =  new Map("whispering woods", wwDesc, wwTopo, wwFeat, 16, 16, 2);
 		CAVE_1 = new Map("cave", caveDesc, cavTopo, cavFeat, 5, 5, 2);
@@ -422,9 +245,183 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		TNO = new Map("wilderness", tnoDesc, tnoTopo, tnoFeat, 16, 16, 3);
 		TAN = new Map("taniere", tanDesc, tanTopo, tanFeat, 16, 16, 2);
 		SHIP = new Map("ship", shipDesc, shipTopo, shipFeat, 5, 5, 2);
+		
+		System.out.println("Creating NPCs...");
+		NPC MAIA = new NPC("Maia", 3, 2, 4, 2, 3, 3, 5, 1, 2, 'm', Entity.Race.HUMAN);
+		NPC MATHIEU = new NPC("Mathieu", 5, 5, 2, 2, 3, 5, 2, 4, 2, 'm', Entity.Race.HUMAN);
+		NPC ELE = new NPC("Ele", 1, 1, 1, 2, 1, 1, 3, 0, 1, 'e', Entity.Race.HUMAN);
+		NPC OLIVER = new NPC("Oliver", 1, 1, 2, 3, 1, 1, 3, 0, 1, 'o', Entity.Race.HUMAN);
+		NPC CAPTAIN = new NPC("Captain", 10, 10, 3, 4, 5, 8, 4, 10, 4, 'c', Entity.Race.HUMAN);
+		NPC FROG_PRINCESS = new NPC("Frog Princess", 1, 3, 2, 5, 1, 1, 1, 1, 1, 'f', Entity.Race.FROG);
+		NPC FROG_KING = new NPC("Frog King", 10, 10, 2, 5, 1, 1, 1, 1, 1, 'f', Entity.Race.FROG);
+		
+		System.out.println("Setting relationships...");
+		setRelationships(MAIA, MATHIEU, ELE, OLIVER, CAPTAIN, FROG_PRINCESS, FROG_KING);
+		
+		System.out.println("Writing dialogue...");
+		writeDialogue(MAIA, MATHIEU, ELE, OLIVER, CAPTAIN, FROG_PRINCESS, FROG_KING, WW, CAVE_1, CAVE_2, CAVE_3, CAVE_4, CAVE_5, TWN, TNO, TAN, SHIP);
+
+		System.out.println("Populating maps...");
+		populateMaps(MAIA, MATHIEU, ELE, OLIVER, CAPTAIN, FROG_PRINCESS, FROG_KING, WW, CAVE_1, CAVE_2, CAVE_3, CAVE_4, CAVE_5, TWN, TNO, TAN, SHIP);
+
+		System.out.println("Buidling map links...");
+		addLinks(WW, CAVE_1, CAVE_2, CAVE_3, CAVE_4, CAVE_5, TWN, TNO, TAN, SHIP);
+
+		System.out.println("Generating Everdark.game...");
+		saveToFile(MAIN_MENU, WW);
 	}
 	
-	private static void populateMaps() {
+	private static void setRelationships(NPC MAIA, NPC MATHIEU, NPC ELE, NPC OLIVER, NPC CAPTAIN, NPC FROG_PRINCESS, NPC FROG_KING) {
+		MATHIEU.addRelationship(MAIA);
+		MATHIEU.addRelationship(ELE);
+		MATHIEU.addRelationship(OLIVER);
+		MAIA.addRelationship(OLIVER);
+		MAIA.addRelationship(ELE);
+		OLIVER.addRelationship(ELE);
+		CAPTAIN.addRelationship(FROG_PRINCESS);
+	}
+	
+	private static void writeDialogue(NPC MAIA, NPC MATHIEU, NPC ELE, NPC OLIVER, NPC CAPTAIN, NPC FROG_PRINCESS, NPC FROG_KING,
+									  Map WW, Map CAVE_1, Map CAVE_2, Map CAVE_3, Map CAVE_4, Map CAVE_5, Map TWN, Map TNO, Map TAN, Map SHIP) {
+		MAIA.setDialogue(new DialogueTree()
+			 .add("\"Please... I have children...\"", (p,q) -> q.getOpinion() == NPC.Opinion.FEARFUL)
+			 .add("\"Why don't you just leave already. You've already taken everything we have.\"",
+			 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.HOSTILE)
+			 .add("\"You're that odd one Mathieu told me about. You say some strange things...\"", 
+			 (p,q) -> p.getOrigin() == Player.Origin.OTHER || q.getOpinion() == NPC.Opinion.NEUTRAL)
+			 .add("\"You say you don't know where you're from? Well, if you remember, you should let Mathieu know; he's in charge around here.\"",
+			 (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == NPC.Opinion.CURIOUS)
+			 .add("\"So you're from around here? I'd love to get to know you some more. The kids have been wanting someone to play with too...\"",
+			 (p,q) -> p.getOrigin() == Player.Origin.FAIM)
+			 .add("\"Hello there, stranger.\"")
+			 .add(new int[] {5,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
+			 .add(new int[] {5,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
+			 .add(new int[] {5,3}, "Why is it so dark?", "\"What do you mean? Tonight is a full moon, and it shines so brightly.\"")
+			 .add(new int[] {5,4}, "Bye.", "\"Bye, then.\"")
+			 .add(new int[] {3,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
+			 .add(new int[] {3,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
+			 .add(new int[] {3,3}, "Why is it so dark?", "\"What do you mean? Tonight is a full moon, and it shines so brightly.\"")
+			 .add(new int[] {3,4}, "Bye.", "\"Bye, then.\"")
+			 .add(new int[] {5,2,1}, "When is sunrise?", "\"Sun... rise?\" She looks at you like you have two heads, \"Where are you from? And how old are you? " +
+				 "The sun has not risen here for thirty years. If there is somewhere it still shines, I'd love to go.\"")
+			 .add(new int[] {5,2,2}, "Of course.", "\"Yes.\"")
+			 .add(new int[] {3,2,1}, "When is sunrise?", "\"Sun... rise?\" She looks at you like you have two heads, \"Where are you from? And how old are you? " +
+				 "The sun has not risen here for thirty years. If there is somewhere it still shines, I'd love to go.\"")
+			 .add(new int[] {3,2,2}, "Of course.", "\"Yes.\""));
+
+		
+		MATHIEU.setDialogue(new DialogueTree()
+				 .add("\"Take what you want and begone. I can only stand your smell so long.\"", 
+				 (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.HOSTILE)
+				 .add("\"Have you remembered where you're from?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || q.getOpinion() == NPC.Opinion.CURIOUS)
+				 .add("\"Hello there, friend.\"", (p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == NPC.Opinion.FRIENDLY)
+				 .add("\"Hello there, stranger. From where are you coming?\"", (p,q) -> p.getOrigin() == Player.Origin.UNKNOWN || p.getOrigin() == Player.Origin.UNDEFINED)
+				 .add(new int[] {1,1}, "Yes.", "\"Well, where is it, then?\"").add(new int[] {1,2}, "No.", "\"Well, let me know if you do.\"")
+				 .add(new int[] {3,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
+					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(NPC.Opinion.FRIENDLY),
+					 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
+				 .add(new int[] {3,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
+					 (g) -> g.setInterOpinion(NPC.Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+				 .add(new int[] {3,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
+					 (g) -> g.setInterOpinion(NPC.Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
+				 .add(new int[] {3,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
+					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.UNKNOWN))
+				 .add(new int[] {1,0,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
+					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(NPC.Opinion.FRIENDLY),
+					 (g) -> g.setPlayerOrigin(Player.Origin.FAIM))
+				 .add(new int[] {1,0,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
+					 (g) -> g.setInterOpinion(NPC.Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+				 .add(new int[] {1,0,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
+					 (g) -> g.setInterOpinion(NPC.Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Player.Origin.TANIERE))
+				 .add(new int[] {1,0,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
+					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(NPC.Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Player.Origin.OTHER))
+				 .add("\"Hello there.\""));
+
+		
+		ELE.setDialogue(new DialogueTree()
+			.add("\"My doll isn't very good anymore, but I still play with it!\"",(p,q) -> p.getOrigin() == Player.Origin.FAIM || q.getOpinion() == NPC.Opinion.FRIENDLY)
+			.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
+			"is falling out.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 5)
+			.add("The girl is too preoccupied playing with a doll to speak to you.")
+			.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"", (g) -> g.givePlayer(new Item("Old doll", 0.2, 0.0)))
+			.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
+
+		
+		OLIVER.setDialogue(new DialogueTree().add("\"The woods to the north can be so scary! I went in the cave once, and even though I took two " + 
+											"steps left and two steps right, I still didn't end up back in the same place! ...Maybe I should listen to mom when she " + 
+											"says not to play there...\""));
+
+		
+		CAPTAIN.setDialogue(new DialogueTree()
+				.add("\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
+				.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
+				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
+				.add("The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
+				.add("The large man doesn't even acknowledge you.")
+				.add(new int[] {1}, "\"Yar, lad...\"", (p,q) -> p.getOrigin() == Player.Origin.TANIERE || q.getOpinion() == NPC.Opinion.FRIENDLY)
+				.add(new int[] {1}, "The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
+				"his fat fingers. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 6)
+				.add(new int[] {1}, "The large man doesn't even acknowledge you. He reeks of booze.", (p,q) -> p.getStat(Entity.Stat.PERC) >= 3)
+				.add(new int[] {1}, "The large man doesn't even acknowledge you.")
+				.add(new int[] {4,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"L-lad? That be true? Yer not pullin' on me leg?\" Tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+				.add(new int[] {4,2}, "Leave.", "\"Bye then, lad...\"")
+				.add(new int[] {5,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the treat, "
+											+ "but tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+				.add(new int[] {5,2}, "Leave.", "The man does not even notice you leave. He stares, transfixed, at the chain.")
+				.add(new int[] {6,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the threat, \"Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+				.add(new int[] {6,2}, "Leave.", "The man does not even notice you leave. He continues starting at the chain in his hand.")
+				.add(new int[] {7,1}, "There is a frog in the whispering woods that claims to be your daughter.",
+											"\"That be true? If ye be lyin' to me... Blast it, I'll go there me self! I need to see!\"",
+											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship.";})
+				.add(new int[] {7,2}, "Leave.", "The man does not even notice you leave."));
+		
+		
+		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", (p,q) -> !p.has(FROG_AMULET))
+						.add(new int[] {1}, "", "\"Please contact my father right away!\"")
+						.add(new int[] {2}, "", "\"Have you come to change your mind about helping me? Please, I do not know what to do.\"")
+						.add("\"Hello?\"", (p,q) -> p.has(FROG_AMULET))
+						.add(new int[] {3,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
+						.add(new int[] {3,2}, "Leave.", "The frog looks... oddly sad?")
+						.add(new int[] {3,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
+							"\"Please listen, the spirits of these woods cursed me to be a frog. My father lives in Taniere and he has not seen me for so long. " +
+							"He must be so worried. Can you help me?\"")
+						.add(new int[] {3,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
+						.add(new int[] {3,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+																																										g.setInterStage(1);
+																																										CAPTAIN.setStage(1);
+																																										return"";
+																																									})
+						.add(new int[] {3,0,0,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {3,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+																																										g.setInterStage(1);
+																																										CAPTAIN.setStage(1);
+																																										return"";
+																																									})
+						.add(new int[] {3,0,1,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {2,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+																																								g.setInterStage(1);
+																																								CAPTAIN.setStage(1);
+																																								return"";
+																																							})
+						.add(new int[] {2,2}, "No.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add("\"ribbit.\""));
+						
+		
+		FROG_KING.setDialogue(new DialogueTree().add("The fat frog shifts backwards slightly, revealing an amulet hidden under its stomach.")
+				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", (g) -> {CAVE_5.spawnEntity(null, 0, 2); return g.givePlayer(FROG_AMULET);})
+				  .add(new int[] {0,2}, "Leave it.", "The frog tilts its head and stares at you in confusion, before moving to conceal the amulet once again."));
+
+	}
+		
+	private static void populateMaps(NPC MAIA, NPC MATHIEU, NPC ELE, NPC OLIVER, NPC CAPTAIN, NPC FROG_PRINCESS, NPC FROG_KING,
+									  Map WW, Map CAVE_1, Map CAVE_2, Map CAVE_3, Map CAVE_4, Map CAVE_5, Map TWN, Map TNO, Map TAN, Map SHIP) {
+										  
 		WW.spawnEntity(FROG_PRINCESS, 0, 14);
 
 		CAVE_5.spawnEntity(FROG_KING, 0, 2);
@@ -444,7 +441,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		SHIP.spawnEntity(CAPTAIN, 2, 4);
 	}
 	
-	private static void addLinks() {
+	private static void addLinks(Map WW, Map CAVE_1, Map CAVE_2, Map CAVE_3, Map CAVE_4, Map CAVE_5, Map TWN, Map TNO, Map TAN, Map SHIP) {
 		for (int i = 0; i < 16; i++) {
 			WW.addLink(TWN, 15, (i%13), 1, (i%13));
 			TWN.addLink(WW, 0, (i%13), 14, (i%13));
@@ -468,12 +465,12 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		SHIP.addLink(TAN, 2, 2, 8, 12);
 	}
 
-	private static void saveToFile() {
+	private static void saveToFile(Map MAIN_MENU, Map WW) {
 		try {
-			new GameState.GameData(MAIN_MENU, WW, 6, 6).save("global/EverDark");
+			new GameState.GameData(MAIN_MENU, WW, 6, 6).save(CFG.getGlobalPath() + "EverDark");
 		} catch (Exception e) {
+			System.out.println("Error building Everdark.game\nThis is a fatal error. Please reinstall EverDark and ensure it is the latest version.");
 			e.printStackTrace();
-			System.exit(-1);
 		}
 	}
 	

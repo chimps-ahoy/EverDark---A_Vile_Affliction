@@ -7,9 +7,7 @@ import javax.swing.SwingUtilities;
 
 public class Main {	
 	public static void main(String[] args) {
-
-		GameBuilder.buildGame();//remove from release
-										
+								
 		boolean legacy = false;
 		String config = "config.txt";
 		String gamefile = "EverDark.game";
@@ -26,6 +24,9 @@ public class Main {
 			System.out.println("Config file not found or formatted incorrectly. Please check your config.");
 			System.exit(-1);
 		}
+		
+		GameBuilder.buildGame();
+		
 		try {
 			GameState.loadGame(CFG.getGlobalPath() + gamefile);
 		} catch (Exception e) {
