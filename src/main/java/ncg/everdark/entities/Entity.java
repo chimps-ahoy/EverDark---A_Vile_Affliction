@@ -24,9 +24,6 @@ public abstract class Entity implements Serializable{
 	private final char APPEAR_MOD; //the appearance modifier. the basic char for their appearance before it is affected by stuff like starvation
 	private final int NUM_PARTS;
 	
-	private static int count = 0;
-	private final int ID;	
-
 	public Entity(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, Race race) {//once body parts are added
 																																				//add an easy constructor for different creatures
 		this.name = name;
@@ -47,7 +44,6 @@ public abstract class Entity implements Serializable{
 		stats.put(Stat.PERC,perc);
 
 		APPEAR_MOD = appearMod;
-		ID = count++;
 	} 
 
 	public String beginDialogue(Player player) throws Event {
@@ -80,8 +76,8 @@ public abstract class Entity implements Serializable{
 		return inv.contains(item);
 	}
 
-	public boolean equals(Entity other) {
-		return other != null && this.ID == other.ID;
+	public boolean equals(Entity other) {//SOLVES SOME SERIALIZATION ISSUES FOR NOW
+		return (other != null && this.name.equals(other.name)); 
 	}
 
 	public String toString() {

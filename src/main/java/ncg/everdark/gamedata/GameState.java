@@ -230,10 +230,8 @@ public class GameState implements Serializable {
 	}
 	
 	public String changeLocation(Map m, int playerR, int playerC) {
-		if (!location.equals(m)) { 
-			location = m;
-			startMusic();
-		}
+		location = m;
+		startMusic();
 		location.spawnEntity(player, playerR, playerC);
 		return location.getDesc();
 	} 

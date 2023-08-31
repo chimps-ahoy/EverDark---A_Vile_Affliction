@@ -10,8 +10,6 @@ import java.io.Serializable;
 
 public class Map implements Serializable {
 	
-	private static int mapCount = 0;
-	private final int ID;
 	private String name;
 	private String desc;
 	private int[][] topoMap;
@@ -29,7 +27,6 @@ public class Map implements Serializable {
 	private static final String LIQUID = "~";
 
 	public Map(String name, String desc, int[][] topoMap, char[][] featMap, int rows, int cols, int percDelta){
-		this.ID = mapCount++;
 		this.name = name;
 		this.desc = desc;
 		this.topoMap = topoMap;
@@ -151,10 +148,6 @@ public class Map implements Serializable {
 	
 	public String getName() {
 		return name;
-	}
-
-	public boolean equals(Map other) {
-		return (this.ID == other.ID);
 	}
 
 	public String getTopoMapString() {//gets a string of the topography of the area. 
