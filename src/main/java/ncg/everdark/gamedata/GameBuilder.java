@@ -285,16 +285,16 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 	
 	private static void writeDialogue(NPC MAIA, NPC MATHIEU, NPC ELE, NPC OLIVER, NPC CAPTAIN, NPC FROG_PRINCESS, NPC FROG_KING,
 									  Map WW, Map CAVE_1, Map CAVE_2, Map CAVE_3, Map CAVE_4, Map CAVE_5, Map TWN, Map TNO, Map TAN, Map SHIP) {
-		MAIA.setDialogue(new DialogueTree()
-			 .add("\"Please... I have children...\"", new OpinionRequirement(Opinion.FEARFUL))
+		MAIA.setDialogue(new DialogueTree()//NEED somekinda OR for Opinion/Origin requirements
+			 .add("\"Please... I have children...\"", new OpinionRequirement(Opinion.FEARFUL).and(new OriginRequirement(Origin.TANIERE)))
 			 .add("\"Why don't you just leave already. You've already taken everything we have.\"",
-			 new OriginRequirement(Origin.TANIERE))
+			 new OpinionRequirement(Opinion.HOSTILE).or(new OriginRequirement(Origin.TANIERE)))
 			 .add("\"You're that odd one Mathieu told me about. You say some strange things...\"", 
-			 new OriginRequirement(Origin.OTHER))
+			 new OpinionRequirement(Opinion.NEUTRAL).or(new OriginRequirement(Origin.OTHER)))
 			 .add("\"You say you don't know where you're from? Well, if you remember, you should let Mathieu know; he's in charge around here.\"",
-			 new OriginRequirement(Origin.UNKNOWN))
+			 new OpinionRequirement(Opinion.CURIOUS).or(new OriginRequirement(Origin.UNKNOWN)))
 			 .add("\"So you're from around here? I'd love to get to know you some more. The kids have been wanting someone to play with too...\"",
-			 new OriginRequirement(Origin.FAIM))
+			 new OpinionRequirement(Opinion.FRIENDLY).or(new OriginRequirement(Origin.FAIM)))
 			 .add("\"Hello there, stranger.\"")
 			 .add(new int[] {5,1}, "What is this place?", "\"This town is called Faim. Welcome.\"")
 			 .add(new int[] {5,2}, "Who are you?", "\"I am Maia. Nice to meet you.\"")
@@ -312,11 +312,11 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 			 .add(new int[] {3,2,2}, "Of course.", "\"Yes.\""));
 
 		
-		MATHIEU.setDialogue(new DialogueTree()
+		MATHIEU.setDialogue(new DialogueTree()//Opinion/Origin requirements
 				 .add("\"Take what you want and begone. I can only stand your smell so long.\"", 
-				 new OriginRequirement(Origin.TANIERE))
-				 .add("\"Have you remembered where you're from?\"", new OriginRequirement(Origin.UNKNOWN))
-				 .add("\"Hello there, friend.\"", new OriginRequirement(Origin.FAIM))
+				 new OpinionRequirement(Opinion.HOSTILE).or(new OriginRequirement(Origin.TANIERE)))
+				 .add("\"Have you remembered where you're from?\"", new OpinionRequirement(Opinion.CURIOUS).or(new OriginRequirement(Origin.UNKNOWN)))
+				 .add("\"Hello there, friend.\"", new OpinionRequirement(Opinion.FRIENDLY).or(new OriginRequirement(Origin.FAIM)))
 				 .add("\"Hello there, stranger. From where are you coming?\"", new OriginRequirement(Origin.UNDEFINED))
 				 .add(new int[] {1,1}, "Yes.", "\"Well, where is it, then?\"").add(new int[] {1,2}, "No.", "\"Well, let me know if you do.\"")
 				 .add(new int[] {3,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
@@ -340,8 +340,8 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 				 .add("\"Hello there.\""));
 
 		
-		ELE.setDialogue(new DialogueTree()
-			.add("\"My doll isn't very good anymore, but I still play with it!\"", new OriginRequirement(Origin.FAIM))
+		ELE.setDialogue(new DialogueTree()//Origin/Opinion requirements
+			.add("\"My doll isn't very good anymore, but I still play with it!\"", new OpinionRequirement(Opinion.FRIENDLY).or(new OriginRequirement(Origin.FAIM)))
 			.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
 			"is falling out.", new StatRequirement(Stat.PERC, 5, 1))
 			.add("The girl is too preoccupied playing with a doll to speak to you.")
@@ -354,13 +354,13 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 											"says not to play there...\""));
 
 		
-		CAPTAIN.setDialogue(new DialogueTree()
-				.add("\"Yar, lad...\"", new OriginRequirement(Origin.TANIERE))
+		CAPTAIN.setDialogue(new DialogueTree()//Origin/Opinion requirements
+				.add("\"Yar, lad...\"", new OpinionRequirement(Opinion.FRIENDLY).or(new OriginRequirement(Origin.TANIERE)))
 				.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
 				"his fat fingers. He reeks of booze.", new StatRequirement(Stat.PERC, 6, 1))
 				.add("The large man doesn't even acknowledge you. He reeks of booze.", new StatRequirement(Stat.PERC, 3, 1))
 				.add("The large man doesn't even acknowledge you.")
-				.add(new int[] {1}, "\"Yar, lad...\"", (new OriginRequirement(Origin.TANIERE)))
+				.add(new int[] {1}, "\"Yar, lad...\"", new OpinionRequirement(Opinion.FRIENDLY).or(new OriginRequirement(Origin.TANIERE)))
 				.add(new int[] {1}, "The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
 				"his fat fingers. He reeks of booze.", new StatRequirement(Stat.PERC, 6, 1))
 				.add(new int[] {1}, "The large man doesn't even acknowledge you. He reeks of booze.", new StatRequirement(Stat.PERC, 3, 1))
