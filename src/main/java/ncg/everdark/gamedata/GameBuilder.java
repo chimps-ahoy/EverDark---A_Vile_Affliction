@@ -1,6 +1,7 @@
 package ncg.everdark.gamedata;
 
 import ncg.everdark.ui.CFG;
+import ncg.everdark.events.*;
 import ncg.everdark.dialogue.*;
 import ncg.everdark.entities.*;
 import ncg.everdark.entities.Entity.Stat;
@@ -318,23 +319,23 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 				 .add("\"Hello there, stranger. From where are you coming?\"", new OriginRequirement(Origin.UNDEFINED))
 				 .add(new int[] {1,1}, "Yes.", "\"Well, where is it, then?\"").add(new int[] {1,2}, "No.", "\"Well, let me know if you do.\"")
 				 .add(new int[] {3,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
-					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(NPC.Opinion.FRIENDLY),
-					 (g) -> g.setPlayerOrigin(Origin.FAIM))
+					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", new OpinionChange(MATHIEU, Opinion.FRIENDLY),
+					 new OriginChange(Origin.FAIM))
 				 .add(new int[] {3,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
-					 (g) -> g.setInterOpinion(Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Origin.OTHER))
+					 new OpinionChange(MATHIEU, Opinion.NEUTRAL), new OriginChange(Origin.OTHER))
 				 .add(new int[] {3,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
-					 (g) -> g.setInterOpinion(Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Origin.TANIERE))
+					 new OpinionChange(MATHIEU, Opinion.HOSTILE), new OriginChange(Origin.TANIERE))
 				 .add(new int[] {3,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
-					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Origin.UNKNOWN))
+					 + "and if you remember, let me know.\"", new OpinionChange(MATHIEU, Opinion.CURIOUS), new OriginChange(Origin.UNKNOWN))
 				 .add(new int[] {1,0,1}, "This village.", "\"Really? I'm sorry then, friend. You must have been gone long. None of us remember you. "
-					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", (g) -> g.setInterOpinion(Opinion.FRIENDLY),
-					 (g) -> g.setPlayerOrigin(Origin.FAIM))
+					 + "Regardless, any resident of Faim is like a child to me. Please, make yourself at home.\"", new OpinionChange(MATHIEU, Opinion.FRIENDLY),
+					 new OriginChange(Origin.FAIM))
 				 .add(new int[] {1,0,2}, "The forest to the North.", "\"Haha... Oh? Well... We of Faim will still treat you with hospility, odd one.\"",
-					 (g) -> g.setInterOpinion(Opinion.NEUTRAL), (g) -> g.setPlayerOrigin(Origin.OTHER))
+					 new OpinionChange(MATHIEU, Opinion.NEUTRAL), new OriginChange(Origin.OTHER))
 				 .add(new int[] {1,0,3}, "The coastal town to the South.", "\"So you've come for more? Well, we don't have much left. Be quick with it.\"",
-					 (g) -> g.setInterOpinion(Opinion.HOSTILE), (g) -> g.setPlayerOrigin(Origin.TANIERE))
+					 new OpinionChange(MATHIEU, Opinion.HOSTILE), new OriginChange(Origin.TANIERE))
 				 .add(new int[] {1,0,4}, "I don't know.", "\"You don't know where you're from? I'm sorry to here that. Feel free to make yourself at home here, " 
-					 + "and if you remember, let me know.\"", (g) -> g.setInterOpinion(Opinion.CURIOUS), (g) -> g.setPlayerOrigin(Origin.OTHER))
+					 + "and if you remember, let me know.\"", new OpinionChange(MATHIEU, Opinion.CURIOUS), new OriginChange(Origin.UNKNOWN))
 				 .add("\"Hello there.\""));
 
 		
@@ -343,7 +344,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 			.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
 			"is falling out.", new StatRequirement(Stat.PERC, 5, 1))
 			.add("The girl is too preoccupied playing with a doll to speak to you.")
-			.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"", (g) -> g.givePlayer(new Item("Old doll", 0.2, 0.0)))
+			.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"", new GiveItem(new Item("Old doll", 0.2, 0)))
 			.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
 
 		
@@ -365,20 +366,20 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 				.add(new int[] {1}, "The large man doesn't even acknowledge you.")
 				.add(new int[] {4,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"L-lad? That be true? Yer not pullin' on me leg?\" Tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+											new SpawnEntity(SHIP, null, 2, 4))
 				.add(new int[] {4,2}, "Leave.", "\"Bye then, lad...\"")
 				.add(new int[] {5,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the treat, "
 											+ "but tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+											new SpawnEntity(SHIP, null, 2, 4))
 				.add(new int[] {5,2}, "Leave.", "The man does not even notice you leave. He stares, transfixed, at the chain.")
 				.add(new int[] {6,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the threat, \"Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship, shaking the floorboards with his stomps.";})
+											new SpawnEntity(SHIP, null, 2, 4))
 				.add(new int[] {6,2}, "Leave.", "The man does not even notice you leave. He continues starting at the chain in his hand.")
 				.add(new int[] {7,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"That be true? If ye be lyin' to me... Blast it, I'll go there me self! I need to see!\"",
-											(g) -> {SHIP.spawnEntity(null, 2, 4); return "The man storms out of the ship.";})
+											new SpawnEntity(SHIP, null, 2, 4))
 				.add(new int[] {7,2}, "Leave.", "The man does not even notice you leave."));
 		
 		
@@ -394,29 +395,17 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 							"\"Please listen, the spirits of these woods cursed me to be a frog. My father lives in Taniere and he has not seen me for so long. " +
 							"He must be so worried. Can you help me?\"")
 						.add(new int[] {5,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
-						.add(new int[] {5,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
-																																										g.setInterStage(1);
-																																										CAPTAIN.setStage(1);
-																																										return"";
-																																									})
-						.add(new int[] {5,0,0,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
-						.add(new int[] {5,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
-																																										g.setInterStage(1);
-																																										CAPTAIN.setStage(1);
-																																										return"";
-																																									})
-						.add(new int[] {5,0,1,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
-						.add(new int[] {4,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
-																																								g.setInterStage(1);
-																																								CAPTAIN.setStage(1);
-																																								return"";
-																																							})
-						.add(new int[] {4,2}, "No.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {5,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
+						.add(new int[] {5,0,0,2}, "Decline.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
+						.add(new int[] {5,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
+						.add(new int[] {5,0,1,2}, "Decline.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
+						.add(new int[] {4,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
+						.add(new int[] {4,2}, "No.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
 						.add("\"ribbit.\""));
 						
 		
 		FROG_KING.setDialogue(new DialogueTree().add("The fat frog shifts backwards slightly, revealing an amulet hidden under its stomach.")
-				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", (g) -> {CAVE_5.spawnEntity(null, 0, 2); return g.givePlayer(Item.FROG_AMULET);})
+				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", new GiveItem(Item.FROG_AMULET).and(new SpawnEntity(CAVE_5, null, 0 ,2)))
 				  .add(new int[] {0,2}, "Leave it.", "The frog tilts its head and stares at you in confusion, before moving to conceal the amulet once again."));
 
 	}

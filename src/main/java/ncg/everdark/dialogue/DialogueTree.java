@@ -2,8 +2,7 @@ package ncg.everdark.dialogue;
 
 import ncg.everdark.entities.Player;
 import ncg.everdark.entities.NPC;
-import ncg.everdark.events.Event;
-import ncg.everdark.events.Consequence;
+import ncg.everdark.events.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -53,7 +52,7 @@ public class DialogueTree implements Serializable {
 		}
 
 		if (curr.extraEffect != null && !args.contains('l')) {
-			throw new Event(output, curr.extraEffect, curr.defaultEffect);
+			throw new Event(output, curr.extraEffect.and(curr.defaultEffect));
 		} else if (curr.defaultEffect != null) {
 			throw new Event(output, curr.defaultEffect);
 		} else {
@@ -64,17 +63,11 @@ public class DialogueTree implements Serializable {
 	private void throwExits(boolean lying) throws Event {
 			Event end;
 			if (curr.extraEffect != null && !lying) {
-				end = new Event(curr.dialogue, curr.defaultEffect, curr.extraEffect, (state) -> {state.endDialogue();
-																															return "";
-																														  });
+				end = new Event(curr.dialogue, curr.defaultEffect.and(curr.extraEffect).and(new EndDialogue()));
 			} else if (curr.defaultEffect != null) {
-				end = new Event(curr.dialogue, curr.defaultEffect, (state) -> {state.endDialogue();
-																									return "";
-																								  });
+				end = new Event(curr.dialogue, curr.defaultEffect.and(new EndDialogue()));
 			} else {
-				end = new Event(curr.dialogue, (state) -> {state.endDialogue();
-																		 return "";
-																	   });
+				end = new Event(curr.dialogue, new EndDialogue());
 			}
 			curr = head;
 			throw end; 

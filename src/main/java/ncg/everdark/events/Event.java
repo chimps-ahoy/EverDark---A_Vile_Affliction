@@ -6,7 +6,7 @@ public class Event extends Throwable {
 	
 	private Consequence effect;
 
-	public Event(String message, Consequence... effects) {
+	/*public Event(String message, Consequence... effects) {
 		super(message);
 		this.effect = (state) -> { 
 									String output = "";
@@ -15,7 +15,7 @@ public class Event extends Throwable {
 										}	
 									return output;
 								};
-	}
+	}*/
 
 	public Event(String message, Consequence effect) {
 		super(message);

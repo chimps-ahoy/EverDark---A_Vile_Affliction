@@ -175,28 +175,12 @@ public class GameState implements Serializable {
 		return location.movePlayer(d);
 	}
 
-	public String setPlayerOrigin(Player.Origin origin) {
+	public void setPlayerOrigin(Player.Origin origin) {
 		player.setOrigin(origin);	
-		return "\n(What you said has set a fact about your life into stone.)";
 	}
 
-	public String setInterOpinion(NPC.Opinion opinion) {
-		NPC inter = (NPC)interlocutor;
-		inter.setOpinion(opinion);
-		return "\n(What you said has changed their thoughts about you, and the thoughts of those they know.)";
-	}
-
-	public void setInterStage(int stage) {
-		NPC inter = (NPC)interlocutor;
-		inter.setStage(stage);
-	}
-
-	public String givePlayer(Item item) {
+	public void givePlayer(Item item) {
 		player.addToInventory(item);
-		boolean startsWithVowel = ("AEIOUaeiou".indexOf(item.NAME.charAt(0)) >= 0);
-		String article = (startsWithVowel) ? "an " : "a ";
-		String output = (item.IS_HIDDEN) ? "" : "\nYou got " + article + item.NAME + ".";
-		return output;
 	}	
 
 	public String removeFromPlayer(int itemIndex) {

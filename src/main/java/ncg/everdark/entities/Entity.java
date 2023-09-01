@@ -5,7 +5,7 @@ import ncg.everdark.ui.CFG.Colour;
 import ncg.everdark.items.Item;
 import ncg.everdark.items.Bodypart;
 import ncg.everdark.events.Event;
-import ncg.everdark.events.EndOfDialogueEvent;
+import ncg.everdark.events.EndDialogue;
 
 import java.util.Map;
 import java.util.EnumMap;
@@ -52,7 +52,7 @@ public abstract class Entity implements Serializable{
 	} 
 
 	public String beginDialogue(Player player) throws Event {
-		throw new EndOfDialogueEvent("They don't have anything to say to you.");
+		throw new Event("They don't have anything to say to you.", new EndDialogue());
 	}
 
 	public String talk(int response, Deque<Character> args, Player player) throws Event {
