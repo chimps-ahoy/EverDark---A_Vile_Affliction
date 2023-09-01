@@ -10,8 +10,6 @@ import ncg.everdark.items.Item;
 
 public class GameBuilder {//this is ONLY to be used for development so i can construct the .game file quickly, should be removed for releases
 	
-	//private static Item FROG_AMULET = new Item("Frog Amulet", 0.2, 10).put(Stat.CHARM, 3);
-
 	public static void buildGame()  {
 		
 		Map MAIN_MENU = null;
