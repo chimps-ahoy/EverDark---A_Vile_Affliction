@@ -21,19 +21,20 @@ public abstract class Entity implements Serializable{
 	private String name;
 	private List<Item> inv;
 	private Map<Stat,Integer> stats;
+	public final Race RACE;
+	public final int ID;
 	private final char APPEAR_MOD; //the appearance modifier. the basic char for their appearance before it is affected by stuff like starvation
 	private final int NUM_PARTS;
 	
-	public Entity(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, Race race) {//once body parts are added
-																																				//add an easy constructor for different creatures
+	public Entity(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, Race race, int ID) {
+
 		this.name = name;
 		this.stats = new EnumMap<Stat,Integer>(Stat.class);
 		this.inv = new LinkedList<Item>();
 
+		this.RACE = race;
 		inv.addAll(Bodypart.getBody(65, race));
 		this.NUM_PARTS = inv.size();//IMPORTANT - any other items added at construction need to be AFTER NUM_PARTS is set.
-
-		//inv.add(Item.FROG_AMULET);
 
 		stats.put(Stat.STR,str);
 		stats.put(Stat.ENDUR,endur);
@@ -44,6 +45,8 @@ public abstract class Entity implements Serializable{
 		stats.put(Stat.CHARM,charm);
 		stats.put(Stat.INTIM,intim);
 		stats.put(Stat.PERC,perc);
+
+		this.ID = ID;
 
 		APPEAR_MOD = appearMod;
 	} 
@@ -78,8 +81,9 @@ public abstract class Entity implements Serializable{
 		return inv.contains(item);
 	}
 
-	public boolean equals(Entity other) {//SOLVES SOME SERIALIZATION ISSUES FOR NOW
-		return (other != null && this.name.equals(other.name)); 
+	public boolean equals(Object other) {
+		Entity e = (Entity)(other);
+		return (e != null && this.ID == e.ID);
 	}
 
 	public String toString() {
@@ -87,7 +91,7 @@ public abstract class Entity implements Serializable{
 		if (getStat(Stat.STR) + getStat(Stat.ENDUR) >= getStat(Stat.DEX) + getStat(Stat.SWIFT)) {
 			lilGuy = Character.toUpperCase(APPEAR_MOD);
 		}
-		return "" + lilGuy;
+		return "" + lilGuy; 
 	}
 
 	public String stats() {
@@ -207,23 +211,28 @@ public abstract class Entity implements Serializable{
 		}
 	}
 
-	public enum Race {//TODO: precentages depend on race, etc
+	public enum Race {
 
-		OTHER(Arrays.asList(new Bodypart("head", 1))),
+		OTHER(Arrays.asList(new Bodypart("head", 1)),
+				Colour.MAGENTA),
 
-		HUMAN((Arrays.asList(new Bodypart("head", 0.0723),
+		HUMAN(Arrays.asList(new Bodypart("head", 0.0723),
 									new Bodypart("left arm", 0.04335), new Bodypart("right arm", 0.04335),
 									new Bodypart("left leg", 0.16555), new Bodypart("right leg", 0.16555),
-									new Bodypart("torso", 0.5099)))),
+									new Bodypart("torso", 0.5099)),
+									Colour.GRAY),
 
 		FROG(Arrays.asList(new Bodypart("head", 0.2667), new Bodypart ("torso", 0.5333),
 								 new Bodypart("front left leg", 0.04), new Bodypart("front right leg", 0.04),
-								 new Bodypart("hind left leg", 0.06), new Bodypart("hind right leg", 0.06)));
+								 new Bodypart("hind left leg", 0.06), new Bodypart("hind right leg", 0.06)),
+								 Colour.GREEN);
 
 		public final List<Bodypart> PARTS;
+		public final Colour COLOUR;
 
-		Race(List<Bodypart> parts) {
+		Race(List<Bodypart> parts, Colour colour) {
 			PARTS = parts;
+			COLOUR = colour;
 		}
 	}
 	

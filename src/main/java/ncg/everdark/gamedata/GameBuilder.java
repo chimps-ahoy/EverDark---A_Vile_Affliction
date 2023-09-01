@@ -383,33 +383,35 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 		
 		
 		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", new ItemRequirement(Item.FROG_AMULET, false))
+						.add(new int[] {1}, "", "\"ribbit.\"", new ItemRequirement(Item.FROG_AMULET, false))
+						.add(new int[] {2}, "", "\"ribbit.\"", new ItemRequirement(Item.FROG_AMULET, false))
 						.add(new int[] {1}, "", "\"Please contact my father right away!\"")
 						.add(new int[] {2}, "", "\"Have you come to change your mind about helping me? Please, I do not know what to do.\"")
 						.add("\"Hello?\"", new ItemRequirement(Item.FROG_AMULET))
-						.add(new int[] {3,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
-						.add(new int[] {3,2}, "Leave.", "The frog looks... oddly sad?")
-						.add(new int[] {3,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
+						.add(new int[] {5,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
+						.add(new int[] {5,2}, "Leave.", "The frog looks... oddly sad?")
+						.add(new int[] {5,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
 							"\"Please listen, the spirits of these woods cursed me to be a frog. My father lives in Taniere and he has not seen me for so long. " +
 							"He must be so worried. Can you help me?\"")
-						.add(new int[] {3,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
-						.add(new int[] {3,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+						.add(new int[] {5,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
+						.add(new int[] {5,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
 																																										g.setInterStage(1);
 																																										CAPTAIN.setStage(1);
 																																										return"";
 																																									})
-						.add(new int[] {3,0,0,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
-						.add(new int[] {3,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+						.add(new int[] {5,0,0,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {5,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
 																																										g.setInterStage(1);
 																																										CAPTAIN.setStage(1);
 																																										return"";
 																																									})
-						.add(new int[] {3,0,1,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
-						.add(new int[] {2,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
+						.add(new int[] {5,0,1,2}, "Decline.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {4,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", (g) -> {
 																																								g.setInterStage(1);
 																																								CAPTAIN.setStage(1);
 																																								return"";
 																																							})
-						.add(new int[] {2,2}, "No.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
+						.add(new int[] {4,2}, "No.", "\"Oh...\"", (g) -> {g.setInterStage(2);return"";})
 						.add("\"ribbit.\""));
 						
 		

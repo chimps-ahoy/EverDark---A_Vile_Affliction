@@ -8,7 +8,7 @@ public class Player extends Entity {
 	private Origin origin;
 
 	public Player(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod) {
-		super(name, str, endur, dex, swift, iq, wil, charm, intim, perc, appearMod, Entity.Race.HUMAN);
+		super(name, str, endur, dex, swift, iq, wil, charm, intim, perc, appearMod, Entity.Race.HUMAN, -1);
 		origin = Origin.UNDEFINED;
 	}
 

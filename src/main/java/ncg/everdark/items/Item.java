@@ -11,10 +11,12 @@ public class Item implements Serializable {
 
 	public static final boolean LOCKED = true;
 	public static final boolean HIDDEN = true;
+	private static int count = 0;
 
 	public final String NAME;
 	public final double WEIGHT;
 	public final double VALUE;
+	public final int ID;
 	private Map<Stat,Integer> buffs;
 	
 	public final boolean IS_LOCKED;
@@ -27,6 +29,7 @@ public class Item implements Serializable {
 		this.buffs = new EnumMap<Stat,Integer>(buffs);
 		this.IS_LOCKED = false;
 		this.IS_HIDDEN = false;
+		this.ID = count++;
 	}
 
 	public Item(String NAME, double WEIGHT, double VALUE) {
@@ -39,6 +42,7 @@ public class Item implements Serializable {
 		for (Stat stat : Stat.values()) {
 			buffs.put(stat,0);
 		}
+		this.ID = count++;
 	}
 
 	public Item(String NAME, double WEIGHT, double VALUE, boolean... flags) {
@@ -51,6 +55,7 @@ public class Item implements Serializable {
 		for (Stat stat : Stat.values()) {
 			buffs.put(stat,0);
 		}
+		this.ID = count++;
 	}
 
 	public Item(Item i) {//copy
@@ -60,6 +65,7 @@ public class Item implements Serializable {
 		this.buffs = new EnumMap<Stat,Integer>(i.buffs);
 		this.IS_LOCKED = i.IS_LOCKED;
 		this.IS_HIDDEN = i.IS_HIDDEN;
+		this.ID = i.ID;
 	}
 
 	public Item put(Stat s, int i) {
@@ -71,9 +77,9 @@ public class Item implements Serializable {
 		return buffs.get(stat);
 	}
 
-	public boolean equals(Object i) {
-		Item o = (Item)(i);
-		return this.NAME.equals(o.NAME);
+	public boolean equals(Object o) {
+		Item i = (Item)(o);
+		return (i != null && this.ID == i.ID);
 	}
 
 	public String toString() {

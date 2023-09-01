@@ -16,10 +16,12 @@ public class NPC extends Entity {
 	private DialogueTree dialogue;
 	private Deque<NPC> relationships;
 
+	private static int count = 0;
+
 	public enum Opinion { UNDEFINED, HOSTILE, FEARFUL, NEUTRAL, CURIOUS, FRIENDLY }
 
-		public NPC(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, Entity.Race race) {
-		super(name, str, endur, dex, swift, iq, wil, charm, intim, perc, appearMod, race);
+	public NPC(String name, int str, int endur, int dex, int swift, int iq, int wil, int charm, int intim, int perc, char appearMod, Entity.Race race) {
+		super(name, str, endur, dex, swift, iq, wil, charm, intim, perc, appearMod, race, count++);
 		dialogueStage = 0;
 		opinion = Opinion.UNDEFINED;
 		dialogue = new DialogueTree();
@@ -67,7 +69,7 @@ public class NPC extends Entity {
 	}
 
 	public String toString() {
-		return CFG.colour(super.toString(), Colour.GRAY);
+		return CFG.colour(super.toString(), super.RACE.COLOUR);
 	}
 
 }
