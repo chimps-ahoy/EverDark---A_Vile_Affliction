@@ -286,7 +286,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 									  Map WW, Map CAVE_1, Map CAVE_2, Map CAVE_3, Map CAVE_4, Map CAVE_5, Map TWN, Map TNO, Map TAN, Map SHIP) {
 		
 		Item OLD_DOLL = new Item("Old doll", 0.2, 0);
-		Item FROG_AMULET = new Item("Frog amulet", 0.2, 20);
+		Item FROG_AMULET = new Item("Frog amulet", 0.2, 20).put(Stat.CHARM, 3);
 		Item GOLD_CHAIN = new Item("Gold chain", 0.031, 200);
 		
 		MAIA.setDialogue(new DialogueTree()//NEED somekinda OR for Opinion/Origin requirements
