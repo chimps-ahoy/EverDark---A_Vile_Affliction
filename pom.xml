@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ncg.everdark</groupId>
     <artifactId>ever-dark</artifactId>
-    <version>0.2.1G</version>
+    <version>0.2.3G</version>
     <packaging>jar</packaging>
     <name>EverDark - A Vile Affliction</name>
     <properties>

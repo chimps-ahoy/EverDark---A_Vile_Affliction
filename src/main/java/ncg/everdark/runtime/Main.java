@@ -25,7 +25,7 @@ public class Main {
 			System.exit(-1);
 		}
 		
-		GameBuilder.buildGame();
+		GameBuilder.buildGame();//REMOVE FROM RELEASE. provide Everdark.game in the downloads
 		
 		try {
 			GameState.loadGame(CFG.getGlobalPath() + gamefile);

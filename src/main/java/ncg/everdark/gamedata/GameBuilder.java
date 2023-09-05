@@ -284,6 +284,11 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 	
 	private static void writeDialogue(NPC MAIA, NPC MATHIEU, NPC ELE, NPC OLIVER, NPC CAPTAIN, NPC FROG_PRINCESS, NPC FROG_KING,
 									  Map WW, Map CAVE_1, Map CAVE_2, Map CAVE_3, Map CAVE_4, Map CAVE_5, Map TWN, Map TNO, Map TAN, Map SHIP) {
+		
+		Item OLD_DOLL = new Item("Old doll", 0.2, 0);
+		Item FROG_AMULET = new Item("Frog amulet", 0.2, 20);
+		Item GOLD_CHAIN = new Item("Gold chain", 0.031, 200);
+		
 		MAIA.setDialogue(new DialogueTree()//NEED somekinda OR for Opinion/Origin requirements
 			 .add("\"Please... I have children...\"", new OpinionRequirement(Opinion.FEARFUL).and(new OriginRequirement(Origin.TANIERE)))
 			 .add("\"Why don't you just leave already. You've already taken everything we have.\"",
@@ -344,7 +349,7 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 			.add("The girl is too preoccupied playing with a doll to speak to you. The doll is shoddily made out of wood, and its hair " +
 			"is falling out.", new StatRequirement(Stat.PERC, 5, 1))
 			.add("The girl is too preoccupied playing with a doll to speak to you.")
-			.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"", new GiveItem(new Item("Old doll", 0.2, 0)))
+			.add(new int[] {0,1}, "Offer to help.", "\"Would you really? Thank you!\"", new GiveItem(OLD_DOLL))
 			.add(new int[] {0,2}, "Leave.", "\"Bye bye!\""));
 
 		
@@ -352,8 +357,10 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 											"steps left and two steps right, I still didn't end up back in the same place! ...Maybe I should listen to mom when she " + 
 											"says not to play there...\""));
 
+		Consequence CAPTAIN_LEAVES = new SpawnEntity(SHIP, null, 2, 4).and(new SpawnEntity(WW, CAPTAIN, 1, 13)).and(new StageChange(CAPTAIN, 2)).and(new StageChange(FROG_PRINCESS, 3));
+		Requirement FROG_SPEAKING = new ItemRequirement(FROG_AMULET);
 		
-		CAPTAIN.setDialogue(new DialogueTree()//Origin/Opinion requirements
+		CAPTAIN.setDialogue(new DialogueTree()
 				.add("\"Yar, lad...\"", new OpinionRequirement(Opinion.FRIENDLY).or(new OriginRequirement(Origin.TANIERE)))
 				.add("The large man doesn't even meet your eyes as you approach. Instead, he simply stares at a chain he holds between " +
 				"his fat fingers. He reeks of booze.", new StatRequirement(Stat.PERC, 6, 1))
@@ -366,46 +373,57 @@ public class GameBuilder {//this is ONLY to be used for development so i can con
 				.add(new int[] {1}, "The large man doesn't even acknowledge you.")
 				.add(new int[] {4,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"L-lad? That be true? Yer not pullin' on me leg?\" Tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
-											new SpawnEntity(SHIP, null, 2, 4))
+											CAPTAIN_LEAVES)
 				.add(new int[] {4,2}, "Leave.", "\"Bye then, lad...\"")
 				.add(new int[] {5,1}, "There is a frog in the whispering woods that claims to be your daughter.",
-											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the treat, "
+											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the threat, "
 											+ "but tears well in his eyes, \"Blast it, I'll go there me self! I need to see!\"",
-											new SpawnEntity(SHIP, null, 2, 4))
+											CAPTAIN_LEAVES)
 				.add(new int[] {5,2}, "Leave.", "The man does not even notice you leave. He stares, transfixed, at the chain.")
 				.add(new int[] {6,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"That be true? If ye be lyin' to me...\" He clenches his fist with the threat, \"Blast it, I'll go there me self! I need to see!\"",
-											new SpawnEntity(SHIP, null, 2, 4))
+											CAPTAIN_LEAVES)
 				.add(new int[] {6,2}, "Leave.", "The man does not even notice you leave. He continues starting at the chain in his hand.")
 				.add(new int[] {7,1}, "There is a frog in the whispering woods that claims to be your daughter.",
 											"\"That be true? If ye be lyin' to me... Blast it, I'll go there me self! I need to see!\"",
-											new SpawnEntity(SHIP, null, 2, 4))
-				.add(new int[] {7,2}, "Leave.", "The man does not even notice you leave."));
+											CAPTAIN_LEAVES)
+				.add(new int[] {7,2}, "Leave.", "The man does not even notice you leave.")
+				.add(new int[] {2}, "\"What be going on here!? You say it's me daughter, but all it just looks like a normal frog t'me!\"", FROG_SPEAKING)
+				.add(new int[] {2}, "\"What be going on here!? You say it's me daughter, but all it just looks like a normal frog t'me!\"")
+				.add(new int[] {8,1}, "Give him the amulet", "\"That be the punchline to your bloody prank? Ye want me to wear an amulet of a frog now too? Fine! " 
+									+ "Must be worth something at least...\" As he puts on the amphibian jewelry, his expression of rage quickly softens, and tears "
+									+ "being pouring down his face. \"Ye wasn't lying! That be her!\""
+									+ " After taking a moment to wipe his face, he turns to face you warmly, holding out a gold chain." 
+									+ " \"Take this. I shant be needing it anymore.\"", 
+									new GiveItem(FROG_AMULET, false).and(new GiveItem(GOLD_CHAIN)).and(new StageChange(CAPTAIN, 3)))
+				.add(new int[] {8,2}, "Leave.", "He glares at you as you walk off. \"Ye better be back with an answer!\"")
+				.add(new int[] {3}, "\"Thanks, lad. I'll always remember what ye did fer me.\""));
 		
-		
-		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", new ItemRequirement(Item.FROG_AMULET, false))
-						.add(new int[] {1}, "", "\"ribbit.\"", new ItemRequirement(Item.FROG_AMULET, false))
-						.add(new int[] {2}, "", "\"ribbit.\"", new ItemRequirement(Item.FROG_AMULET, false))
-						.add(new int[] {1}, "", "\"Please contact my father right away!\"")
-						.add(new int[] {2}, "", "\"Have you come to change your mind about helping me? Please, I do not know what to do.\"")
-						.add("\"Hello?\"", new ItemRequirement(Item.FROG_AMULET))
-						.add(new int[] {5,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
-						.add(new int[] {5,2}, "Leave.", "The frog looks... oddly sad?")
-						.add(new int[] {5,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
+		FROG_PRINCESS.setDialogue(new DialogueTree().add("\"ribbit.\"", FROG_SPEAKING.negate())
+						.add(new int[] {1}, "\"ribbit.\"", FROG_SPEAKING.negate())
+						.add(new int[] {2}, "\"ribbit.\"", FROG_SPEAKING.negate())
+						.add(new int[] {3}, "\"ribbit.\"", FROG_SPEAKING.negate())
+						.add(new int[] {1}, "\"Please contact my father right away!\"")
+						.add(new int[] {2}, "\"Have you come to change your mind about helping me? Please, I do not know what to do.\"")
+						.add("\"Hello?\"", FROG_SPEAKING)
+						.add(new int[] {6,1}, "Hello.", "\"You can understand me? It must be that amulet you have, isn't it?\"")
+						.add(new int[] {6,2}, "Leave.", "The frog looks... oddly sad?")
+						.add(new int[] {6,0,1}, "I'm fluent in frog; the amulet is just for looks.", 
 							"\"Please listen, the spirits of these woods cursed me to be a frog. My father lives in Taniere and he has not seen me for so long. " +
 							"He must be so worried. Can you help me?\"")
-						.add(new int[] {5,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
-						.add(new int[] {5,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
-						.add(new int[] {5,0,0,2}, "Decline.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
-						.add(new int[] {5,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
-						.add(new int[] {5,0,1,2}, "Decline.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
-						.add(new int[] {4,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
-						.add(new int[] {4,2}, "No.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
+						.add(new int[] {6,0,2}, "I suppose that would be it.", "\"Please help me. I'm a human, but I was cursed! My father lives in Taniere. He must be so worried.\"")
+						.add(new int[] {6,0,0,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
+						.add(new int[] {6,0,0,2}, "Decline.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
+						.add(new int[] {6,0,1,1}, "Accept.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
+						.add(new int[] {6,0,1,2}, "Decline.", "\"Oh...\"", new StageChange(FROG_PRINCESS, 2))
+						.add(new int[] {5,1}, "Yes.", "\"Thank you! Please find him and tell him what happened!\"", new StageChange(FROG_PRINCESS, 1).and(new StageChange(CAPTAIN, 1)))
+						.add(new int[] {5,2}, "No.", "\"Oh...\"")
+						.add(new int[] {3}, "\"There he is! That's my dad! But... He can't understand me...\"", FROG_SPEAKING)
 						.add("\"ribbit.\""));
 						
 		
 		FROG_KING.setDialogue(new DialogueTree().add("The fat frog shifts backwards slightly, revealing an amulet hidden under its stomach.")
-				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", new GiveItem(Item.FROG_AMULET).and(new SpawnEntity(CAVE_5, null, 0 ,2)))
+				  .add(new int[] {0,1}, "Take the amulet.", "The frog hops away.", new GiveItem(FROG_AMULET).and(new SpawnEntity(CAVE_5, null, 0 ,2)))
 				  .add(new int[] {0,2}, "Leave it.", "The frog tilts its head and stares at you in confusion, before moving to conceal the amulet once again."));
 
 	}

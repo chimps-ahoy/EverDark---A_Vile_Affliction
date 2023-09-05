@@ -92,7 +92,7 @@ public class TUI extends UI {
 		String menu = "";
 		String title = "EverDark";
 		String subtitle = "---A Vile Affliction---";
-		String VERS = "v0.2.1";
+		String VERS = "v0.2.3";
 		int WIDTH = CFG.getWidth();
 		int HEIGHT = CFG.getHeight();
 		for (int i = 0; i < HEIGHT-2; i++) {
